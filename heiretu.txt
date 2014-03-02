@@ -1,0 +1,110 @@
+Base code : Miura Hideki
+
+
+
+Patch
+
+
+src/vm.c
+http://github.com/ysei/mruby/commit/053a5dc623258e80da9aa7cc15a1adb9552d5212
+58b1c088
+
+# include/mrbconf.h
+# MRB_GC_TURN_OFF_GENERATIONAL
+
+
+
+build_config.rb
+
+
+    conf.gem :github => 'mattn/mruby-thread'
+  # conf.gem :github => 'crimsonwoods/mruby-thread', :branch => 'experimental_thread_support'
+    conf.gem :github => 'miura1729/mruby-meta-circular'
+    conf.gem :github => 'iij/mruby-env'
+    conf.gem :github => 'mattn/mruby-json'
+    conf.gem :github => 'iij/mruby-process'
+
+Thank you authers
+
+
+
+Special thanks
+
+
+Andrew S. Tanenbaum , Douglas E. Smith , FUJIMOTOisao , HASEGAWAatusi , 
+HAYAKAWAtakasi , HBowl , HIEIyukio , Jean L. Gassee , KADO , KatouPiano , 
+KAMIUTI , KATAYAMA , KITAGAWAhirosi , KITANOmasaya , KOIKEkinya , 
+MAKINOmasami , MATUMOTOmasakazu , masataka , MIKI , MIURAkenji , NARITA , 
+NHlignuxNH , NISII , NISIKADOtomohiro , NISIMURAtakesi , OGAWAmasahiro , 
+OOI , OONISIyosinori , Plainss , SAITOUken , SATAKE , Syoji , TAKAMI , 
+TAKATUKASA , Tooya , TORII , Usagi , WATANABE , yosinori
+
+
+
+
+
+
+Memo
+
+
+http://github.com/lsegal/barracuda/
+
+program = Barracuda::Program.new <<EOF
+__kernel void get_opcode(
+  __global int *a	// ,
+// __global int *b
+) {
+  int i = get_global_id(0);
+  a[i] = a[i] & 0x7f
+}
+EOF
+
+n = 1_000_000
+a = Array.new(n) {cop}
+sym = program.get_opcode(a, :times => n)
+
+	http://r7kamura.hatenablog.com/entry/2011/12/28/234717
+
+
+http://github.com/davll/ruby-opencl/
+
+kernel_source = <<EOF
+__kernel void
+get_opcode (__global const int *a,
+             __global int *c)
+{
+  int gid = get_global_id(0);
+  c[gid] = a[gid] & 0xff;
+}
+EOF
+
+OpenCL::Quick.init
+n = 256
+sym = OpenCL::Quick::VArray.new(OpenCL::VArray::INT, n)
+
+for i in 0...n
+  cop[i] = OpenCL::INT.new(i)
+end
+
+OpenCL::Quick.sources = [kernel_source]
+OpenCL::Quick.execute_NDRange("get_opcode", [cop], [n], [1])
+
+
+
+http://prg.is.titech.ac.jp/ja/projects/ikra/
+http://prg.is.titech.ac.jp/members/masuhara/papers/jssst2011-nishiguchi.pdf
+
+sym = MDarray.new(2) {"get_opcode", cop}
+
+case sym.shift
+when "get_opcode"
+  sym = sym.map { |cop|
+    cop & 0xff
+  }
+end
+
+
+
+http://github.com/matsumoto-r/mruby-on-Lua/
+http://github.com/CowboyTim/lua-cell/
+http://google.com/search?q=ruby+cellbe
