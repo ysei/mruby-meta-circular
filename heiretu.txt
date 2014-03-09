@@ -19,6 +19,7 @@ build_config.rb
 
     conf.gem :github => 'mattn/mruby-thread'
   # conf.gem :github => 'crimsonwoods/mruby-thread', :branch => 'experimental_thread_support'
+  # conf.gem :github => 'ysei/mruby-thread', :branch => 'ac8d04fb6c'
     conf.gem :github => 'miura1729/mruby-meta-circular'
     conf.gem :github => 'iij/mruby-env'
     conf.gem :github => 'mattn/mruby-json'

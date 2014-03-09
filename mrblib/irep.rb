@@ -426,7 +426,7 @@ class RiteVM
       @idx[k] = n
     end
 
-    wkth
+    @rmt = wkth
 #    GC.disable
 
 #   5ff9c1d2 :
@@ -733,6 +733,9 @@ p "#{@pc.to_xeh} #{sym}"
       @pc = @pc + 1
       @sp = sp  ##
     end
+
+    @rmt.join
+
   end
 end
 
