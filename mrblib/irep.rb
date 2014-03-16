@@ -147,9 +147,10 @@ class ENVary < Array
     @@idx = iiddxx
   end
 
-  def ckth(pc)
+  def ckth(th)
 #    self[pc][idx('th')].kind_of?(Array)
-    self[pc][self[0].index('th')].kind_of?(Array)
+#    self[pc][self[0].index('th')].kind_of?(Array)
+    ! th.kind_of?(Array)
   end
 
 #  @@st_id = Proc.new { |a|
@@ -242,7 +243,7 @@ p "#{pc.to_xeh} #{opc} #{op.to_xeh}"
     while 0 != pc do
       pl = self[pc]
       th = pl[i_th]
-      break if ! self.ckth(pc)
+      break if ckth(th)
       self.slp
 #      sleep @@slp
 #      sleep 0.001
@@ -567,9 +568,6 @@ p "#{@pc.to_xeh} #{sym}"
 #         @stack[@sp + getarg_a(cop)] = @stack[@sp + getarg_b(cop)]
 #         @stack[sp + arg['a']] = @stack[sp + arg['b']]
 #         arg_clc(sp , sym , arg['b'])
-#          @stack[sp + $getarg_a.call(cop)] = setstk(@pc , sp , $getarg_b, cop)
-#          setstk( @pc , sp , cop , $getarg_b )
-#         setstk_() { @stack[ sp + getarg_a(cop)] = @stack[ sp + getarg_b(cop)] }
         iset(sp, ['getarg_b', cop], sym)
         iset(sp, ['getarg_a', cop])
 
