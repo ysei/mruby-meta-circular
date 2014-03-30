@@ -19,13 +19,14 @@ class ENVary < Array
   @@fl += '.loc'
 #  @@idb = 0.pid_g.to_xeh + @@idb       # +
 #    (rand 0xff).to_xeh +
-#    (Time.now.to_f - 0x4fffffff.to_f << 0x10).to_s.split('.')[0][-8..-1].to_xeh
+#    (Time.now.to_f - 0x3fffffff.to_f << 0x10).to_s.split('.')[0][-8..-1].to_xeh
 #  @@dlm = '\n'
 #  @@dlm = '__--__'
    @@idx = Hash.new
 
 
   def initialize(*a)
+#    @m = Mutex.new
 #    @@idx = []
 
     n = a.shift
@@ -46,6 +47,7 @@ class ENVary < Array
 #  @@ploc = Fiber.new { |a|
 #  @@ploc = Proc.new { |*a|
   def ploc(*a)
+#    @m.lock
     begin
       f = File.open(@@fl, 'w')
       f.flock(File::LOCK_EX)
@@ -62,6 +64,7 @@ class ENVary < Array
 #      ENV[@@idb + a[0]] = a[1].to_msgpack
     end
     f.close
+#    @m.unlock
     r
 #    a = yield(r)
   end
@@ -158,8 +161,6 @@ class ENVary < Array
     for n in (0 ... a.size)
       v = a[n]
       if v.kind_of?(Array)
-#        v = @@st_id.call(v)
-#        v = self.call(v)
         v = __send__(v)
       end
     end
@@ -178,12 +179,15 @@ p "#{pc.to_xeh} #{opc} #{op.to_xeh}"
       a = (op >> 7) & 0xffff
     when 'getarg_sbx'
       a = ((op >> 7) & 0xffff) - (0xffff >> 1)
+    when '_sm_'
+      a = opc
     when '_im_'
       a = op
     else
       a = 0
     end
-    a.to_i
+    a.to_i if a.kind_of?(Numeric)
+    a
   end
 #  }
 
@@ -222,7 +226,7 @@ p "#{pc.to_xeh} #{opc} #{op.to_xeh}"
 #      sleep 0.002
 #     sleep 0.00001
 #      sleep 0
-####      GC.start
+####  GC.start
     end
   end
 
@@ -252,16 +256,20 @@ p "#{pc.to_xeh} #{opc} #{op.to_xeh}"
     end
 
     sp = pl[i__sp].to_i
-    [pl[i_sym], sp + pl[i_th].to_i]
+    r = pl[i_th]
+    r = sp + r.to_i if r.kind_of?(Numeric)
+    [pl[i_sym], r]
+#    [pl[i_sym], sp + pl[i_th].to_i]
   end
 
   def rslts(pc2)
     sym = [-1, -1]
     r = [-1, -1]
     if 0 != pc2
-      (0 .. 1).each { |idx|
+      for idx in (0 .. 1)
         sym[idx], r[idx] = self.rslt(pc2 + idx)
-      }
+      end
+      r[idx] = r[0] if '_sm_' == r[idx]
     end
     [sym, r]
   end
@@ -317,9 +325,6 @@ module RiteOpcodeUtil
   def get_opcode(op)
     op & 0x7f
   end
-#  $get_opcode = Proc.new { |op|
-#    op & 0x7f
-#  }
 
   def getarg_a(op)
     (op >> 23) & 0x1ff
@@ -560,14 +565,11 @@ p "#{((pc2 >> 1) - 1).to_xeh} #{sym[0]} #{r[0].to_xeh}"
       sp = @sp  ##
 
 #     case Irep::OPTABLE_SYM[ get_opcode(cop)]
-#      sym = Irep::OPTABLE_SYM[ $get_opcode.call(cop)]   ##
       sym = Irep::OPTABLE_SYM[ get_opcode(cop)]   ##
 p "#{@pc.to_xeh} #{sym}"
        case sym  ##
       when :MOVE
 #         @stack[@sp + getarg_a(cop)] = @stack[@sp + getarg_b(cop)]
-#         @stack[sp + arg['a']] = @stack[sp + arg['b']]
-#         arg_clc(sp , sym , arg['b'])
         iset(sp, ['getarg_b', cop], sym)
         iset(sp, ['getarg_a', cop])
 
@@ -599,7 +601,8 @@ p "#{@pc.to_xeh} #{sym}"
       when :ADD
 #        @stack[@sp + getarg_a(cop)] += @stack[@sp + getarg_a(cop) + 1] ##
         iset(sp, ['getarg_a', cop], sym)
-        iset(sp, ['getarg_a', cop])
+        iset(0, ['_sm_', 0])
+#        iset(sp, ['getarg_a', cop])
 
       when :ADDI
 #        @stack[@sp + getarg_a(cop)] += getarg_c(cop)   ##
