@@ -18,11 +18,18 @@ class FibVM
   def eval(irep)
     @irep = irep
     @irepid = @irep.id
+
+    @flg = [true]
+
     while true
       #　命令コードの取り出し
       cop = @irep.iseq[@pc]
+      sp = @sp  ##
 
-      case OPTABLE_SYM[get_opcode(cop)]
+#     case OPTABLE_SYM[get_opcode(cop)]
+      sym = OPTABLE_SYM[get_opcode(cop)]
+
+      case sym
         # 何もしない
       when :NOP
 
@@ -55,68 +62,81 @@ class FibVM
         val = (@stack[@sp + getarg_a(cop)] == @stack[@sp + getarg_a(cop) + 1])
         @stack[@sp + getarg_a(cop)] = val
 
-        # JMP nでpcをnだけ増やす。ただし、nは符号付き
-      when :JMP
-        @pc = @pc + getarg_sbx(cop)
-        next
-
-        # JMPNOT Ra, nでもしRaがnilかfalseならpcをnだけ増やす。ただし、nは符号付き
-      when :JMPNOT
-        if !@stack[@sp + getarg_a(cop)] then
-          @pc = @pc + getarg_sbx(cop)
-          next
-        end
-
-        # メソッドの先頭で引数のセットアップする命令。面倒なので詳細は省略
-      when :ENTER
-
-        # SEND Ra, mid, anumでRaをレシーバにしてシンボルmidの名前のメソッドを
-        # 呼び出す。ただし、引数はanum個あり、R(a+1), R(a+2)... R(a+anum)が引数
-      when :SEND
-        a = getarg_a(cop)
-        mid = @irep.syms[getarg_b(cop)]
-        n = getarg_c(cop)
-        newirep = Irep::get_irep(@stack[@sp + a], mid)
-        if newirep then
-          @callinfo[@cp] = @sp
-          @cp += 1
-          @callinfo[@cp] = @pc
-          @cp += 1
-          @callinfo[@cp] = @irep
-          @cp += 1
-          @sp += a
-          @pc = 0
-          @irep = newirep
-          @irepid = @irep.id
-
-          next
-        else
-          args = []
-          n.times do |i|
-            args.push @stack[@sp + a + i + 1]
-          end
-
-          @stack[@sp + a] = @stack[@sp + a].send(mid, *args)
-        end
-
-        # RETURN Raで呼び出し元のメソッドに戻る。Raが戻り値になる
-      when :RETURN
-        if @cp == 0 then
-          return @stack[@sp + getarg_a(cop)]
-        else
-          @stack[@sp] = @stack[@sp + getarg_a(cop)]
-          @cp -= 1
-          @irep = @callinfo[@cp]
-          @irepid = @irep.id
-          @cp -= 1
-          @pc = @callinfo[@cp]
-          @cp -= 1
-          @sp = @callinfo[@cp]
-        end
       else
-        printf("Unkown code %s \n", OPTABLE_SYM[get_opcode(cop)])
+
+        @flg.pop
+        @flg.push(true)
+        @flg.push(true)
+
+	case sym
+
+	  # JMP nでpcをnだけ増やす。ただし、nは符号付き
+	when :JMP
+##	  @pc = @pc + getarg_sbx(cop)
+	  @pc = @pc + getarg_sbx(cop) - 1
+##	  next
+
+	  # JMPNOT Ra, nでもしRaがnilかfalseならpcをnだけ増やす。ただし、nは符号付き
+	when :JMPNOT
+	  if !@stack[@sp + getarg_a(cop)] then
+##	    @pc = @pc + getarg_sbx(cop)
+	    @pc = @pc + getarg_sbx(cop) - 1
+##	    next
+	  end
+
+	  # メソッドの先頭で引数のセットアップする命令。面倒なので詳細は省略
+	when :ENTER
+
+	  # SEND Ra, mid, anumでRaをレシーバにしてシンボルmidの名前のメソッドを
+	  # 呼び出す。ただし、引数はanum個あり、R(a+1), R(a+2)... R(a+anum)が引数
+	when :SEND
+	  a = getarg_a(cop)
+	  mid = @irep.syms[getarg_b(cop)]
+	  n = getarg_c(cop)
+	  newirep = Irep::get_irep(@stack[@sp + a], mid)
+	  if newirep then
+	    @callinfo[@cp] = @sp
+	    @cp += 1
+	    @callinfo[@cp] = @pc
+	    @cp += 1
+	    @callinfo[@cp] = @irep
+	    @cp += 1
+	    @sp += a
+##	    @pc = 0
+	    @pc = -1
+	    @irep = newirep
+	    @irepid = @irep.id
+
+##	    next
+	  else
+	    args = []
+	    n.times do |i|
+	      args.push @stack[@sp + a + i + 1]
+	    end
+
+	    @stack[@sp + a] = @stack[@sp + a].send(mid, *args)
+	  end
+
+	  # RETURN Raで呼び出し元のメソッドに戻る。Raが戻り値になる
+	when :RETURN
+	  if @cp == 0 then
+	    return @stack[@sp + getarg_a(cop)]
+	  else
+	    @stack[@sp] = @stack[@sp + getarg_a(cop)]
+	    @cp -= 1
+	    @irep = @callinfo[@cp]
+	    @irepid = @irep.id
+	    @cp -= 1
+	    @pc = @callinfo[@cp]
+	    @cp -= 1
+	    @sp = @callinfo[@cp]
+	  end
+	else
+	  printf("Unkown code %s \n", OPTABLE_SYM[get_opcode(cop)])
+	end
       end
 
+      @flg.pop
       @pc = @pc + 1
     end
   end
