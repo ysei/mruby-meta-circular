@@ -1,4 +1,294 @@
-# -*- coding: cp932 -*-
+# -*- coding: iso-2022-jp -*-
+
+class Numeric
+  def to_xeh
+    self.to_i.to_s(0x10).reverse
+  end
+
+#  def pid_g
+#    pid = $$
+#    pid = 0 if nil == pid
+#    pid
+#  end
+end
+
+class ENVary < Array
+  @@slp = 0.001
+
+  @@fl = '~~ritepl'
+  @@idb = @@fl
+  @@fl += '.loc'
+#  @@idb = 0.pid_g.to_xeh + @@idb       # +
+#    (rand 0xff).to_xeh +
+#    (Time.now.to_f - 0x3fffffff.to_f << 0x10).to_s.split('.')[0][-8..-1].to_xeh
+#  @@dlm = '\n'
+#  @@dlm = '__--__'
+   @@idx = Hash.new
+
+
+  def initialize(*a)
+#    @m = Mutex.new
+#    @@idx = []
+
+    n = a.shift
+#   @sz = a.size
+    if 1 > n
+#      @n = 0 - n
+#      return self[@n]
+      return
+    end
+#   @ary = Array.new(n)
+    (0..n).each{ |i|
+#      @ary = a
+      self[i] = *a
+    }
+  end
+
+
+#  @@ploc = Fiber.new { |a|
+#  @@ploc = Proc.new { |*a|
+  def ploc(*a)
+#    @m.lock
+    begin
+      f = File.open(@@fl, 'w')
+      f.flock(File::LOCK_EX)
+    rescue
+      redo
+    end
+    r = true
+    a[0] = a[0].to_xeh
+    if 2 > a.size
+      r = JSON::parse(ENV[@@idb + a[0]])
+#     r = MessagePack.unpack(ENV[@@idb + a[0]])
+    else
+      ENV[@@idb + a[0]] = JSON::generate(a[1])
+#      ENV[@@idb + a[0]] = a[1].to_msgpack
+    end
+    f.close
+#    @m.unlock
+    r
+#    a = yield(r)
+  end
+#  }
+
+
+  def []=(n, v)
+#    ENV[@@idb + n.to_s] = v.to_msgpack
+#    ENV[@@idb + n.to_s] = MsgPack.dump(v)
+    ENV[@@idb + n.to_s] = JSON::generate(v)
+#     ploc(n, v)
+#     @@ploc.call(n, v)
+#     $ploc.resume([n, v])
+#    super
+  end
+  def [](n)
+#    p n
+#    MessagePack.unpack(ENV[@@idb + n.to_s])
+#    MsgPack.load(ENV[@@idb + n.to_s])
+     JSON::parse(ENV[@@idb + n.to_s])
+#     ploc(n)
+#     @@ploc.call(n)
+#     $ploc.resume([n])
+#    super
+  end
+##  def [](n = true)
+#    MessagePack.unpack(ENV[@@idb + n.to_s])
+#    if n
+#      ary = []
+#      (0 .. @sz).each { |i|
+#        ary[i] = JSON::parse(ENV[@@idb] + n)
+#      }
+#      ary
+#    else
+#      JSON::parse(ENV[@@idb + n])
+#      @@ploc.call(n)
+##      self.ploc(n)
+#    end
+##  end
+
+  def ctr_g
+    self[1][self[0].index('ctr')].to_i
+#    ctr = self[1][self[0].index('ctr')]
+#    ctr.to_i
+  end
+
+#@@pr = Proc.new{
+#  ctr = self[1][i_ctr].to_i
+#  ctr
+#}
+
+#  def lf_i
+#    self[1][self[0].index('lf')] += 1
+##    self[1][self.idx('lf')] += 1
+##    self[1][@@idx['lf']] += 1
+#  end
+
+#  def lf_d
+#    self[1][self[0].index('lf')] -= 1
+##    self[1][self.idx('lf')] -= 1
+##    self[1][@@idx['lf']] -= 1
+#  end
+
+  def slp(t = @@slp)
+    sleep t
+#    (0 .. self.size << 4).each {
+#      (true == true).kind_of?(Object)
+#    }
+  end
+
+  def idx(k = '')
+    self[0].index(k)
+#    @@idx[k]
+  end
+
+  def idx_s
+    pl = self[0]
+    iiddxx = Hash.new
+    for n in (0 ... pl.size)
+      key = pl[n]
+      iiddxx[key] = n
+    end
+    @@idx = iiddxx
+  end
+
+  def ckth(th)
+#    self[pc][idx('th')].kind_of?(Array)
+#    self[pc][self[0].index('th')].kind_of?(Array)
+    ! th.kind_of?(Array)
+  end
+
+#  @@st_id = Proc.new { |a|
+  def st_id(a, pc)
+    for n in (0 ... a.size)
+      v = a[n]
+      if v.kind_of?(Array)
+        v = __send__(v)
+      end
+    end
+    opc = a.shift
+    op = a.shift.to_i
+#    GC.start
+p "#{pc.to_xeh} #{opc} #{op.to_xeh}"
+    case opc
+    when 'getarg_a'
+      a = (op >> 23) & 0x1ff
+    when 'getarg_b'
+      a = (op >> 14) & 0x1ff
+    when 'getarg_c'
+      a = (op >> 7) & 0x7f
+    when 'getarg_bx'
+      a = (op >> 7) & 0xffff
+    when 'getarg_sbx'
+      a = ((op >> 7) & 0xffff) - (0xffff >> 1)
+    when '_sm_'
+      a = opc
+    when '_im_'
+      a = op
+    else
+      a = 0
+    end
+    a.to_i if a.kind_of?(Numeric)
+    a
+  end
+#  }
+
+  def pl(pc = 1)
+    i_th = self[0].index('th')
+#    i_th = self.idx('th')
+#    i_th = @@idx['th']
+#    i_lf = self[0].index('lf')
+
+    pl2 = pl2g(pc)
+#p "#{((pc >> 1) - 1).to_xeh} #{pl2[0][0]} #{pl2[0][1].to_xeh}"
+
+#    a = @@st_id.call(a)
+#    a = st_id(a)
+    a = st_id(pl2[i_th], (pc >> 1) - 1)
+
+    pl2[i_th] = a
+    self[pc] = pl2
+#    self.lf_d
+#    GC.start
+  end
+
+  def plw(pc = 1)
+    cto = 0
+    loop do
+      pc2 = self.ctr_g << 1
+      if pc2 != cto
+        cto += 1
+#        an[cto] = Thread.new(envid) { |envid|
+
+        self.pl(cto + 2)
+
+      end
+      self.slp
+#      sleep @@slp
+#      sleep 0.002
+#     sleep 0.00001
+#      sleep 0
+####  GC.start
+    end
+  end
+
+#  private
+
+  def rslt(pc)
+    i_th = self[0].index('th')
+#    i_th = self.idx('th')
+#    i_th = @@idx['th']
+    i__sp = self[0].index('_sp')
+#    i__sp = self.idx('_sp')
+#    i__sp = @@idx['_sp']
+    i_sym = self[0].index('sym')
+#    i_sym = self.idx('sym')
+#    i_sym = @@idx['sym']
+
+
+    while 0 != pc do
+      pl = self[pc]
+      th = pl[i_th]
+      break if ckth(th)
+      self.slp
+#      sleep @@slp
+#      sleep 0.001
+#      sleep 0.00001
+#      sleep 0
+    end
+
+    sp = pl[i__sp].to_i
+    r = pl[i_th]
+    r = sp + r.to_i if r.kind_of?(Numeric)
+    [pl[i_sym], r]
+#    [pl[i_sym], sp + pl[i_th].to_i]
+  end
+
+  def rslts(pc2)
+    sym = [-1, -1]
+    r = [-1, -1]
+    if 0 != pc2
+      for idx in (0 .. 1)
+        sym[idx], r[idx] = self.rslt(pc2 + idx)
+      end
+      r[idx] = r[0] if '_sm_' == r[idx]
+    end
+    [sym, r]
+  end
+
+  def pl2g(pc)
+    i_th = self[0].index('th')
+    loop do
+      pl2 = self[pc]
+      a = pl2[i_th]
+      return(pl2) if false != a[0][0]
+      self.slp
+#      sleep @@slp
+#      sleep 0.001
+#      sleep 0
+    end
+  end
+end
+
 class FibVM
   include RiteOpcodeUtil
   OPTABLE_CODE = Irep::OPTABLE_CODE
@@ -6,13 +296,113 @@ class FibVM
 
   def initialize
     # For Interpriter
-    @stack = []                 # ƒXƒ^ƒbƒN(@sp‚æ‚èãˆÊ‚ğƒŒƒWƒXƒ^‚Æ‚µ‚Äˆµ‚¤)
-    @callinfo = []              # ƒƒ\ƒbƒhŒÄ‚Ño‚µ‚ÅŒÄ‚Ño‚µŒ³‚Ìî•ñ‚ğŠi”[
-    @pc = 0                     # Às‚·‚é–½—ß‚ÌˆÊ’u
-    @sp = 0                     # ƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^
-    @cp = 0                     # callinfo‚Ìƒ|ƒCƒ“ƒ^
-    @irep = nil                 # Œ»İÀs’†‚Ì–½—ß—ñƒIƒuƒWƒFƒNƒg
-    @irepid =nil                # –½—ß—ñƒIƒuƒWƒFƒNƒg‚Ìid(JIT—p)
+    @stack = []                 # $B%9%?%C%/(B(@sp$B$h$j>e0L$r%l%8%9%?$H$7$F07$&(B)
+    @callinfo = []              # $B%a%=%C%I8F$S=P$7$G8F$S=P$785$N>pJs$r3JG<(B
+    @pc = 0                     # $B<B9T$9$kL?Na$N0LCV(B
+    @sp = 0                     # $B%9%?%C%/%]%$%s%?(B
+    @cp = 0                     # callinfo$B$N%]%$%s%?(B
+    @irep = nil                 # $B8=:_<B9TCf$NL?NaNs%*%V%8%'%/%H(B
+    @irepid =nil                # $BL?NaNs%*%V%8%'%/%H$N(Bid(JIT$BMQ(B)
+  end
+
+  def fls(pc2, *sym)
+    return if 0 != @flg.size    # || 0 == pc2
+
+    sym, r = @pl.rslts(pc2)
+
+p "#{((pc2 >> 1) - 1).to_xeh} #{sym[0]} #{r[0].to_xeh}"
+    case sym[0]
+#    when :MOVE
+    when 'MOVE'
+#        @stack[@sp + getarg_a(cop)] = @stack[@sp + getarg_b(cop)]
+      @stack[r[1]] = @stack[r[0]]
+#    when :LOADL
+    when 'LOADL'
+#        @stack[@sp + getarg_a(cop)] = irep.pool[getarg_bx(cop)]
+      @stack[r[1]] = irep.pool[r[0]]
+#    when :LOADI
+    when 'LOADI'
+#        @stack[@sp + getarg_a(cop)] = getarg_sbx(cop)
+      @stack[r[1]] = r[0]
+#    when :LOADSYM
+    when 'LOADSYM'
+#        @stack[@sp + getarg_a(cop)] = irep.syms[getarg_bx(cop)]
+      @stack[r[1]] = irep.syms[r[0]]
+#    when :LOADSELF
+    when 'LOADSELF'
+#        @stack[@sp + getarg_a(cop)] = @stack[@sp]
+      @stack[r[1]] = @stack[r[0]]
+#    when :LOADT
+    when 'LOADT'
+#        @stack[@sp + getarg_a(cop)] = true
+      @stack[r[1]] = r[0]
+#    when :ADD
+    when 'ADD'
+#        @stack[@sp + getarg_a(cop)] += @stack[@sp + getarg_a(cop) + 1]
+      @stack[r[1]] += @stack[r[0] + 1]
+#    when :ADDI
+    when 'ADDI'
+#        @stack[@sp + getarg_a(cop)] += getarg_c(cop)
+      @stack[r[1]] += r[0]
+#    when :SUB
+    when 'SUB'
+#        @stack[@sp + getarg_a(cop)] -= @stack[@sp + getarg_a(cop) + 1]
+      @stack[r[1]] -= @stack[r[0] + 1]
+#    when :SUBI
+    when 'SUBI'
+#        @stack[@sp + getarg_a(cop)] -= getarg_c(cop)
+      @stack[r[1]] -= r[0]
+#    when :MUL
+    when 'MUL'
+#        @stack[@sp + getarg_a(cop)] *= @stack[@sp + getarg_a(cop) + 1]
+      @stack[r[1]] *= @stack[r[0] + 1]
+#    when :DIV
+    when 'DIV'
+#        @stack[@sp + getarg_a(cop)] /= @stack[@sp + getarg_a(cop) + 1]
+      @stack[r[1]] /= @stack[r[0] + 1]
+#    when :EQ
+    when 'EQ'
+#        val = (@stack[@sp + getarg_a(cop)] == @stack[@sp + getarg_a(cop) + 1])
+#        @stack[@sp + getarg_a(cop)] = val
+      val = @stack[r[1]] == @stack[r[0] + 1]
+#      @stack[@sp + getarg_a(cop)] = val
+      @stack[r[1]] = val
+     end
+  end
+
+  def iset(sp , arg ,*sym)
+    pl0 = @pl0
+    pl1 = @pl1
+
+#    i_th = pl0.index('th')
+#    i_th = @pl.idx('th')
+    i_th = @idx['th']
+#    i_sym = pl0.index('sym')
+#    i_sym = @pl.idx('sym')
+    i_sym = @idx['sym']
+#    i__sp = pl0.index('_sp')
+#    i__sp = @pl.idx('_sp')
+    i__sp = @idx['_sp']
+#    i_ctr = pl0.index('ctr')
+#    i_ctr = @pl.idx('ctr')
+    i_ctr = @idx['ctr']
+#    i_lf = @idx['lf']
+
+    ab = 1 - sym.size
+    pc2 = @pc << 1
+    pc2ab = pc2 + ab
+
+    fls(pc2, sym) if 0 == ab
+
+    pl2 = @pl[pc2ab + 2]
+    pl2[i__sp] = sp
+    pl2[i_th] = arg
+    pl2[i_sym] = sym[0]
+    @pl[pc2ab + 2] = pl2
+
+    pl1[i_ctr] += 1
+#    pl1[i_lf] += 1
+    @pl[1] = pl1
   end
 
   def eval(irep)
@@ -22,7 +412,7 @@ class FibVM
     @flg = [true]
 
     while true
-      #@–½—ßƒR[ƒh‚Ìæ‚èo‚µ
+      #$B!!L?Na%3!<%I$N<h$j=P$7(B
       cop = @irep.iseq[@pc]
       sp = @sp  ##
 
@@ -30,34 +420,34 @@ class FibVM
       sym = OPTABLE_SYM[get_opcode(cop)]
 
       case sym
-        # ‰½‚à‚µ‚È‚¢
+        # $B2?$b$7$J$$(B
       when :NOP
 
-        # MOVE Ra, Rb‚ÅƒŒƒWƒXƒ^Ra‚ÉƒŒƒWƒXƒ^Rb‚Ì“à—e‚ğƒZƒbƒg‚·‚é
+        # MOVE Ra, Rb$B$G%l%8%9%?(BRa$B$K%l%8%9%?(BRb$B$NFbMF$r%;%C%H$9$k(B
       when :MOVE
         @stack[@sp + getarg_a(cop)] = @stack[@sp + getarg_b(cop)]
 
-        # LOADL Ra, pb ‚ÅƒŒƒWƒXƒ^Ra‚É’è”ƒe[ƒuƒ‹(pool)‚Ìpb”Ô–Ú‚Ì’l‚ğƒZƒbƒg‚·‚é
+        # LOADL Ra, pb $B$G%l%8%9%?(BRa$B$KDj?t%F!<%V%k(B(pool)$B$N(Bpb$BHVL\$NCM$r%;%C%H$9$k(B
       when :LOADL
         @stack[@sp + getarg_a(cop)] = @irep.pool[getarg_bx(cop)]
 
-        # LOADI Ra, n ‚ÅƒŒƒWƒXƒ^Ra‚ÉFixnum‚Ì’l n‚ğƒZƒbƒg‚·‚é
+        # LOADI Ra, n $B$G%l%8%9%?(BRa$B$K(BFixnum$B$NCM(B n$B$r%;%C%H$9$k(B
       when :LOADI
         @stack[@sp + getarg_a(cop)] = getarg_sbx(cop)
 
-        # LOADSELF Ra ‚ÅƒŒƒWƒXƒ^Ra‚ÉŒ»İ‚Ìself‚ğƒZƒbƒg‚·‚é
+        # LOADSELF Ra $B$G%l%8%9%?(BRa$B$K8=:_$N(Bself$B$r%;%C%H$9$k(B
       when :LOADSELF
         @stack[@sp + getarg_a(cop)] = @stack[@sp]
 
-        # ADD Ra, Rb ‚ÅƒŒƒWƒXƒ^Ra‚ÉRa+Rb‚ğƒZƒbƒg‚·‚é
+        # ADD Ra, Rb $B$G%l%8%9%?(BRa$B$K(BRa+Rb$B$r%;%C%H$9$k(B
       when :ADD
         @stack[@sp + getarg_a(cop)] += @stack[@sp + getarg_a(cop) + 1]
 
-        # SUB Ra, n ‚ÅƒŒƒWƒXƒ^Ra‚ÉRa-n‚ğƒZƒbƒg‚·‚é
+        # SUB Ra, n $B$G%l%8%9%?(BRa$B$K(BRa-n$B$r%;%C%H$9$k(B
       when :SUBI
         @stack[@sp + getarg_a(cop)] -= getarg_c(cop)
 
-        # EQ Ra ‚ÅRa‚ÆR(a+1)‚ğ”ä‚×‚Ä“¯‚¶‚È‚çtrue, ˆá‚¤‚È‚çfalse‚ğRa‚ÉƒZƒbƒg‚·‚é
+        # EQ Ra $B$G(BRa$B$H(BR(a+1)$B$rHf$Y$FF1$8$J$i(Btrue, $B0c$&$J$i(Bfalse$B$r(BRa$B$K%;%C%H$9$k(B
       when :EQ
         val = (@stack[@sp + getarg_a(cop)] == @stack[@sp + getarg_a(cop) + 1])
         @stack[@sp + getarg_a(cop)] = val
@@ -70,13 +460,13 @@ class FibVM
 
 	case sym
 
-	  # JMP n‚Åpc‚ğn‚¾‚¯‘‚â‚·B‚½‚¾‚µAn‚Í•„†•t‚«
+	  # JMP n$B$G(Bpc$B$r(Bn$B$@$1A}$d$9!#$?$@$7!"(Bn$B$OId9fIU$-(B
 	when :JMP
 ##	  @pc = @pc + getarg_sbx(cop)
 	  @pc = @pc + getarg_sbx(cop) - 1
 ##	  next
 
-	  # JMPNOT Ra, n‚Å‚à‚µRa‚ªnil‚©false‚È‚çpc‚ğn‚¾‚¯‘‚â‚·B‚½‚¾‚µAn‚Í•„†•t‚«
+	  # JMPNOT Ra, n$B$G$b$7(BRa$B$,(Bnil$B$+(Bfalse$B$J$i(Bpc$B$r(Bn$B$@$1A}$d$9!#$?$@$7!"(Bn$B$OId9fIU$-(B
 	when :JMPNOT
 	  if !@stack[@sp + getarg_a(cop)] then
 ##	    @pc = @pc + getarg_sbx(cop)
@@ -84,11 +474,11 @@ class FibVM
 ##	    next
 	  end
 
-	  # ƒƒ\ƒbƒh‚Ìæ“ª‚Åˆø”‚ÌƒZƒbƒgƒAƒbƒv‚·‚é–½—ßB–Ê“|‚È‚Ì‚ÅÚ×‚ÍÈ—ª
+	  # $B%a%=%C%I$N@hF,$G0z?t$N%;%C%H%"%C%W$9$kL?Na!#LLE]$J$N$G>\:Y$O>JN,(B
 	when :ENTER
 
-	  # SEND Ra, mid, anum‚ÅRa‚ğƒŒƒV[ƒo‚É‚µ‚ÄƒVƒ“ƒ{ƒ‹mid‚Ì–¼‘O‚Ìƒƒ\ƒbƒh‚ğ
-	  # ŒÄ‚Ño‚·B‚½‚¾‚µAˆø”‚ÍanumŒÂ‚ ‚èAR(a+1), R(a+2)... R(a+anum)‚ªˆø”
+	  # SEND Ra, mid, anum$B$G(BRa$B$r%l%7!<%P$K$7$F%7%s%\%k(Bmid$B$NL>A0$N%a%=%C%I$r(B
+	  # $B8F$S=P$9!#$?$@$7!"0z?t$O(Banum$B8D$"$j!"(BR(a+1), R(a+2)... R(a+anum)$B$,0z?t(B
 	when :SEND
 	  a = getarg_a(cop)
 	  mid = @irep.syms[getarg_b(cop)]
@@ -117,7 +507,7 @@ class FibVM
 	    @stack[@sp + a] = @stack[@sp + a].send(mid, *args)
 	  end
 
-	  # RETURN Ra‚ÅŒÄ‚Ño‚µŒ³‚Ìƒƒ\ƒbƒh‚É–ß‚éBRa‚ª–ß‚è’l‚É‚È‚é
+	  # RETURN Ra$B$G8F$S=P$785$N%a%=%C%I$KLa$k!#(BRa$B$,La$jCM$K$J$k(B
 	when :RETURN
 	  if @cp == 0 then
 	    return @stack[@sp + getarg_a(cop)]
@@ -138,6 +528,7 @@ class FibVM
 
       @flg.pop
       @pc = @pc + 1
+      @sp = sp  ##
     end
   end
 end
