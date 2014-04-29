@@ -602,7 +602,7 @@ p "#{@pc.to_xeh} #{sym}"
 #        @stack[@sp + getarg_a(cop)] += @stack[@sp + getarg_a(cop) + 1] ##
         iset(sp, ['getarg_a', cop], sym)
         iset(0, ['_sm_', 0])
-#        iset(sp, ['getarg_a', cop])
+#	iset(sp, ['getarg_a', cop])
 
       when :ADDI
 #        @stack[@sp + getarg_a(cop)] += getarg_c(cop)   ##
@@ -612,7 +612,8 @@ p "#{@pc.to_xeh} #{sym}"
       when :SUB
 #        @stack[@sp + getarg_a(cop)] -= @stack[@sp + getarg_a(cop) + 1]
         iset(sp, ['getarg_a', cop], sym)
-        iset(sp, ['getarg_a', cop])
+        iset(0, ['_sm_', 0])
+#	iset(sp, ['getarg_a', cop])
 
       when :SUBI
 #        @stack[@sp + getarg_a(cop)] -= getarg_c(cop)
@@ -622,18 +623,21 @@ p "#{@pc.to_xeh} #{sym}"
       when :MUL
 #        @stack[@sp + getarg_a(cop)] *= @stack[@sp + getarg_a(cop) + 1]
         iset(sp, ['getarg_a', cop], sym)
-        iset(sp, ['getarg_a', cop])
+        iset(0, ['_sm_', 0])
+#	iset(sp, ['getarg_a', cop])
 
       when :DIV
 #        @stack[@sp + getarg_a(cop)] /= @stack[@sp + getarg_a(cop) + 1]
         iset(sp, ['getarg_a', cop], sym)
-        iset(sp, ['getarg_a', cop])
+        iset(0, ['_sm_', 0])
+#	iset(sp, ['getarg_a', cop])
 
       when :EQ
 #        val = (@stack[@sp + getarg_a(cop)] == @stack[@sp + getarg_a(cop) + 1])
 #        @stack[@sp + getarg_a(cop)] = val
         iset(sp, ['getarg_a', cop], sym)
-        iset(sp, ['getarg_a', cop])
+        iset(0, ['_sm_', 0])
+#	iset(sp, ['getarg_a', cop])
 
       else
         iset(0 , ['~~', 0], sym)
