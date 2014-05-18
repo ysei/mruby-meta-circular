@@ -289,6 +289,7 @@ p "#{pc.to_xeh} #{opc} #{op.to_xeh}"
   end
 end
 
+
 class FibVM
   include RiteOpcodeUtil
   OPTABLE_CODE = Irep::OPTABLE_CODE
@@ -303,6 +304,70 @@ class FibVM
     @cp = 0                     # callinfoのポインタ
     @irep = nil                 # 現在実行中の命令列オブジェクト
     @irepid =nil                # 命令列オブジェクトのid(JIT用)
+
+
+#    rmth = 63
+#    rmth = 47
+    rmth = 39
+#    @pla = Array.new($pcmax)
+#   $pltini.call()
+#    @pl = ENVary.new((rmth + 1) << 1, [['~~', 0]])
+#    @pl = ENVary.new((rmth + 1) << 1, [[[], 0]])
+    @pl = ENVary.new((rmth + 1) << 1, [[false, 0]])
+
+    plini
+#    @pl.idx_s
+
+    @idx = Hash.new
+    pl0 = @pl0
+    for n in (0 ... pl0.size)
+      k = pl0[n]
+      @idx[k] = n
+    end
+
+    @rmt = wkth
+#    GC.disable
+
+#   5ff9c1d2 :
+#   Assertion failed: ((obj)->tt != MRB_TT_FREE), function mrb_gc_mark, file src/gc.c, line 577.
+
+#   ysei/mruby-thread/tree/normal/ 4c02f126
+#       / mruby-thread/crimsonwoods/tree/experimental-thread-support/
+#               / mruby/mruby/ 32818bd2 :
+#   Assertion failed: (((mrb)->is_generational_gc_mode) || mrb->gc_state != GC_STATE_NONE),
+#       function mrb_write_barrier, file src/gc.c, line 1103.
+
+  end
+
+  # $pltini = Proc.new {
+  def plini
+
+    @pl[0] = ['th', 'sym', '_sp', 'ctr']
+    @pl[1] = [false,   0,     0,     0 ]
+    @pl0 = @pl[0]
+    @pl1 = @pl[1]
+
+#   (1..$pcmax + 1).each{ |n| @pl[n] = Envha.new(n, {})}
+#     @pl = [$pcmax + 1, {}]
+#     @envid = @pl.gethd
+
+#     @@wa.each{ |v|
+#     @@idx[v] = wa.index(v)
+##    eval "v = wa.index(v)"
+#   }
+
+#   @idx = Hash.new
+#   for n in (0 ... pl0.size)
+#      key = pl0[n]
+#      @idx[key] = n
+#   end
+  end
+
+  def wkth(pc = 1)
+#    Thread.new($pcmax) { |pcmax|
+    Thread.new(pc) { |pc|
+      ENVary.new(0).plw(pc)
+    }
   end
 
   def fls(pc2, *sym)
@@ -418,6 +483,7 @@ p "#{((pc2 >> 1) - 1).to_xeh} #{sym[0]} #{r[0].to_xeh}"
 
 #     case OPTABLE_SYM[get_opcode(cop)]
       sym = OPTABLE_SYM[get_opcode(cop)]
+p "#{@pc.to_xeh} #{sym}"
 
       case sym
         # 何もしない
@@ -425,36 +491,58 @@ p "#{((pc2 >> 1) - 1).to_xeh} #{sym[0]} #{r[0].to_xeh}"
 
         # MOVE Ra, RbでレジスタRaにレジスタRbの内容をセットする
       when :MOVE
-        @stack[@sp + getarg_a(cop)] = @stack[@sp + getarg_b(cop)]
+#       @stack[@sp + getarg_a(cop)] = @stack[@sp + getarg_b(cop)]
+        iset(sp, ['getarg_b', cop], sym)
+        iset(sp, ['getarg_a', cop])
 
         # LOADL Ra, pb でレジスタRaに定数テーブル(pool)のpb番目の値をセットする
       when :LOADL
-        @stack[@sp + getarg_a(cop)] = @irep.pool[getarg_bx(cop)]
+#	@stack[@sp + getarg_a(cop)] = @irep.pool[getarg_bx(cop)]
+	iset(0 , ['getarg_bx', cop], sym)
+	iset(sp, ['getarg_a', cop])
 
         # LOADI Ra, n でレジスタRaにFixnumの値 nをセットする
       when :LOADI
-        @stack[@sp + getarg_a(cop)] = getarg_sbx(cop)
+#       @stack[@sp + getarg_a(cop)] = getarg_sbx(cop)
+	iset(0 , ['getarg_sbx', cop], sym)
+        iset(sp, ['getarg_a', cop])
 
         # LOADSELF Ra でレジスタRaに現在のselfをセットする
       when :LOADSELF
-        @stack[@sp + getarg_a(cop)] = @stack[@sp]
+#	@stack[@sp + getarg_a(cop)] = @stack[@sp]
+	iset(sp , ['_im_', 0], sym)
+	iset(sp, ['getarg_a', cop])
 
         # ADD Ra, Rb でレジスタRaにRa+Rbをセットする
       when :ADD
-        @stack[@sp + getarg_a(cop)] += @stack[@sp + getarg_a(cop) + 1]
+#	@stack[@sp + getarg_a(cop)] += @stack[@sp + getarg_a(cop) + 1]
+	iset(sp, ['getarg_a', cop], sym)
+	#iset(0, ['_sm_', 0])
+	iset(sp, ['getarg_a', cop])
 
         # SUB Ra, n でレジスタRaにRa-nをセットする
       when :SUBI
-        @stack[@sp + getarg_a(cop)] -= getarg_c(cop)
+#	@stack[@sp + getarg_a(cop)] -= getarg_c(cop)
+	iset(0,  ['getarg_c', cop], sym)
+	iset(sp, ['getarg_a', cop])
 
         # EQ Ra でRaとR(a+1)を比べて同じならtrue, 違うならfalseをRaにセットする
       when :EQ
-        val = (@stack[@sp + getarg_a(cop)] == @stack[@sp + getarg_a(cop) + 1])
-        @stack[@sp + getarg_a(cop)] = val
-
+#	val = (@stack[@sp + getarg_a(cop)] == @stack[@sp + getarg_a(cop) + 1])
+#	@stack[@sp + getarg_a(cop)] = val
+	iset(sp, ['getarg_a', cop], sym)
+	#iset(0, ['_sm_', 0])
+	iset(sp, ['getarg_a', cop])
+		
       else
 
-        @flg.pop
+	iset(0 , ['~~', 0], sym)
+	iset(0 , ['~~', 0])
+#	pc2 = @pc << 1
+#	fls(pc2, sym)
+	
+	plini
+	@flg.pop
         @flg.push(true)
         @flg.push(true)
 
@@ -530,6 +618,9 @@ p "#{((pc2 >> 1) - 1).to_xeh} #{sym[0]} #{r[0].to_xeh}"
       @pc = @pc + 1
       @sp = sp  ##
     end
+
+    @rmt.join
+
   end
 end
 
