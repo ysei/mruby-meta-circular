@@ -32,13 +32,14 @@ Thank you authers
 Special thanks
 
 
-Andrew S. Tanenbaum , Douglas E. Smith , FUJIMOTOisao , HASEGAWAatusi , 
-HAYAKAWAtakasi , HBowl , HIEIyukio , Jean L. Gassee , KADO , KatouPiano , 
-KAMIUTI , KATAYAMA , KITAGAWAhirosi , KITANOmasaya , KOIKEkinya , 
-MAKINOmasami , MATUMOTOmasakazu , masataka , MIKI , MIURAkenji , NARITA , 
-NHlignuxNH , NISII , NISIKADOtomohiro , NISIMURAtakesi , OGAWAmasahiro , 
-OOI , OONISIyosinori , Plainss , SAITOUken , SATAKE , Syoji , TAKAMI , 
-TAKATUKASA , Tooya , TORII , Usagi , WATANABE , yosinori
+AEC , AiKyouDai , Andrew S. Tanenbaum , Douglas E. Smith , FUJIMOTOisao ,
+HASEGAWAatusi , HAYAKAWAtakasi , HBowl , HIEIyukio , Jean L. Gassee ,
+KADO , KATOUario , KatouPiano , KAMIUTI , KATAYAMA , KITAGAWAhirosi , 
+KITANOmasaya , KOIKEkinya , MAKINOmasami , MATUMOTOmasakazu , masataka , 
+MIKI , MIURAkenji , NagoyaJuke , NARITA , NHlignuxNH , NISII , 
+NISIKADOtomohiro , NISIMURAtakesi , OAsystem-plaza , Oh!MZ , Oh!X , OOI , 
+OONISIyosinori , Plainss , SAITOUken , SATAKE , Syoji , TAKAMI , 
+TAKATUKASA , Tooya , TORII , Tsukumo , Usagi , WATANABE , yosinori
 
 
 
