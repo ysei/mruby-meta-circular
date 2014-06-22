@@ -556,7 +556,8 @@ p "#{@pc.to_xeh} #{sym}"
 
 	  # JMPNOT Ra, nでもしRaがnilかfalseならpcをnだけ増やす。ただし、nは符号付き
 	when :JMPNOT
-	  if !@stack[@sp + getarg_a(cop)] then
+###	  if !@stack[@sp + getarg_a(cop)] then
+	  if !@stack[sp + getarg_a(cop)] then
 ##	    @pc = @pc + getarg_sbx(cop)
 	    @pc = @pc + getarg_sbx(cop) - 1
 ##	    next
@@ -571,15 +572,18 @@ p "#{@pc.to_xeh} #{sym}"
 	  a = getarg_a(cop)
 	  mid = @irep.syms[getarg_b(cop)]
 	  n = getarg_c(cop)
-	  newirep = Irep::get_irep(@stack[@sp + a], mid)
+###	  newirep = Irep::get_irep(@stack[@sp + a], mid)
+	  newirep = Irep::get_irep(@stack[sp + a], mid)
 	  if newirep then
-	    @callinfo[@cp] = @sp
+###	    @callinfo[@cp] = @sp
+	    @callinfo[@cp] = sp
 	    @cp += 1
 	    @callinfo[@cp] = @pc
 	    @cp += 1
 	    @callinfo[@cp] = @irep
 	    @cp += 1
-	    @sp += a
+###	    @sp += a
+	    sp += a
 ##	    @pc = 0
 	    @pc = -1
 	    @irep = newirep
@@ -589,25 +593,31 @@ p "#{@pc.to_xeh} #{sym}"
 	  else
 	    args = []
 	    n.times do |i|
-	      args.push @stack[@sp + a + i + 1]
+###	      args.push @stack[@sp + a + i + 1]
+	      args.push @stack[sp + a + i + 1]
 	    end
 
-	    @stack[@sp + a] = @stack[@sp + a].send(mid, *args)
+###	    @stack[@sp + a] = @stack[@sp + a].send(mid, *args)
+	    @stack[sp + a] = @stack[sp + a].send(mid, *args)
 	  end
 
 	  # RETURN Raで呼び出し元のメソッドに戻る。Raが戻り値になる
 	when :RETURN
 	  if @cp == 0 then
-	    return @stack[@sp + getarg_a(cop)]
+###	    return @stack[@sp + getarg_a(cop)]
+	    return @stack[sp + getarg_a(cop)]
 	  else
-	    @stack[@sp] = @stack[@sp + getarg_a(cop)]
+###	    @stack[@sp] = @stack[@sp + getarg_a(cop)]
+	    @stack[sp] = @stack[sp + getarg_a(cop)]
 	    @cp -= 1
 	    @irep = @callinfo[@cp]
 	    @irepid = @irep.id
 	    @cp -= 1
-	    @pc = @callinfo[@cp]
+###	    @pc = @callinfo[@cp]
+	    @pc = @callinfo[@cp] - 1
 	    @cp -= 1
-	    @sp = @callinfo[@cp]
+###	    @sp = @callinfo[@cp]
+	    sp = @callinfo[@cp]
 	  end
 	else
 	  printf("Unkown code %s \n", OPTABLE_SYM[get_opcode(cop)])
