@@ -32,14 +32,16 @@ Thank you authers
 Special thanks
 
 
-AEC , AiKyouDai , Andrew S. Tanenbaum , Douglas E. Smith , FUJIMOTOisao ,
-HASEGAWAatusi , HAYAKAWAtakasi , HBowl , HIEIyukio , Jean L. Gassee ,
-KADO , KATOUario , KatouPiano , KAMIUTI , KATAYAMA , KITAGAWAhirosi , 
-KITANOmasaya , KOIKEkinya , MAKINOmasami , MATUMOTOmasakazu , masataka , 
-MIKI , MIURAkenji , NagoyaJuke , NARITA , NHlignuxNH , NISII , 
-NISIKADOtomohiro , NISIMURAtakesi , OAsystem-plaza , Oh!MZ , Oh!X , OOI , 
-OONISIyosinori , Plainss , SAITOUken , SATAKE , Syoji , TAKAMI , 
-TAKATUKASA , Tooya , TORII , Tsukumo , Usagi , WATANABE , yosinori
+AEC , AiKyouDai , Andrew S. Tanenbaum , DenkaShopKuwayama , 
+Douglas E. Smith , FUJIMOTOisao , HASEGAWAatusi , HAYAKAWAtakasi , 
+HBowl , HIEIyukio , INAGAKIhitosi , Jean L. Gassee , KADO , 
+KATOUario , KatouPiano , KAMIUTI , KATAYAMA , KITAGAWAhirosi , 
+KITANOmasaya , KOIKEkinya , MAKINOmasami , MATUMOTOmasakazu , 
+masataka , MIKI , MIURAkenji , MizutaniEijiJimusyo , NagoyaJuke , 
+NARITA , NHlignuxNH , NISII , NISIKADOtomohiro , NISIMURAtakesi , 
+OAsystem-plaza , Oh!MZ , Oh!X , OOI , OONISIyosinori , Plainss , 
+SAITOUken , SATAKE , Syoji , TAKAMI , Takasago , TAKATUKASA , 
+Tooya , TORII , Tsukumo , Usagi , WATANABE , yosinori
 
 
 
@@ -110,3 +112,281 @@ end
 http://github.com/matsumoto-r/mruby-on-Lua/
 http://github.com/CowboyTim/lua-cell/
 http://google.com/search?q=ruby+cellbe
+
+
+
+ ( eof ) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+UTC Sun CEy002014m06d22
+
+
+Pipeline management ( ? ) is bad , after re-clone this gem ( not like before re-clone ) : {
+
+
+https://github.com/ysei/mruby
+> commit 671b2c2dc7ff97b36edba07515e0ed1038c9aba0
+> Merge: 85ae9ed cb25481
+> Author: baron <baron@baron>
+> Date:   Thu May 1 04:09:54 2014 +0000
+> 
+>     Merge https://github.com/mruby/mruby into mruby-thread_-_normal
+> 
+> commit cb2548141b743c2d5a6b03f99a45bf2707cf59f7
+
+  conf.gem :github => 'ysei/mruby-thread', :branch => 'master_-_merge_-_postmodern_-_master_-_pthread_kill_-_8a67d500'
+	( 89b2c90debde8b5ab5ca48a8d7c1fadc8fd69d9f ) 
+  conf.gem :github => 'ysei/mruby-meta-circular-heiretu', :branch => 'heiretu'
+	( 2887764222ee6175ae80eea28bbe3cd200f00959 ) 
+  conf.gem :github => 'iij/mruby-env', :branch => 'master'
+	( b1e3ae76991191aca88c60761d6995a98de531f9 ) 
+  conf.gem :github => 'mattn/mruby-json', :branch => 'master'
+	( 00269fccbce30347b1f4b99e2c985570e308813d ) 
+  conf.gem :github => 'ysei/mruby-io', :branch => 'master_-_mattn_-_global_variables'
+	( 4c91f5af244352320ff2ddefcc52e178898f902d ) 
+  conf.gem :github => 'iij/mruby-process'
+	( 44660203637eb1fc21455ed1daf00d66e8b1855b ) 
+
+
+Sun Jun 22 12:44:39 UTC 2014
+$ rake
+GIT CHECKOUT master_-_merge_-_postmodern_-_master_-_pthread_kill_-_8a67d500
+Already on 'master_-_merge_-_postmodern_-_master_-_pthread_kill_-_8a67d500'
+GIT CHECKOUT heiretu
+Already on 'heiretu'
+GIT CHECKOUT master
+Already on 'master'
+GIT CHECKOUT master
+Already on 'master'
+GIT CHECKOUT master_-_mattn_-_global_variables
+Already on 'master_-_mattn_-_global_variables'
+GIT CHECKOUT master
+Already on 'master'
+CC    build/mrbgems/mruby-meta-circular-heiretu/src/meta.c -> build/host/mrbgems/mruby-meta-circular/src/meta.o
+      MRBC build/mrbgems/mruby-meta-circular-heiretu/mrblib/irep.rb
+CC    build/host/mrbgems/mruby-meta-circular/gem_init.c -> build/host/mrbgems/mruby-meta-circular/gem_init.o
+AR    build/host/lib/libmruby.a
+LD    build/host/bin/mruby
+LD    build/host/bin/mirb
+
+Build summary:
+
+================================================
+      Config Name: host
+ Output Directory: build/host
+         Binaries: mrbc, mruby
+    Included Gems:
+             mruby-thread
+             mruby-meta-circular
+             mruby-env
+             mruby-json
+             mruby-io
+             mruby-process
+             mruby-sprintf - standard Kernel#sprintf method
+             mruby-print - standard print/puts/p
+             mruby-math - standard Math module
+             mruby-time - standard Time class
+             mruby-struct - standard Struct class
+             mruby-enum-ext - extensional Enumerable module
+             mruby-string-ext - extensional String class
+             mruby-numeric-ext - extensional Numeric class
+             mruby-array-ext - extensional Array class
+             mruby-hash-ext - extensional Hash class
+             mruby-range-ext - extensional Range class
+             mruby-proc-ext - extensional Proc class
+             mruby-symbol-ext - extensional Symbol class
+             mruby-random - Random class
+             mruby-object-ext - extensional Object class
+             mruby-objectspace - ObjectSpace class
+             mruby-fiber - Fiber class
+             mruby-enumerator - Enumerator class
+             mruby-enum-lazy - Enumerable::Lazy class
+             mruby-toplevel-ext - extended toplevel object (main) methods
+             mruby-bin-mirb - mirb command
+               - Binaries: mirb
+             mruby-bin-mruby - mruby command
+               - Binaries: mruby
+================================================
+
+$ bin/mruby build/mrbgems/mruby-meta-circular-heiretu_-_new/sample/jit-1.rb
+"0 ENTER"
+"1 LOADSELF"
+"2 LOADI"
+^C
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+therad
+
+compile err
+b35893ee139f0fdd61dad4eae4aa071937f4ea66
+
+compile err
+0947aefa23701c5cb25d89e18c591c6d7afeaa37
+
+compile err
+4a2c37df935495fd612377d67bdba0582ad1813e
+
+ok
+5da7bd3a9133f03eb259fd9858cb08fa56bc53ac
+201402
+
+
+no
+commit 65d2073739e47142125e5b666d24c551c3e652a9
+Merge: 78ab979 993095c
+Author: Yukihiro "Matz" Matsumoto <matz@ruby-lang.org>
+Date:   Tue Jan 7 00:37:38 2014 -0800
+
+no 7c3f06ddd8cd61277e041b538da68fd5b8be9dde
+no af5bec1fbc2fd2047d40524d3bfedea77de318b2
+commit af5bec1fbc2fd2047d40524d3bfedea77de318b2
+Author: fleuria <me.ssword@gmail.com>
+Date:   Tue Oct 1 21:32:16 2013 +0800
+
+no
+commit 862517d540c12a54c5750e83a65274bccfe9df51
+Author: Keita Obo <ktaobo@gmail.com>
+Date:   Fri Sep 20 17:23:00 2013 +0900
+
+
+
+
+
+
+commit d74887f5822e3ec75f29fbb1de3ae6c9fe282513
+Author: Yukihiro "Matz" Matsumoto <matz@ruby-lang.org>
+Date:   Fri Sep 20 15:41:59 2013 +0900
+
+compile error
+commit 12183fa250ec979ae55980a038d70714c2f2fca1
+Author: Yukihiro "Matz" Matsumoto <matz@ruby-lang.org>
+Date:   Fri Sep 20 06:09:41 2013 +0900
+
+ok
+commit 58b1c0883baa84cc6b4394194b42cb580001b8b3
+Author: Yukihiro "Matz" Matsumoto <matz@ruby-lang.org>
+Date:   Fri Sep 20 06:08:01 2013 +0900
+
+
+
+
+meta-circular
+
+no
+commit 592117f6c9b30a01f9cfaf5636c2b96844af79e5
+Author: Miura Hideki <m-72@tf6.so-net.ne.jp>
+Date:   Sat Nov 23 12:05:38 2013 +0900
+
+    sBx　operand support
+
+no
+5a31f134df2054b311c15bca8451ec0cc713f798
+
+
+
+
+ok
+0412ab3b4f9ff74ae4441ea735371c4402edd760
+
+
+
+
+
+
+
+
+
+
+
+miura
+no
+3e75007eb701750422ce199e9320a6d6f8bc875c
+
+no
+a080595136b3b1820b4892bb0b929eb873cbf41b
+
+
+
+
+crimsonwoods
+no
+e8dd8180baae425c893e1054368a4c32c99ea805
+no
+302e20333b5da7f5f5166264c54bee7e3add6652
