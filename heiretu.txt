@@ -418,6 +418,24 @@ Showing 1 changed file with 2 additions and 2 deletions.
 
 
 
+vm.c 1358
++          ci = mrb->c->cibase + proc->env->cioff + 1;
++          if (!ci->stackent) {
++            localjump_error(mrb, LOCALJUMP_ERROR_BREAK);
++            goto L_RAISE;
++          }
++          mrb->c->ci = ci;
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -467,3 +485,135 @@ no
 302e20333b5da7f5f5166264c54bee7e3add6652
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Worked not well ( Hash too ? , mruby 00201402 ? ) , 
+# and Array is more suitable to GC . 
+
+
+class ENVwrp < Hash
+  @@usr_str_h__hed = {'rb' => 'rb__', 'nm' =>'nm__'}
+  @@usr_f__nm = false
+  @@usr_ep__hed = Proc.new { |a|
+#p a
+    k = a[0]
+    if ! k.kind_of?(String)
+      [false, k]
+    else
+      hd = ''
+      hdsz = 0
+      @@usr_str_h__hed.each_value { |hd|
+        hdsz = hd.size
+        hdsz = 0 if hd != k[0..hdsz]
+        @@usr_f__nm = true if hd == @@usr_str_h__hed['nm']
+      }
+      [hd == k[0..hdsz - 1], k[hdsz..-1]]
+    #   [hd == k.slice!(k[0..hdsz - 1]), k]
+    end
+  }
+
+  # alias usr__define_extend_bind_method__hash__get []
+  def [](*a)
+    f, s = @@usr_ep__hed.call(a)
+    # p 's=' + s
+    # f ? super : a = ma('l', s)
+    f ? super : ma('l', ENV[s])
+#    f ? super : ma('l', ENV[ma('d', s)])
+    a
+  end
+
+  # alias usr__define_extend_bind_method__hash__set []=
+  def []=(*a)
+#    if a.kind_of?(Hash)
+#      a.each_key.each{ |k|
+#	a[k]
+    f, s = @@usr_ep__hed.call(a)
+    #    f ? super : a = ma('d', a[1], s)
+#    f ? super : ENV[s] = ma('d', a[1])
+    f ? super : ENV[ma('d', s)] = ma('d', a[1])
+    a
+  end
+
+  #  def ma(*arg)
+  def ma(m, a)
+    # m = arg.shift
+    if ! @@usr_f__nm
+      # 'd' == m ? ENV[arg[1]] = Marshal.dump(arg[0]) : a = Marshal.load(ENV[arg[0]])
+      # 'd' == m ? a = Marshal.dump(arg[0]) : a = Marshal.load(arg[0])
+p m, a
+#      'd' == m ? a = Marshal.dump(a) : ( a = Marshal.load(a) if a.kind_of?(String) )
+      'd' == m ? a = Marshal.dump(a) : a = Marshal.load(a)
+    end
+    a
+  end
+
+end
+
+
+class Envhashaa
+  @@str__hedenv = 'env__'
+  def initialize(n = 1, *arg)
+    n -= 1
+    eh=''
+    if n < 0 then
+      [0..n].each { |l| self.get(*arg)}
+    else
+      (0..n).each { |l|
+        set(l, *arg)
+      }
+    end
+  end
+
+  def set(l, *arg)
+    eh = l.to_s
+    eh += cv(*arg[0..-2])
+    ENV[@@idb + cv(eh)] = arg[-1] #.to_s
+  end
+
+  def add(l, *arg)
+    eh = l.to_s
+    eh += cv(*arg[0..-2])
+    ENV[@@idb + cv(eh)] += arg[-1].to_s
+  end
+
+  def push(l, *arg)
+    eh = l.to_s
+    eh += cv(*arg[0..-2])
+    ENV[@@idb + cv(eh)].push(arg[-1].to_s)
+  end
+
+  def get(*arg)
+    ENV[@@idb + cv(*arg)]
+  end
+
+  def cv(*arg)
+    eh=''
+    arg.each{|s| eh += @@sep + s.to_s}
+    eh
+  end
+
+  def gtnm
+    [@@idb, @@sep]
+  end
+
+end
+
+
+
+##    wkth(pc2ab + 2)
