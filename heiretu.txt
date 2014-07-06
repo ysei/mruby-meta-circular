@@ -17,7 +17,8 @@ http://github.com/ysei/mruby/commit/053a5dc623258e80da9aa7cc15a1adb9552d5212
 build_config.rb
 
 
-    conf.gem :github => 'mattn/mruby-thread'
+  # conf.gem :github => 'mattn/mruby-thread'
+    conf.gem :github => 'ysei/mruby-thread', :branch => 'master_-_merge_-_postmodern_-_master_-_pthread_kill_-_8a67d500'
   # conf.gem :github => 'crimsonwoods/mruby-thread', :branch => 'experimental_thread_support'
   # conf.gem :github => 'ysei/mruby-thread', :branch => 'ac8d04fb6c'
     conf.gem :github => 'miura1729/mruby-meta-circular'
@@ -161,6 +162,43 @@ http://google.com/search?q=ruby+cellbe
 
 
 
+
+
+
+conf.bins = %w(mrbc mruby )
+
+  # conf.gem :github => 'ysei/mruby-thread', :branch => 'crimsonwoods_-_experimental_thread_support_-_normal'
+    conf.gem :github => 'ysei/mruby-thread', :branch => 'master_-_merge_-_postmodern_-_master_-_pthread_kill_-_8a67d500'
+  # conf.gem :github => 'crimsonwoods/mruby-thread', :branch => 'experimental_thread_support'
+  # conf.gem :github => 'mattn/mruby-thread', :branch => 'master'
+  # conf.gem :github => 'postmodern/mruby-thread', :branch => 'master'
+  # conf.gem :github => 'matsumoto-r/mruby-thread', :branch => 'master'
+  # conf.gem :github => 'hatoishi/mruby-thread', :branch => 'master'
+  # conf.gem :github => 'miura1729/mruby-meta-circular', :branch => 'master'
+    conf.gem :github => 'ysei/mruby-meta-circular-heiretu', :branch => 'heiretu'
+  # conf.gem :github => 'charlescui/mruby-cache', :branch => 'master'
+  # conf.gem :github => 'matsumoto-r/mruby-userdata', :branch => 'master'
+    conf.gem :github => 'iij/mruby-env', :branch => 'master'
+    conf.gem :github => 'mattn/mruby-json', :branch => 'master'
+  # conf.gem :github => 'suzukaze/mruby-msgpack', :branch => 'master'
+  # conf.gem :github => 'take-cheeze/mruby-msgpack', :branch => 'master'
+  # conf.gem :github => 'schmurfy/mruby-msgpack', :branch => 'master'
+  # conf.gem :github => 'matsumoto-r/mruby-redis', :branch => 'master'
+  # conf.gem :github => 'matsumoto-r/mruby-vedis', :branch => 'master'
+  # conf.gem :github => 'iij/mruby-io'
+    conf.gem :github => 'ysei/mruby-io', :branch => 'master_-_mattn_-_global_variables'
+  # conf.gem :github => 'iij/mruby-dir'
+  # conf.gem :github => 'iij/mruby-tempfile'
+  # conf.gem :github => 'iij/mruby-require'
+    conf.gem :github => 'iij/mruby-process'
+  # conf.gem :github => 'matsumoto-r/mruby-sleep', :branch => 'master'
+  # conf.gem :github => 'wasabiz/mruby-partcont'
+  # mruby-eval
+  #memcached / Couchbase / MongoDB
+
+
+  # conf.gem :github => 'take-cheeze/mruby-onig-regexp', :branch => 'global_variables'
+  # conf.gem :github => 'take-cheeze/mruby-marshal', :branch => 'master'
 
 
 
@@ -347,6 +385,43 @@ Date:   Fri Sep 20 06:08:01 2013 +0900
 
 
 
+
+Use self for the given proc
+    master
+commit 862517d540c12a54c5750e83a65274bccfe9df51 1 parent d74887f
+Keita Obo ktaobo authored 4 months ago
+Showing 1 changed file with 2 additions and 2 deletions.
+4 ?????????? src/vm.c
+@@ -460,7 +460,7 @@
+ {
+   struct RProc *p = mrb_proc_ptr(b);
+ 
+-  return mrb_yield_internal(mrb, b, argc, argv, mrb->c->stack[0], p->target_class);
++  return mrb_yield_internal(mrb, b, argc, argv, p->env->stack[0], p->target_class);
+ }
+ 
+ mrb_value
+@@ -468,7 +468,7 @@
+ {
+   struct RProc *p = mrb_proc_ptr(b);
+ 
+-  return mrb_yield_internal(mrb, b, 1, &arg, mrb->c->stack[0], p->target_class);
++  return mrb_yield_internal(mrb, b, 1, &arg, p->env->stack[0], p->target_class);
+ }
+ 
+ typedef enum {
+0 notes on commit 862517d Show line notes below
+
+
+
+
+
+
+
+
+
+
+
 meta-circular
 
 no
@@ -390,3 +465,5 @@ no
 e8dd8180baae425c893e1054368a4c32c99ea805
 no
 302e20333b5da7f5f5166264c54bee7e3add6652
+
+
