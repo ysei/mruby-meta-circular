@@ -1,7 +1,7 @@
 # -*- coding: iso-2022-jp -*-
 
 class Numeric
-  def to_xeh
+  def to_xeh	# unwork # mrblib/irep.rb
     self.to_i.to_s(0x10).reverse
   end
 

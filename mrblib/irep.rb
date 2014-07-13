@@ -1,3 +1,17 @@
+
+class Numeric
+  def to_xeh
+    self.to_i.to_s(0x10).reverse
+  end
+
+#  def pid_g
+#    pid = $$
+#    pid = 0 if nil == pid
+#    pid
+#  end
+end
+
+
 module RiteOpcodeUtil
   def get_opcode(op)
     op & 0x7f
