@@ -17,8 +17,8 @@ http://github.com/ysei/mruby/commit/053a5dc623258e80da9aa7cc15a1adb9552d5212
 build_config.rb
 
 
-  # conf.gem :github => 'mattn/mruby-thread'
-    conf.gem :github => 'ysei/mruby-thread', :branch => 'master_-_merge_-_postmodern_-_master_-_pthread_kill_-_8a67d500'
+    conf.gem :github => 'mattn/mruby-thread'
+  # conf.gem :github => 'ysei/mruby-thread', :branch => 'master_-_merge_-_postmodern_-_master_-_pthread_kill_-_8a67d500'
   # conf.gem :github => 'crimsonwoods/mruby-thread', :branch => 'experimental_thread_support'
   # conf.gem :github => 'ysei/mruby-thread', :branch => 'ac8d04fb6c'
     conf.gem :github => 'miura1729/mruby-meta-circular'
@@ -33,16 +33,19 @@ Thank you authers
 Special thanks
 
 
-AEC , AiKyouDai , Andrew S. Tanenbaum , DenkaShopKuwayama , 
-Douglas E. Smith , FUJIMOTOisao , HASEGAWAatusi , HAYAKAWAtakasi , 
-HBowl , HIEIyukio , INAGAKIhitosi , Jean L. Gassee , KADO , 
-KATOUario , KatouPiano , KAMIUTI , KATAYAMA , KITAGAWAhirosi , 
-KITANOmasaya , KOIKEkinya , MAKINOmasami , MATUMOTOmasakazu , 
-masataka , MIKI , MIURAkenji , MizutaniEijiJimusyo , NagoyaJuke , 
-NARITA , NHlignuxNH , NISII , NISIKADOtomohiro , NISIMURAtakesi , 
-OAsystem-plaza , Oh!MZ , Oh!X , OOI , OONISIyosinori , Plainss , 
-SAITOUken , SATAKE , Syoji , TAKAMI , Takasago , TAKATUKASA , 
-Tooya , TORII , Tsukumo , Usagi , WATANABE , yosinori
+AEC , AHS-AC , ASC , AiKyouDai , Andrew S. Tanenbaum , 
+Douglas E. Smith , FUJIMOTOisao , GalleryIDF , HASEGAWA , HASEGAWAatusi , 
+HAYAKAWAtakasi , HoshigaokaBowl , HIEIyukio , INAGAKIhitosi , 
+Jean L. Gassee , KADO , KAGEYAMAken , KATOUario , KatouPiano , KAMIUTI , 
+KATAYAMA , KITAGAWAhirosi , KITAMURAtuyosi , KITANOmasaya , KOIKEkinya , 
+KuwayamaDenkaShop , MAKINOmasami , MATUMOTOmasakazu , masataka , MIKI , 
+MIURAkenji , MizutaniEijiJimusyo , NAITOUmutumi , NagoyaJuke , 
+NAKAGAWAmasaya , NARITA , NHlignuxNH , NISII , NISIKADOtomohiro , 
+NISIMURAtakesi , NOJIMAakinori , OAsystem-plaza , Oh!MZ , Oh!X , 
+OKAYAMAyasuo , OKUMURAnobuo , OOI , OONISIyosinori , Plainss , 
+SAITOUken , SATAKE , SATOUfumi , Syoji , TAKAMI , Takasago , TAKATUKASA , 
+TANAKAyasusi , TANAKAhideaki , TANIGUTItakanori , Tooya , TORII , 
+Tsukumo , Tutui , Usagi , WATANABE , YAMAJI , YAMAZAKIeiji , yosinori
 
 
 
@@ -220,10 +223,6 @@ conf.bins = %w(mrbc mruby )
 
 UTC Sun CEy002014m06d22
 
-
-Pipeline management ( ? ) is bad , after re-clone this gem ( not like before re-clone ) : {
-
-
 https://github.com/ysei/mruby
 > commit 671b2c2dc7ff97b36edba07515e0ed1038c9aba0
 > Merge: 85ae9ed cb25481
@@ -248,74 +247,13 @@ https://github.com/ysei/mruby
 	( 44660203637eb1fc21455ed1daf00d66e8b1855b ) 
 
 
-Sun Jun 22 12:44:39 UTC 2014
-$ rake
-GIT CHECKOUT master_-_merge_-_postmodern_-_master_-_pthread_kill_-_8a67d500
-Already on 'master_-_merge_-_postmodern_-_master_-_pthread_kill_-_8a67d500'
-GIT CHECKOUT heiretu
-Already on 'heiretu'
-GIT CHECKOUT master
-Already on 'master'
-GIT CHECKOUT master
-Already on 'master'
-GIT CHECKOUT master_-_mattn_-_global_variables
-Already on 'master_-_mattn_-_global_variables'
-GIT CHECKOUT master
-Already on 'master'
-CC    build/mrbgems/mruby-meta-circular-heiretu/src/meta.c -> build/host/mrbgems/mruby-meta-circular/src/meta.o
-      MRBC build/mrbgems/mruby-meta-circular-heiretu/mrblib/irep.rb
-CC    build/host/mrbgems/mruby-meta-circular/gem_init.c -> build/host/mrbgems/mruby-meta-circular/gem_init.o
-AR    build/host/lib/libmruby.a
-LD    build/host/bin/mruby
-LD    build/host/bin/mirb
-
-Build summary:
-
-================================================
-      Config Name: host
- Output Directory: build/host
-         Binaries: mrbc, mruby
-    Included Gems:
-             mruby-thread
-             mruby-meta-circular
-             mruby-env
-             mruby-json
-             mruby-io
-             mruby-process
-             mruby-sprintf - standard Kernel#sprintf method
-             mruby-print - standard print/puts/p
-             mruby-math - standard Math module
-             mruby-time - standard Time class
-             mruby-struct - standard Struct class
-             mruby-enum-ext - extensional Enumerable module
-             mruby-string-ext - extensional String class
-             mruby-numeric-ext - extensional Numeric class
-             mruby-array-ext - extensional Array class
-             mruby-hash-ext - extensional Hash class
-             mruby-range-ext - extensional Range class
-             mruby-proc-ext - extensional Proc class
-             mruby-symbol-ext - extensional Symbol class
-             mruby-random - Random class
-             mruby-object-ext - extensional Object class
-             mruby-objectspace - ObjectSpace class
-             mruby-fiber - Fiber class
-             mruby-enumerator - Enumerator class
-             mruby-enum-lazy - Enumerable::Lazy class
-             mruby-toplevel-ext - extended toplevel object (main) methods
-             mruby-bin-mirb - mirb command
-               - Binaries: mirb
-             mruby-bin-mruby - mruby command
-               - Binaries: mruby
-================================================
-
-$ bin/mruby build/mrbgems/mruby-meta-circular-heiretu_-_new/sample/jit-1.rb
-"0 ENTER"
-"1 LOADSELF"
-"2 LOADI"
-^C
 
 
-}
+
+
+
+
+
 
 
 
