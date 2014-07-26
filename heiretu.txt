@@ -21,9 +21,10 @@ build_config.rb
   # conf.gem :github => 'ysei/mruby-thread', :branch => 'master_-_merge_-_postmodern_-_master_-_pthread_kill_-_8a67d500'
   # conf.gem :github => 'crimsonwoods/mruby-thread', :branch => 'experimental_thread_support'
   # conf.gem :github => 'ysei/mruby-thread', :branch => 'ac8d04fb6c'
-    conf.gem :github => 'miura1729/mruby-meta-circular'
+  # conf.gem :github => 'miura1729/mruby-meta-circular'
     conf.gem :github => 'iij/mruby-env'
     conf.gem :github => 'mattn/mruby-json'
+    conf.gem :github => 'iij/mruby-io'
     conf.gem :github => 'iij/mruby-process'
 
 Thank you authers
@@ -232,32 +233,29 @@ conf.bins = %w(mrbc mruby )
 
 
 
-monami-ya.mrb_-_2_0_1_4_0_7_1_5__5170410200 / develop
+monami-ya.mrb / develop
 
 
-Sun Jul 13 12:18:28 UTC 2014
+Sat Jul 26 08:22:46 UTC 2014
 
 $ bin/mruby build/mrbgems/mruby-meta-circular-heiretu/sample/jit-1.rb
 "0 ENTER"
 "1 LOADSELF"
-"2 LOADL"
 "0 ~~ 0"
+"2 LOADL"
 "1 _im_ 0"
 "1 getarg_a 6000002"
 "1 LOADSELF 0"
-"3 SEND"
 "2 getarg_bx 2000003"
+"3 SEND"
 "2 getarg_a 2000003"
 "2 LOADL 0"
-trace:
-        [3] build/mrbgems/mruby-meta-circular-heiretu/sample/jit-1.rb:387:in FibVM.fls
-        [2] build/mrbgems/mruby-meta-circular-heiretu/sample/jit-1.rb:460:in FibVM.iset
-        [1] build/mrbgems/mruby-meta-circular-heiretu/sample/jit-1.rb:539:in FibVM.eval
-        [0] build/mrbgems/mruby-meta-circular-heiretu/sample/jit-1.rb:653
-build/mrbgems/mruby-meta-circular-heiretu/sample/jit-1.rb:387: undefined method 'irep' for #<FibVM:0x283a4e08> (NoMethodError)
-        0.48 real         0.28 user         0.10 sys
-1
-Sun Jul 13 12:18:29 UTC 2014
+"0 ENTER"
+"1 MOVE"
+"2 LOADL"
+"3 ~~ 0"
+"3 ~~ 0"
+Assertion failed: ((obj)->tt != MRB_TT_FREE), function mrb_gc_mark, file /root/mrb/monami-ya.mrb_-_2_0_1_4_0_7_2_3__3270410200/src/gc.c, line 590.
 
 
 LOADL ? LOADI ?

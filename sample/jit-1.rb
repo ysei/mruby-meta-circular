@@ -302,7 +302,7 @@ class FibVM
     @pc = 0                     # 実行する命令の位置
     @sp = 0                     # スタックポインタ
     @cp = 0                     # callinfoのポインタ
-    @irep = nil                 # 現在実行中の命令列オブジェクト
+    @irep = [nil]               # 現在実行中の命令列オブジェクト
     @irepid =nil                # 命令列オブジェクトのid(JIT用)
 
 
@@ -328,12 +328,12 @@ class FibVM
     @rmt = wkth
 #    GC.disable
 
-#   5ff9c1d2 :
+#   5ff9c1d2 : ( irep.rb ) 
 #   Assertion failed: ((obj)->tt != MRB_TT_FREE), function mrb_gc_mark, file src/gc.c, line 577.
 
 #   ysei/mruby-thread/tree/normal/ 4c02f126
 #       / mruby-thread/crimsonwoods/tree/experimental-thread-support/
-#               / mruby/mruby/ 32818bd2 :
+#               / mruby/mruby/ 32818bd2 : ( irep.rb ) 
 #   Assertion failed: (((mrb)->is_generational_gc_mode) || mrb->gc_state != GC_STATE_NONE),
 #       function mrb_write_barrier, file src/gc.c, line 1103.
 
@@ -383,16 +383,18 @@ p "#{((pc2 >> 1) - 1).to_xeh} #{sym[0]} #{r[0].to_xeh}"
       @stack[r[1]] = @stack[r[0]]
 #    when :LOADL
     when 'LOADL'
-#        @stack[@sp + getarg_a(cop)] = irep.pool[getarg_bx(cop)]
-      @stack[r[1]] = irep.pool[r[0]]
+##	@stack[@sp + getarg_a(cop)] = irep.pool[getarg_bx(cop)]
+#	@stack[@sp + getarg_a(cop)] = @irep.pool[getarg_bx(cop)]
+      @stack[r[1]] = @irep[0].pool[r[0]]
 #    when :LOADI
     when 'LOADI'
 #        @stack[@sp + getarg_a(cop)] = getarg_sbx(cop)
       @stack[r[1]] = r[0]
 #    when :LOADSYM
     when 'LOADSYM'
-#        @stack[@sp + getarg_a(cop)] = irep.syms[getarg_bx(cop)]
-      @stack[r[1]] = irep.syms[r[0]]
+##	@stack[@sp + getarg_a(cop)] = irep.syms[getarg_bx(cop)]
+#	@stack[@sp + getarg_a(cop)] = @irep.syms[getarg_bx(cop)]
+      @stack[r[1]] = @irep[0].syms[r[0]]
 #    when :LOADSELF
     when 'LOADSELF'
 #        @stack[@sp + getarg_a(cop)] = @stack[@sp]
@@ -471,14 +473,16 @@ p "#{((pc2 >> 1) - 1).to_xeh} #{sym[0]} #{r[0].to_xeh}"
   end
 
   def eval(irep)
-    @irep = irep
-    @irepid = @irep.id
+    @irep[0] = irep
+#   @irepid = @irep.id
+    @irepid = irep.id
 
     @flg = [true]
 
     while true
       #　命令コードの取り出し
-      cop = @irep.iseq[@pc]
+#     cop = @irep.iseq[@pc]
+      cop = irep.iseq[@pc]
       sp = @sp  ##
 
 #     case OPTABLE_SYM[get_opcode(cop)]
@@ -570,7 +574,8 @@ p "#{@pc.to_xeh} #{sym}"
 	  # 呼び出す。ただし、引数はanum個あり、R(a+1), R(a+2)... R(a+anum)が引数
 	when :SEND
 	  a = getarg_a(cop)
-	  mid = @irep.syms[getarg_b(cop)]
+#	  mid = @irep.syms[getarg_b(cop)]
+	  mid = irep.syms[getarg_b(cop)]
 	  n = getarg_c(cop)
 ###	  newirep = Irep::get_irep(@stack[@sp + a], mid)
 	  newirep = Irep::get_irep(@stack[sp + a], mid)
@@ -580,14 +585,17 @@ p "#{@pc.to_xeh} #{sym}"
 	    @cp += 1
 	    @callinfo[@cp] = @pc
 	    @cp += 1
-	    @callinfo[@cp] = @irep
+#	    @callinfo[@cp] = @irep
+	    @callinfo[@cp] = irep
 	    @cp += 1
 ###	    @sp += a
 	    sp += a
 ##	    @pc = 0
 	    @pc = -1
-	    @irep = newirep
-	    @irepid = @irep.id
+#	    @irep = newirep
+	    irep = newirep
+#	    @irepid = @irep.id
+	    @irepid = irep.id
 
 ##	    next
 	  else
@@ -610,7 +618,8 @@ p "#{@pc.to_xeh} #{sym}"
 ###	    @stack[@sp] = @stack[@sp + getarg_a(cop)]
 	    @stack[sp] = @stack[sp + getarg_a(cop)]
 	    @cp -= 1
-	    @irep = @callinfo[@cp]
+#	    @irep = @callinfo[@cp]
+	    irep = @callinfo[@cp]
 	    @irepid = @irep.id
 	    @cp -= 1
 ###	    @pc = @callinfo[@cp]
@@ -627,6 +636,7 @@ p "#{@pc.to_xeh} #{sym}"
       @flg.pop
       @pc = @pc + 1
       @sp = sp  ##
+      @irep[0] = irep
     end
 
     @rmt.join
