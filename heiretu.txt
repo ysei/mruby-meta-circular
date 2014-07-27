@@ -1,4 +1,12 @@
 Base code : Miura Hideki
+Thread : mattn
+
+
+Please donate to them and Rubyists 
+Code : Free 
+Coding : Not free
+http://www.gnu.org/philosophy/selling.html
+http://www.gnu.org/philosophy/selling.en.html
 
 
 
@@ -212,6 +220,35 @@ conf.bins = %w(mrbc mruby )
 
   # http://github.com/mruby/mruby/commit/a68a51702876b9c520c21a15bdf03ea91e0439f0
   # http://github.com/mruby/mruby/commit/5ff9c1d2861609fc98f03ec2d768e0b4f1559a09
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GC taisaku : fork ( fuantei )
+
+
+    a = 'local__false'
+#   a = Thread.new(aa) { |aa| fork do        end }.join
+    a = fork do        end
+    while 'local__false' == a do end
+
+
 
 
 
