@@ -136,7 +136,7 @@ class ENVary < Array
 #    }
   end
 
-  def idx(k = '')
+  def idx(k = '')	# higokan mruby 10410200 ( irep.rb )
     self[0].index(k)
 #    @@idx[k]
   end
@@ -152,7 +152,7 @@ class ENVary < Array
   end
 
   def ckth(th)
-#    self[pc][idx('th')].kind_of?(Array)
+#    self[pc][idx('th')].kind_of?(Array)	# higokan mruby 10410200 ( irep.rb )
 #    self[pc][self[0].index('th')].kind_of?(Array)
     ! th.kind_of?(Array)
   end
@@ -193,8 +193,8 @@ p "#{pc.to_xeh} #{opc} #{op.to_xeh}"
 #  }
 
   def pl(pc = 1)
-    i_th = self[0].index('th')
-#    i_th = self.idx('th')
+#    i_th = self[0].index('th')
+    i_th = self.idx('th')	# higokan mruby 10410200 ( irep.rb )
 #    i_th = @@idx['th']
 #    i_lf = self[0].index('lf')
 
@@ -233,21 +233,10 @@ p "#{pc.to_xeh} #{opc} #{op.to_xeh}"
 
 #  private
 
-  def rslt(pc)
-    i_th = self[0].index('th')
-#    i_th = self.idx('th')
-#    i_th = @@idx['th']
-    i__sp = self[0].index('_sp')
-#    i__sp = self.idx('_sp')
-#    i__sp = @@idx['_sp']
-    i_sym = self[0].index('sym')
-#    i_sym = self.idx('sym')
-#    i_sym = @@idx['sym']
-
-
+  def plg(pc)
     while 0 != pc do
       pl = self[pc]
-      th = pl[i_th]
+      th = pl[idx('th')]
       break if ckth(th)
       self.slp
 #      sleep @@slp
@@ -255,8 +244,25 @@ p "#{pc.to_xeh} #{opc} #{op.to_xeh}"
 #      sleep 0.00001
 #      sleep 0
     end
+    pl
+  end
 
-    sp = pl[i__sp].to_i
+#  def rslt(pc)
+  def rslt(pl)
+#    i_th = self[0].index('th')
+    i_th = self.idx('th')
+#    i_th = @@idx['th']
+#    i__sp = self[0].index('_sp')
+#    i__sp = self.idx('_sp')
+#    i__sp = @@idx['_sp']
+#    i_sym = self[0].index('sym')
+    i_sym = self.idx('sym')
+#    i_sym = @@idx['sym']
+
+#    pl = plg(pc)
+	  
+#    sp = pl[i__sp].to_i
+    sp = pl[self.idx('_sp')].to_i
     r = pl[i_th]
     r = sp + r.to_i if r.kind_of?(Numeric)
     [pl[i_sym], r]
@@ -268,7 +274,8 @@ p "#{pc.to_xeh} #{opc} #{op.to_xeh}"
     r = [-1, -1]
     if 0 != pc2
       for idx in (0 .. 1)
-        sym[idx], r[idx] = self.rslt(pc2 + idx)
+#        sym[idx], r[idx] = self.rslt(pc2 + idx)
+        sym[idx], r[idx] = self.rslt(plg(pc2 + idx))
       end
       r[idx] = r[0] if '_sm_' == r[idx]
     end
@@ -437,26 +444,26 @@ p "#{((pc2 >> 1) - 1).to_xeh} #{sym[0]} #{r[0].to_xeh}"
      end
   end
 
-  def iset(sp , arg ,*sym)
+  def iset(sp, arg, pc, *sym)
     pl0 = @pl0
     pl1 = @pl1
 
 #    i_th = pl0.index('th')
-#    i_th = @pl.idx('th')
-    i_th = @idx['th']
+    i_th = @pl.idx('th')	# higokan mruby 10410200 ( irep.rb )
+#    i_th = @idx['th']
 #    i_sym = pl0.index('sym')
-#    i_sym = @pl.idx('sym')
-    i_sym = @idx['sym']
+    i_sym = @pl.idx('sym')
+#    i_sym = @idx['sym']
 #    i__sp = pl0.index('_sp')
-#    i__sp = @pl.idx('_sp')
-    i__sp = @idx['_sp']
+    i__sp = @pl.idx('_sp')
+#    i__sp = @idx['_sp']
 #    i_ctr = pl0.index('ctr')
-#    i_ctr = @pl.idx('ctr')
-    i_ctr = @idx['ctr']
+    i_ctr = @pl.idx('ctr')
+#    i_ctr = @idx['ctr']
 #    i_lf = @idx['lf']
 
     ab = 1 - sym.size
-    pc2 = @pc << 1
+    pc2 = pc << 1
     pc2ab = pc2 + ab
 
     fls(pc2, sym) if 0 == ab
@@ -467,7 +474,8 @@ p "#{((pc2 >> 1) - 1).to_xeh} #{sym[0]} #{r[0].to_xeh}"
     pl2[i_sym] = sym[0]
     @pl[pc2ab + 2] = pl2
 
-    pl1[i_ctr] += 1
+#    pl1[i_ctr] += 1
+    pl1[i_ctr] = pc2ab
 #    pl1[i_lf] += 1
     @pl[1] = pl1
   end
@@ -480,6 +488,8 @@ p "#{((pc2 >> 1) - 1).to_xeh} #{sym[0]} #{r[0].to_xeh}"
     @flg = [true]
 
     while true
+      pc = @pc
+
       #　命令コードの取り出し
 #     cop = @irep.iseq[@pc]
       cop = irep.iseq[@pc]
@@ -487,7 +497,7 @@ p "#{((pc2 >> 1) - 1).to_xeh} #{sym[0]} #{r[0].to_xeh}"
 
 #     case OPTABLE_SYM[get_opcode(cop)]
       sym = OPTABLE_SYM[get_opcode(cop)]
-p "#{@pc.to_xeh} #{sym}"
+p "#{pc.to_xeh} #{sym}"
 
       case sym
         # 何もしない
@@ -496,52 +506,52 @@ p "#{@pc.to_xeh} #{sym}"
         # MOVE Ra, RbでレジスタRaにレジスタRbの内容をセットする
       when :MOVE
 #       @stack[@sp + getarg_a(cop)] = @stack[@sp + getarg_b(cop)]
-        iset(sp, ['getarg_b', cop], sym)
-        iset(sp, ['getarg_a', cop])
+        iset(sp, ['getarg_b', cop], pc, sym)
+        iset(sp, ['getarg_a', cop], pc)
 
         # LOADL Ra, pb でレジスタRaに定数テーブル(pool)のpb番目の値をセットする
       when :LOADL
 #	@stack[@sp + getarg_a(cop)] = @irep.pool[getarg_bx(cop)]
-	iset(0 , ['getarg_bx', cop], sym)
-	iset(sp, ['getarg_a', cop])
+	iset(0 , ['getarg_bx', cop], pc, sym)
+	iset(sp, ['getarg_a',  cop], pc)
 
         # LOADI Ra, n でレジスタRaにFixnumの値 nをセットする
       when :LOADI
 #       @stack[@sp + getarg_a(cop)] = getarg_sbx(cop)
-	iset(0 , ['getarg_sbx', cop], sym)
-        iset(sp, ['getarg_a', cop])
+	iset(0 , ['getarg_sbx', cop], pc, sym)
+        iset(sp, ['getarg_a',   cop], pc)
 
         # LOADSELF Ra でレジスタRaに現在のselfをセットする
       when :LOADSELF
 #	@stack[@sp + getarg_a(cop)] = @stack[@sp]
-	iset(sp , ['_im_', 0], sym)
-	iset(sp, ['getarg_a', cop])
+	iset(sp , ['_im_',      0], pc, sym)
+	iset(sp, ['getarg_a', cop], pc)
 
         # ADD Ra, Rb でレジスタRaにRa+Rbをセットする
       when :ADD
 #	@stack[@sp + getarg_a(cop)] += @stack[@sp + getarg_a(cop) + 1]
-	iset(sp, ['getarg_a', cop], sym)
-	#iset(0, ['_sm_', 0])
-	iset(sp, ['getarg_a', cop])
+	iset(sp, ['getarg_a', cop], pc, sym)
+	#iset(0, ['_sm_',       0], pc)
+	iset(sp, ['getarg_a', cop], pc)
 
         # SUB Ra, n でレジスタRaにRa-nをセットする
       when :SUBI
 #	@stack[@sp + getarg_a(cop)] -= getarg_c(cop)
-	iset(0,  ['getarg_c', cop], sym)
-	iset(sp, ['getarg_a', cop])
+	iset(0,  ['getarg_c', cop], pc, sym)
+	iset(sp, ['getarg_a', cop], pc)
 
         # EQ Ra でRaとR(a+1)を比べて同じならtrue, 違うならfalseをRaにセットする
       when :EQ
 #	val = (@stack[@sp + getarg_a(cop)] == @stack[@sp + getarg_a(cop) + 1])
 #	@stack[@sp + getarg_a(cop)] = val
-	iset(sp, ['getarg_a', cop], sym)
-	#iset(0, ['_sm_', 0])
-	iset(sp, ['getarg_a', cop])
+	iset(sp, ['getarg_a', cop], pc, sym)
+	#iset(0, ['_sm_',       0], pc)
+	iset(sp, ['getarg_a', cop], pc)
 		
       else
 
-	iset(0 , ['~~', 0], sym)
-	iset(0 , ['~~', 0])
+	iset(0 , ['~~', 0], pc, sym)
+	iset(0 , ['~~', 0], pc)
 #	pc2 = @pc << 1
 #	fls(pc2, sym)
 	
@@ -555,7 +565,7 @@ p "#{@pc.to_xeh} #{sym}"
 	  # JMP nでpcをnだけ増やす。ただし、nは符号付き
 	when :JMP
 ##	  @pc = @pc + getarg_sbx(cop)
-	  @pc = @pc + getarg_sbx(cop) - 1
+	  pc = pc + getarg_sbx(cop) - 1
 ##	  next
 
 	  # JMPNOT Ra, nでもしRaがnilかfalseならpcをnだけ増やす。ただし、nは符号付き
@@ -563,7 +573,7 @@ p "#{@pc.to_xeh} #{sym}"
 ###	  if !@stack[@sp + getarg_a(cop)] then
 	  if !@stack[sp + getarg_a(cop)] then
 ##	    @pc = @pc + getarg_sbx(cop)
-	    @pc = @pc + getarg_sbx(cop) - 1
+	    pc = pc + getarg_sbx(cop) - 1
 ##	    next
 	  end
 
@@ -583,7 +593,8 @@ p "#{@pc.to_xeh} #{sym}"
 ###	    @callinfo[@cp] = @sp
 	    @callinfo[@cp] = sp
 	    @cp += 1
-	    @callinfo[@cp] = @pc
+#	    @callinfo[@cp] = @pc
+	    @callinfo[@cp] = pc
 	    @cp += 1
 #	    @callinfo[@cp] = @irep
 	    @callinfo[@cp] = irep
@@ -591,7 +602,7 @@ p "#{@pc.to_xeh} #{sym}"
 ###	    @sp += a
 	    sp += a
 ##	    @pc = 0
-	    @pc = -1
+	    pc = -1
 #	    @irep = newirep
 	    irep = newirep
 #	    @irepid = @irep.id
@@ -623,7 +634,7 @@ p "#{@pc.to_xeh} #{sym}"
 	    @irepid = @irep.id
 	    @cp -= 1
 ###	    @pc = @callinfo[@cp]
-	    @pc = @callinfo[@cp] - 1
+	    pc = @callinfo[@cp] - 1
 	    @cp -= 1
 ###	    @sp = @callinfo[@cp]
 	    sp = @callinfo[@cp]
@@ -634,7 +645,7 @@ p "#{@pc.to_xeh} #{sym}"
       end
 
       @flg.pop
-      @pc = @pc + 1
+      @pc = pc + 1
       @sp = sp  ##
       @irep[0] = irep
     end

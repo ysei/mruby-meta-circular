@@ -42,24 +42,27 @@ Thank you authers
 Special thanks
 
 
-ABEkeniti , AEC , AHS-AC , akihito heika , ANDOUjun , ASC , AUE , 
-Andrew S. Tanenbaum , Douglas E. Smith , FHUH , FUJIMOTOisao , 
-FUKATANIsyouiti , GalleryIDF , HASEGAWA , HASEGAWAatusi , HAYAKAWAtakasi , 
-HoshigaokaBowl , HIEIyukio , HIRANOtakahiko , IcLandMatuno , IKEMITUsatoo , 
-INAGAKIhitosi , ITAKURAyuuji , Jay Miner , Jean L. Gassee , KADO , 
-KAGEYAMAken , KATOUario , KatouPiano , KAMIUTI , KATAYAMA , KITAGAWAhirosi , 
-KITAMURAtuyosi , KITANOmasaya , Kiwa , KIYOTAkazuo , KOIKEkinya , 
-KuwayamaDenkaShop , MAKINOmasami , MankaiSeisakujo , MATUMOTOmasakazu , 
-masataka , MIKI , MIURAkenji , MizutaniEijiJimusyo , NAITOUmutumi , 
-NagoyaJuke , NAKAGAWAmasaya , NAKAHARAyasusi , NARITA , NHlignuxNH , NISII , 
-NISIKADOtomohiro , NISIMURAtakesi , NOJIMAakinori , OAsystem-plaza , Oh!MZ , 
-Oh!X , OKAYAMAyasuo , OKUMURAnobuo , ONOyouko , OOI , OONISIyosinori , 
-OosuNayabasi , Plainss , Professor Babbage , Professor Matz , Rms , 
-SAITOUken , SAKAMURAken , SATAKE , SATOUfumi , SegaN , Sharp , 
-SUZUKItosikazu , Syoji , SyouwaJidousya , Taataa , TAKAMI , Takasago , 
-TAKATUKASA , TANAKAyasusi , TANAKAhideaki , TANIGUTItakanori , TomoeYa , 
-Tooya , TORII , TougouTyou , TOYOTAsumio , Tsukumo , Tutui , Usagi , 
-WAKAZONO , WATANABE , YAMADA , YAMAJI , YAMAZAKIeiji , YokoiFSika , yosinori
+ABEkeniti , AEC , AHS-AC , akihito heika , ANDOUjun , ASC , AUE , BABAkenji , 
+CarrotParty , Douglas E Smith , EidenSya , FHUH , FUJIMOTOisao , 
+FUKATANIsyouiti , GalleryIDF , HARADAsouzaburou , HASEGAWA , HASEGAWAatusi , 
+HAYAKAWAtakasi , HoshigaokaBowl , HIEIyukio , HIRANOtakahiko , IcLandMatuno , 
+IKEMITUsatoo , INAGAKIhitosi , ITAKURAyuuji , Jay Miner , Jean L Gassee , 
+KADO , KAGEYAMAken , KATOU , KATOUario , KatouPiano , KAMIUTIseikou , 
+KATAYAMA , KITAGAWAhirosi , KITAMURAtuyosi , KITANOmasaya , Kiwa , 
+KIYOTAkazuo , KOIKEkinya , KuwayamaDenkaShop , Lpn , MAKINOmasami , 
+MankaiSeisakujo , masataka , MATUMOTOmasakazu , MATUMOTOreiji , MIKI , 
+MITUYAyuuji , MIURAkenji , MizutaniEijiJimusyo , NAKANEkou , NAITOUmutumi , 
+NagoyaJuke , NAKAGAWAmasaya , NAKAHARAyasusi , NARITA , NayabasiOosu , 
+NHlignuxNH , NISII , NISIKADOtomohiro , NISIMURAtakesi , NOJIMAakinori , 
+OAsystem-plaza , Oh!MZ , Oh!X , OKAYAMAyasuo , OKUMURAnobuo , ONOyouko , 
+OOGAWARAkunio , OOI , OONISI , OONISIyosinori , Plainss , 
+Proffessor Andrew S Tanenbaum , Professor Babbage , Professor Buddha , 
+Professor Matz , Rms , SAITOUken , SAKAMURAken , SATAKE , SATOUfumi , SegaN , 
+SEKIGUTInorihiko , Sharp , Spd Yum^2 , SUZUKItosikazu , Syoji , 
+SyouwaJidousya , Taataa , TAKAMI , Takasago , TAKATUKASA , TANAKAyasusi , 
+TANAKAhideaki , TANIGUTItakanori , TomoeYa , Tooya , TORII , TougouTyou , 
+TOYOTAsumio , Tsukumo , Tutui , Usagi , UsagiDan , WAKAZONO , WATANABE , 
+YAMADA , YAMAJI , YAMAZAKIeiji , YokoiFSika , yosinori
 
 
 
