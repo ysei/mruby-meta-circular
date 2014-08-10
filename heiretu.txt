@@ -54,15 +54,16 @@ MankaiSeisakujo , masataka , MATUMOTOmasakazu , MATUMOTOreiji , MIKI ,
 MITUYAyuuji , MIURAkenji , MizutaniEijiJimusyo , NAKANEkou , NAITOUmutumi , 
 NagoyaJuke , NAKAGAWAmasaya , NAKAHARAyasusi , NARITA , NayabasiOosu , 
 NHlignuxNH , NISII , NISIKADOtomohiro , NISIMURAtakesi , NOJIMAakinori , 
-OAsystem-plaza , Oh!MZ , Oh!X , OKAYAMAyasuo , OKUMURAnobuo , ONOyouko , 
-OOGAWARAkunio , OOI , OONISI , OONISIyosinori , Plainss , 
+OAsystem-plaza , Oh!MZ , Oh!X , OkaSin , OKAYAMAyasuo , OKUMURAnobuo , 
+ONOyouko , OOGAWARAkunio , OOI , OONISI , OONISIyosinori , Plainss , 
 Proffessor Andrew S Tanenbaum , Professor Babbage , Professor Buddha , 
 Professor Matz , Rms , SAITOUken , SAKAMURAken , SATAKE , SATOUfumi , SegaN , 
 SEKIGUTInorihiko , Sharp , Spd Yum^2 , SUZUKItosikazu , Syoji , 
 SyouwaJidousya , Taataa , TAKAMI , Takasago , TAKATUKASA , TANAKAyasusi , 
 TANAKAhideaki , TANIGUTItakanori , TomoeYa , Tooya , TORII , TougouTyou , 
-TOYOTAsumio , Tsukumo , Tutui , Usagi , UsagiDan , WAKAZONO , WATANABE , 
-YAMADA , YAMAJI , YAMAZAKIeiji , YokoiFSika , yosinori
+ToyoSin , TOYOTAsumio , Tsukumo , Tutui , Usagi , UsagiDan , WAKAZONO , 
+WATANABE , YAMADA , YAMADAkenji , YAMAJI , YAMAZAKIeiji , YokoiFSika , 
+yosinori
 
 
 
