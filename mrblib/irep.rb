@@ -1,4 +1,10 @@
 
+class Object
+  def to_i_from(k, i = 0)
+    self.kind_of?(k) ? i + self.to_i : self
+  end
+end
+
 class Numeric
   def to_xeh
     self.to_i.to_s(0x10).reverse

@@ -13,12 +13,20 @@ http://www.gnu.org/philosophy/selling.en.html
 Patch
 
 
+10410200
+
 src/vm.c
 http://github.com/ysei/mruby/commit/053a5dc623258e80da9aa7cc15a1adb9552d5212
 58b1c088
 
 # include/mrbconf.h
 # MRB_GC_TURN_OFF_GENERATIONAL
+
+
+80410200
+
+mrblib/array.rb , src/array.c
+http://github.com/mattn/mruby-thread/issues/15#issuecomment-51916890
 
 
 
@@ -42,28 +50,29 @@ Thank you authers
 Special thanks
 
 
-ABEkeniti , AEC , AHS-AC , akihito heika , ANDOUjun , ASC , AUE , BABAkenji , 
-CarrotParty , Douglas E Smith , EidenSya , FHUH , FUJIMOTOisao , 
-FUKATANIsyouiti , GalleryIDF , HARADAsouzaburou , HASEGAWA , HASEGAWAatusi , 
-HAYAKAWAtakasi , HoshigaokaBowl , HIEIyukio , HIRANOtakahiko , IcLandMatuno , 
-IKEMITUsatoo , INAGAKIhitosi , ITAKURAyuuji , Jay Miner , Jean L Gassee , 
-KADO , KAGEYAMAken , KATOU , KATOUario , KatouPiano , KAMIUTIseikou , 
-KATAYAMA , KITAGAWAhirosi , KITAMURAtuyosi , KITANOmasaya , Kiwa , 
-KIYOTAkazuo , KOIKEkinya , KuwayamaDenkaShop , Lpn , MAKINOmasami , 
-MankaiSeisakujo , masataka , MATUMOTOmasakazu , MATUMOTOreiji , MIKI , 
-MITUYAyuuji , MIURAkenji , MizutaniEijiJimusyo , NAKANEkou , NAITOUmutumi , 
-NagoyaJuke , NAKAGAWAmasaya , NAKAHARAyasusi , NARITA , NayabasiOosu , 
+ABEkeniti , AEC , AHS-AC , akihito heika , ANDOUjun , ASC , AUE , 
+ArkInternet , BABAkenji , CarrotParty , Douglas E Smith , EidenSya , FHUH , 
+FUJIMOTOisao , FUKATANIsyouiti , GalleryIDF , HARADAsouzaburou , 
+HASEGAWA , HASEGAWAatusi , HAYAKAWAtakasi , HoshigaokaBowl , HIEIyukio , 
+HIRANOtakahiko , IcLandMatuno , IKEMITUsatoo , INAGAKIhitosi , Isidake , 
+ITAKURAyuuji , Jay Miner , Jean L Gassee , KADO , KAGEYAMAken , KATOU , 
+KATOUario , KatouPiano , KAMIUTIseikou , KATAYAMA , Kazoku , KITAGAWAhirosi , 
+KITAMURAtuyosi , KITANOmasaya , KIYOTAkazuo , KOIKEkinya , KondouZouen , 
+KuwayamaDenkaShop , Lpn , MAKINOmasami , MankaiSeisakujo , masataka , 
+MATUMOTOmasakazu , MATUMOTOreiji , Matz , MIKI , MitomoSangyou , 
+MITUYAyuuji , MIURAkenji , MiyosiRichLand , MizutaniEijiJimusyo , NAKANEkou , 
+NAITOUmutumi , NagoyaJuke , NAKAGAWAmasaya , NARITA , NayabasiOosu , 
 NHlignuxNH , NISII , NISIKADOtomohiro , NISIMURAtakesi , NOJIMAakinori , 
 OAsystem-plaza , Oh!MZ , Oh!X , OkaSin , OKAYAMAyasuo , OKUMURAnobuo , 
 ONOyouko , OOGAWARAkunio , OOI , OONISI , OONISIyosinori , Plainss , 
-Proffessor Andrew S Tanenbaum , Professor Babbage , Professor Buddha , 
-Professor Matz , Rms , SAITOUken , SAKAMURAken , SATAKE , SATOUfumi , SegaN , 
-SEKIGUTInorihiko , Sharp , Spd Yum^2 , SUZUKItosikazu , Syoji , 
-SyouwaJidousya , Taataa , TAKAMI , Takasago , TAKATUKASA , TANAKAyasusi , 
-TANAKAhideaki , TANIGUTItakanori , TomoeYa , Tooya , TORII , TougouTyou , 
+Professor Alan Kay , Professor Andrew S Tanenbaum , Professor Babbage , 
+Professor Buddha , Rms , SAITOUken , SAKAMURAken , SATAKE , SATOUfumi , 
+SegaN , Sharp , Spd Yum^2 , SUZUKItosikazu , Syoji , SyouwaJidousya , 
+Taataa , TAKAMI , Takasago , TAKATUKASA , TANAKAyasusi , TANAKAhideaki , 
+TANIGUTItakanori , TirasiYa , TomoeYa , Tooya , TORII , TougouTyou , 
 ToyoSin , TOYOTAsumio , Tsukumo , Tutui , Usagi , UsagiDan , WAKAZONO , 
-WATANABE , YAMADA , YAMADAkenji , YAMAJI , YAMAZAKIeiji , YokoiFSika , 
-yosinori
+WATANABE , Wellenetz , YAMADA , YAMADAkenji , YAMAJI , YAMAZAKIeiji , 
+YokoiFSika , yosinori
 
 
 
