@@ -1,7 +1,7 @@
 
 class Object
   def to_i_from(k, i = 0)
-    self.kind_of?(k) ? i + self.to_i : self
+    self.kind_of?(k) ? i + self.to_i : self	# unwork ? ( thread ? )
   end
 end
 
@@ -10,13 +10,14 @@ class Numeric
     self.to_i.to_s(0x10).reverse
   end
 
-#  def pid_g
+# def pid_g
 #    pid = $$
 #    pid = 0 if nil == pid
 #    pid
-#  end
+#
+#   $$ || self
+# end
 end
-
 
 module RiteOpcodeUtil
   def get_opcode(op)
