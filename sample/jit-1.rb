@@ -12,10 +12,6 @@ class Numeric
   end
 
 # def pid_g
-#    pid = $$
-#    pid = 0 if nil == pid
-#    pid
-#
 #   $$ || self
 # end
 end
@@ -23,7 +19,8 @@ end
 class ENVary < Array
   include RiteOpcodeUtil
 
-  @@slp = 0.001
+# @@slp = 0.001
+  @@slp = 0.0001
 
   @@fl = '~~ritepl'
   @@idb = @@fl
@@ -147,7 +144,6 @@ class ENVary < Array
   end
 
 #@@pr = Proc.new{
-##  ctr = self[1][i_ctr].to_i
 #  self[1][i_ctr].to_i
 #}
 
@@ -155,10 +151,7 @@ class ENVary < Array
 #   self[1][self.idx('lf')] += 1
 #   self[1][@@idx['lf']] += 1
 # end
-
 # def lf_d
-#   self[1][self.idx('lf')] -= 1
-# end
 
   def slp(t = @@slp)
     sleep t
@@ -169,36 +162,26 @@ class ENVary < Array
 
   def ckth(th, tp)
 #    self[pc][idx('th')].kind_of?(Array)	# higokan mruby 10410200 ( irep.rb )
-#    self[pc][self[0].index('th')].kind_of?(Array)
 #    ! th.kind_of?(Array)
     if 'ar' == tp
-#      re = ! th.kind_of?(Array)
       ! th.kind_of?(Array)
 #   elsif tp.kind_of?(Numeric)
     else
 #     re = th[0][tp]
       false != th[tp]	# nil : true
     end
-#    re
   end
 
-# @@st_id = Proc.new { |a|
+#  @@st_id = Proc.new { |a|
   def st_id(a, pc)
-#    for n in (0 ... a.size)
-#      v = a[n]
-#      if v.kind_of?(Array)
-#        v = __send__(v)
-#      end
-#    end
     a = a.map { |v|
       v = v.kind_of?(Array) ? __send__(v, pc) : v
     }
     return a[0].to_i_from(Numeric) if 2 > a.size
 
-#    opc = a.shift
-#    op = a.shift.to_i
     opc = a.first
-    op = a.last.to_i
+#   op = a.last
+    op = a.last.to_i_from(Numeric)
     GC.start
 p "#{pc.to_xeh} #{opc} #{op.to_xeh}"
     case opc
@@ -212,12 +195,13 @@ p "#{pc.to_xeh} #{opc} #{op.to_xeh}"
       a = (op >> 7) & 0xffff
     when 'getarg_sbx'
       a = ((op >> 7) & 0xffff) - (0xffff >> 1)
-    when '_sm_'
-      a = opc
-    when '_im_'
-      a = op
+#   when '_sm_'
+#     a = opc
+#   when '_im_'
+#     a = op
     else
-      a = 0
+#     a = 0
+      a = opc
     end
     a.to_i_from(Numeric)
   end
@@ -227,50 +211,41 @@ p "#{pc.to_xeh} #{opc} #{op.to_xeh}"
     i_th = self.idx('th')	# higokan mruby 10410200 ( irep.rb )
 #    i_th = @@idx['th']
 #    i_lf = self[0].index('lf')
+#   pc1 = pc + 1
 
-#    pc11 = (pc + 1) << 1
-    pc1 = pc + 1
+#   pl = plg(pc1, 0)
+    pl = plg(pc, 0)
 
-#    pl2 = pl2g(pc11)
-    pl = plg(pc1, 0)
-#    for indx in (0 .. 1)
     for indx in (0 ... pl[i_th].size)
 
 #p    "#{pc.to_xeh} #{pl2[0][0]} #{pl2[0][1].to_xeh}"
 
 #     a = @@st_id.call(a)
 #     a = st_id(a)
-#      a = st_id(pl2[i_th][indx], pc)
-      a = st_id(pl[i_th][indx], pc)
-#      pl2[i_th] = a
-#      pl2[i_th][indx] = a
-      pl[i_th][indx] = a
+#     a = st_id(pl[i_th][indx], pc)
+#     pl[i_th][indx] = a
+      pl[i_th][indx] = st_id(pl[i_th][indx], pc - 1)
 
-##     self[pc] = pl2
-#      self[pc11 + indx] = pl2
-##     self.lf_d
     end
-
-#    for indx in (0 .. 1)
-#      self[pc11 + indx] = pl2
-#      self[pc11] = pl2
-      self[pc1] = pl
-#    end
+#   self[pc11] = pl2
+#   self[pc1] = pl
+    self[pc] = pl
+##  self.lf_d
 #   GC.start
   end
 
   def plw(pc = 1)
-#    cto = 0
+#   cto = 0
     loop do
-#      pc = self.ctr_g
+#     pc = self.ctr_g
       pc, cto = self.ctr_g
       if pc != cto
-#        cto += 1
+#       cto += 1
 #       an[cto] = Thread.new(envid) { |envid|
 
-#       self.pl(cto + 2)
-#        self.pl(cto)
-        self.pl(pc - 1)
+#       self.pl(cto)
+#       self.pl(pc - 1)
+        self.pl(pc)
 	self.ctr_s(cto = pc)
       end
       self.slp
@@ -283,26 +258,21 @@ p "#{pc.to_xeh} #{opc} #{op.to_xeh}"
 
 #  private
 
-#  def plg(pc)
   def plg(pc, md = 1)
-#  def plg(pc2)
-#    pc2 = pc << 1
     i_th = self.idx('th')
     tp = [md, 'ar'][md]
-#    br = false
-#    while 0 != pc do
-#    while (pl = self[pc]).kind_of?(Object) && 0 != pc do
+#   while (pl = self[pc]).kind_of?(Object) && 0 != pc do
     while pl = self[pc] and 0 != pc do
-#      pl = self[pc]
-      for indx in (0 .. md)
-#      th = pl[self.idx('th')]
-	th = pl[i_th][indx]
-#      break if ckth(th, 'ar')
-#	next if ! ckth(th, 'ar')
-	break if ! ckth(th, tp)
-	self[pc] = pl
-#	br = true if 1 == indx
-	br ||= md == indx
+      th = pl[i_th]
+      max ||= md & (th.size - 1)
+#     for indx in (0 .. md)
+      for indx in (0 .. max)
+#	th = pl[i_th][indx]
+#	break if ! ckth(th, tp)
+	break if ! ckth(th[indx], tp)
+####	self[pc] = pl
+#	br ||= md == indx
+	br ||= max == indx
       end
       break if br
       self.slp
@@ -312,10 +282,8 @@ p "#{pc.to_xeh} #{opc} #{op.to_xeh}"
     pl
   end
 
-#  def rslt(pc)
-  def rslt(pl)
-#  def rslt(pc2)
-#    pc2 = pc << 1
+  def rslt(pc)
+#  def rslt(pl)
     i_th = self.idx('th')
 #    i_th = @@idx['th']
     i__sp = self.idx('_sp')
@@ -323,57 +291,26 @@ p "#{pc.to_xeh} #{opc} #{op.to_xeh}"
     i_sym = self.idx('sym')
 #    i_sym = @@idx['sym']
 
-#    pl = plg(pc)
+    pl = plg(pc)
 
     r = pl[i_th]
-#    for indx in (0 .. 1)
     for indx in (0 ... pl[i_th].size)
       r[indx] = r[indx].to_i_from(Numeric, pl[i__sp][indx])
     end
-
+#   r[indx] = r[0] if '_sm_' == r[indx]
     [pl[i_sym], r]
   end
 
-#  def rslts(pc2)
-  def rslts(pc)
-#    pc2 = pc << 1
-#    sym = [-1, -1]
-#    r = [-1, -1]
-    if 0 != pc
-#      for idx in (0 .. 1)
-#       sym[idx], r[idx] = self.rslt(plg(pc2 + idx))
-#        sym[idx], r[idx] = self.rslt(pc2 , idx)
-#	sym, r = self.rslt(pc2)
-	sym, r = self.rslt(plg(pc))
-#      end
-#      r[idx] = r[0] if '_sm_' == r[idx]
-      r[1] = r[0] if '_sm_' == r[1]
-    end
-    [sym, r]
-  end
-
-##  def pl2g(pc)
-#  def pl2g(pc, md = 1)
-##    i_th = self[0].index('th')
-#    i_th = self.idx('th')
-#    0 == md ? tp = md : tp = 'ar'
-#    br = false
-##    loop do
-#    while 0 != pc do
-#      pl2 = self[pc]
-#      for indx in (0 .. md)
-##	th = pl2[i_th][0]
-#	th = pl2[i_th][indx]
-##      return(pl2) if false != th[0][0]
-##      return(pl2) if ckth(th, 0)
-#	next if ! ckth(th, tp)
-#	br = true
-#      end
-#      break if br
-#      self.slp
-##      sleep 0
+#  def rslts(pc)
+##    sym = [-1, -1]
+##    r = [-1, -1]
+#    if 0 != pc
+#      sym, r = self.rslt(plg(pc))
+#      sym, r = self.rslt(pc)
+##      r[idx] = r[0] if '_sm_' == r[idx]
+#      r[1] = r[0] if '_sm_' == r[1]
 #    end
-#    pl2
+#    [sym, r]
 #  end
 end
 
@@ -401,8 +338,8 @@ class FibVM
 #    @pl = ENVary.new((rmth + 1) << 1, [['~~', 0]])
 #    @pl = ENVary.new((rmth + 1) << 1, [[[], 0]])
     thini = [false, 0]
-#    @pl = ENVary.new((rmth + 1) << 1, thini, [thini, thini])
-    @pl = ENVary.new(rmth + 1, [thini, thini], [], [])
+#    @pl = ENVary.new(rmth + 1, [thini, thini], [], [])
+    @pl = ENVary.new(rmth + 1, [thini], [], [])
 
     plini
 #    @pl.idx_s
@@ -434,8 +371,9 @@ class FibVM
     # 3080410200 : gene gc off : mruby 6170410200 d17506c1
     # 3080410200 : 5x2 ng ( segmentation fault ) : mruby 3080410200 0878900f
     # 3080410200 : 5x2 ok ( gc ) : monami-ya.mrb 8270410200 813e2af8
-    @pl[0] = [['th',         'sym', '_sp', 'ctr', 'cto'],	# mruby 20410200 : higokan ? : ary_many
-	      [[thini,thini],   0, [0, 0],    0,     0]]	# mruby 70410200 : 4x2 ok , 5x2 ng
+    @pl[0] = [['th',  'sym', '_sp', 'ctr', 'cto'],	# mruby 20410200 : higokan ? : ary_many
+	      [[thini],  0,    [0],    0,     0]]	# mruby 70410200 : 4x2 ok , 5x2 ng
+#	      [[thini,thini],   0, [0, 0],    0,     0]]	# mruby 70410200 : 4x2 ok , 5x2 ng
 
     @pl0 = @pl[0][0]
     @pl1 = @pl[0][1]
@@ -463,116 +401,122 @@ class FibVM
     }
   end
 
-#  def fls(pc2, *sym)
-#  def fls(pc, *sym)
   def fls(pc)
     return if 0 != @flg.size	# || 0 == pc2
 
-#    sym, r = @pl.rslts(pc2)
-    sym, r = @pl.rslts(pc)
+#   syms = [['ADD', :+], ['SUB', :-], ['MUL', :*], ['DIV', :/]]	# :=
+
+#   sym, r = @pl.rslts(pc)
+    sym, r = @pl.rslt(pc)
 
 #p "#{(pc - 1).to_xeh} #{sym[0]} #{r[0].to_xeh}"
 p "#{(pc - 1).to_xeh} #{sym} #{r[0].to_xeh}"
-#    case sym[0]
+
     case sym.to_sym
     when :MOVE
-#        @stack[@sp + getarg_a(cop)] = @stack[@sp + getarg_b(cop)]
-      @stack[r[1]] = @stack[r[0]]
+#	@stack[@sp + getarg_a(cop)] = @stack[@sp + getarg_b(cop)]
+#      @stack[r[1]] = @stack[r[0]]
+      @stack[r[-1]] = @stack[r[0]]
     when :LOADL
 #	@stack[@sp + getarg_a(cop)] = @irep.pool[getarg_bx(cop)]
-      @stack[r[1]] = @irep[0].pool[r[0]]
+#      @stack[r[1]] = @irep[0].pool[r[0]]
+      @stack[r[-1]] = @irep[0].pool[r[0]]
     when :LOADI
-#        @stack[@sp + getarg_a(cop)] = getarg_sbx(cop)
-      @stack[r[1]] = r[0]
+#	@stack[@sp + getarg_a(cop)] = getarg_sbx(cop)
+#      @stack[r[1]] = r[0]
+      @stack[r[-1]] = r[0]
     when :LOADSYM
 #	@stack[@sp + getarg_a(cop)] = @irep.syms[getarg_bx(cop)]
-      @stack[r[1]] = @irep[0].syms[r[0]]
+#      @stack[r[1]] = @irep[0].syms[r[0]]
+      @stack[r[-1]] = @irep[0].syms[r[0]]
     when :LOADSELF
-#        @stack[@sp + getarg_a(cop)] = @stack[@sp]
-      @stack[r[1]] = @stack[r[0]]
+#	@stack[@sp + getarg_a(cop)] = @stack[@sp]
+#      @stack[r[1]] = @stack[r[0]]
+      @stack[r[-1]] = @stack[r[0]]
     when :LOADT
-#        @stack[@sp + getarg_a(cop)] = true
-      @stack[r[1]] = r[0]
+#	@stack[@sp + getarg_a(cop)] = true
+#      @stack[r[1]] = r[0]
+      @stack[r[-1]] = r[0]
     when :ADD
-#        @stack[@sp + getarg_a(cop)] += @stack[@sp + getarg_a(cop) + 1]
-      @stack[r[1]] += @stack[r[0] + 1]
+#	@stack[@sp + getarg_a(cop)] += @stack[@sp + getarg_a(cop) + 1]
+#      @stack[r[1]] += @stack[r[0] + 1]
+      @stack[r[-1]] += @stack[r[0] + 1]
     when :ADDI
-#        @stack[@sp + getarg_a(cop)] += getarg_c(cop)
-      @stack[r[1]] += r[0]
+#	@stack[@sp + getarg_a(cop)] += getarg_c(cop)
+#      @stack[r[1]] += r[0]
+      @stack[r[-1]] += r[0]
     when :SUB
-#        @stack[@sp + getarg_a(cop)] -= @stack[@sp + getarg_a(cop) + 1]
-      @stack[r[1]] -= @stack[r[0] + 1]
+#	@stack[@sp + getarg_a(cop)] -= @stack[@sp + getarg_a(cop) + 1]
+#      @stack[r[1]] -= @stack[r[0] + 1]
+      @stack[r[-1]] -= @stack[r[0] + 1]
     when :SUBI
-#        @stack[@sp + getarg_a(cop)] -= getarg_c(cop)
-      @stack[r[1]] -= r[0]
+#	@stack[@sp + getarg_a(cop)] -= getarg_c(cop)
+#      @stack[r[1]] -= r[0]
+      @stack[r[-1]] -= r[0]
     when :MUL
-#        @stack[@sp + getarg_a(cop)] *= @stack[@sp + getarg_a(cop) + 1]
-      @stack[r[1]] *= @stack[r[0] + 1]
+#	@stack[@sp + getarg_a(cop)] *= @stack[@sp + getarg_a(cop) + 1]
+#      @stack[r[1]] *= @stack[r[0] + 1]
+      @stack[r[-1]] *= @stack[r[0] + 1]
     when :DIV
-#        @stack[@sp + getarg_a(cop)] /= @stack[@sp + getarg_a(cop) + 1]
-      @stack[r[1]] /= @stack[r[0] + 1]
+#	@stack[@sp + getarg_a(cop)] /= @stack[@sp + getarg_a(cop) + 1]
+#      @stack[r[1]] /= @stack[r[0] + 1]
+      @stack[r[-1]] /= @stack[r[0] + 1]
     when :EQ
-#        val = (@stack[@sp + getarg_a(cop)] == @stack[@sp + getarg_a(cop) + 1])
-#        @stack[@sp + getarg_a(cop)] = val
-      val = @stack[r[1]] == @stack[r[0] + 1]
+#	val = (@stack[@sp + getarg_a(cop)] == @stack[@sp + getarg_a(cop) + 1])
+#	@stack[@sp + getarg_a(cop)] = val
+#      val = @stack[r[1]] == @stack[r[0] + 1]
+      val = @stack[r[-1]] == @stack[r[0] + 1]
 #      @stack[@sp + getarg_a(cop)] = val
-      @stack[r[1]] = val
+#      @stack[r[1]] = val
+      @stack[r[-1]] = val
      end
   end
 
-#  def iset(sp, arg, pc, *sym)
   def iset(sym, pc, ary)
     pc1 = pc + 1
 
     fls(pc)
 
-    pl = @pl[0]
+    pl = @pl # [0]
 #    pl0 = @pl0
 #    pl1 = @pl1
-#    pl0 = pl[0]
-    pl1 = pl[1]
+    pl0 = pl[0]
+    pl01 = pl0[1]
 
-    i_th = @pl.idx('th')	# higokan mruby 10410200 ( irep.rb )
+#   i_th = @pl.idx('th')	# higokan mruby 10410200 ( irep.rb )
+    i_th = pl.idx('th')
 #    i_th = @idx['th']
-    i_sym = @pl.idx('sym')
-#    i_sym = @idx['sym']
-    i__sp = @pl.idx('_sp')
-#    i__sp = @idx['_sp']
-    i_ctr = @pl.idx('ctr')
-#    i_ctr = @idx['ctr']
+#   i_sym = @pl.idx('sym')
+    i_sym = pl.idx('sym')
+#   i__sp = @pl.idx('_sp')
+    i__sp = pl.idx('_sp')
+#   i_ctr = @pl.idx('ctr')
+    i_ctr = pl.idx('ctr')
 #    i_lf = @idx['lf']
 
-#    pc2 = pc << 1
-#    fls(pc, sym) # if 0 != ab
 
-#   pl2 = @pl[pc2ab + 2]
-    pl2 = @pl[pc1]
+#   pl2 = @pl[pc1]
+    pl2 = pl[pc1]
+    pl2[i_th].delete_at(1)
+    pl2[i__sp].delete_at(1)
     pl2[i_sym] = sym
-#    for ab in (0 .. 1)
-    for indx in (0 ... ary.size)
-#     pc2ab = pc2 + ab
-#      sp, arg = ary[ab]
-      sp, arg = ary[indx]
 
-#      pl2[i__sp][ab] = sp
-      pl2[i__sp][indx] = sp
-#      pl2[i_th][ab] = arg
-      pl2[i_th][indx] = arg
+    for indx in (0 ... ary.size)
+#      sp, arg = ary[indx]
+#      pl2[i__sp][indx] = sp
+#      pl2[i_th][indx] = arg
+
+      pl2[i__sp][indx], pl2[i_th][indx] = ary[indx]
     end
-#   @pl[pc2ab + 2] = pl2
     @pl[pc1] = pl2
 
 #    pl1[i_ctr] += 1
-#   pl1[i_ctr] = pc2ab
-    pl1[i_ctr] = pc1
+    pl01[i_ctr] = pc1
 #   pl1[i_lf] += 1
 #   @pl[1] = pl1
-    pl[1] = pl1
-    @pl[0] = pl
+    pl0[1] = pl01
+    @pl[0] = pl0
 
-#    pl2 = @pl[pc2 + 2]
-#    pl2[i_th][ab] = arg
-#    @pl[pc2 + 2] = pl2
   end
 
   def eval(irep)
@@ -587,8 +531,10 @@ p "#{(pc - 1).to_xeh} #{sym} #{r[0].to_xeh}"
 
       #　命令コードの取り出し
 #     cop = @irep.iseq[@pc]
-      cop = irep.iseq[@pc]
+#      cop = irep.iseq[@pc]
+      cop = irep.iseq[pc]
       sp = @sp ##
+      ops = []
 
 #     case OPTABLE_SYM[get_opcode(cop)]
 #     sym = OPTABLE_SYM[get_opcode(cop)]
@@ -596,87 +542,110 @@ p "#{(pc - 1).to_xeh} #{sym} #{r[0].to_xeh}"
 p "#{pc.to_xeh} #{sym}"
 
       case sym
-        # 何もしない
+	# 何もしない
       when :NOP
 
-        # MOVE Ra, RbでレジスタRaにレジスタRbの内容をセットする
+	# MOVE Ra, RbでレジスタRaにレジスタRbの内容をセットする
       when :MOVE
 #       @stack[@sp + getarg_a(cop)] = @stack[@sp + getarg_b(cop)]
-#	iset(sp, ['getarg_b', cop], pc, sym)
-#	iset(sp, ['getarg_a', cop], pc)
-	iset(sym, pc, [[sp, ['getarg_b', cop]], [sp, ['getarg_a', cop]]])
+#	iset(sym, pc, [[sp, ['getarg_b', cop]], [sp, ['getarg_a', cop]]])
+	ops = [[sp, ['getarg_b', cop]], [sp, ['getarg_a', cop]]]
 
-        # LOADL Ra, pb でレジスタRaに定数テーブル(pool)のpb番目の値をセットする
+	# LOADL Ra, pb でレジスタRaに定数テーブル(pool)のpb番目の値をセットする
       when :LOADL
 #	@stack[@sp + getarg_a(cop)] = @irep.pool[getarg_bx(cop)]
-#	iset(0 , ['getarg_bx', cop], pc, sym)
-#	iset(sp, ['getarg_a',  cop], pc)
-	iset(sym, pc, [[0, ['getarg_bx', cop]], [sp, ['getarg_a', cop]]])
+#	iset(sym, pc, [[0, ['getarg_bx', cop]], [sp, ['getarg_a', cop]]])
+	ops = [[0, ['getarg_bx', cop]], [sp, ['getarg_a', cop]]]
 
-        # LOADI Ra, n でレジスタRaにFixnumの値 nをセットする
+	# LOADI Ra, n でレジスタRaにFixnumの値 nをセットする
       when :LOADI
 #       @stack[@sp + getarg_a(cop)] = getarg_sbx(cop)
-#	iset(0 , ['getarg_sbx', cop], pc, sym)
-#	iset(sp, ['getarg_a',   cop], pc)
-	iset(sym, pc, [[0, ['getarg_sbx', cop]], [sp, ['getarg_a', cop]]])
+#	iset(sym, pc, [[0, ['getarg_sbx', cop]], [sp, ['getarg_a', cop]]])
+	ops = [[0, ['getarg_sbx', cop]], [sp, ['getarg_a', cop]]]
 
-        # LOADSELF Ra でレジスタRaに現在のselfをセットする
+#     when :LOADSYM
+#	@stack[@sp + getarg_a(cop)] = irep.syms[getarg_bx(cop)]
+
+	# LOADSELF Ra でレジスタRaに現在のselfをセットする
       when :LOADSELF
 #	@stack[@sp + getarg_a(cop)] = @stack[@sp]
-#	iset(sp , ['_im_',      0], pc, sym)
-#	iset(sp, ['getarg_a', cop], pc)
-	iset(sym, pc, [[sp, ['_im_', 0]], [sp, ['getarg_a', cop]]])
+#	iset(sym, pc, [[sp, ['_im_', 0]], [sp, ['getarg_a', cop]]])
+#	iset(sym, pc, [[sp, [0, 0]], [sp, ['getarg_a', cop]]])
+	ops = [[sp, [0, 0]], [sp, ['getarg_a', cop]]]
 
-        # ADD Ra, Rb でレジスタRaにRa+Rbをセットする
+#     when :LOADT
+#	@stack[@sp + getarg_a(cop)] = true
+
+	# ADD Ra, Rb でレジスタRaにRa+Rbをセットする
       when :ADD
 #	@stack[@sp + getarg_a(cop)] += @stack[@sp + getarg_a(cop) + 1]
-#	iset(sym, pc, [[sp, ['getarg_a', cop]], [sp, ['getarg_a', cop]]])
-	iset(sym, pc, [[sp, ['getarg_a', cop]], [0, ['_sm_', 0]]])
+#	iset(sym, pc, [[sp, ['getarg_a', cop]], [0, ['_sm_', 0]]])
+#	iset(sym, pc, [[sp, ['getarg_a', cop]]])
+	ops = [[sp, ['getarg_a', cop]]]
 
-        # SUB Ra, n でレジスタRaにRa-nをセットする
+#     when :ADDI
+#	@stack[@sp + getarg_a(cop)] += getarg_c(cop)
+
+#     when :SUB
+#	@stack[@sp + getarg_a(cop)] -= @stack[@sp + getarg_a(cop) + 1]
+
+	# SUB Ra, n でレジスタRaにRa-nをセットする
       when :SUBI
 #	@stack[@sp + getarg_a(cop)] -= getarg_c(cop)
-#	iset(0,  ['getarg_c', cop], pc, sym)
-#	iset(sp, ['getarg_a', cop], pc)
-	iset(sym, pc, [[0, ['getarg_c', cop]], [sp, ['getarg_a', cop]]])
+#	iset(sym, pc, [[0, ['getarg_c', cop]], [sp, ['getarg_a', cop]]])
+	ops = [[0, ['getarg_c', cop]], [sp, ['getarg_a', cop]]]
 
-        # EQ Ra でRaとR(a+1)を比べて同じならtrue, 違うならfalseをRaにセットする
+#     when :MUL
+#	@stack[@sp + getarg_a(cop)] *= @stack[@sp + getarg_a(cop) + 1]
+
+#     when :DIV
+#	@stack[@sp + getarg_a(cop)] /= @stack[@sp + getarg_a(cop) + 1]
+
+	# EQ Ra でRaとR(a+1)を比べて同じならtrue, 違うならfalseをRaにセットする
       when :EQ
 #	val = (@stack[@sp + getarg_a(cop)] == @stack[@sp + getarg_a(cop) + 1])
 #	@stack[@sp + getarg_a(cop)] = val
-#	iset(sym, pc, [[sp, ['getarg_a', cop]], [sp, ['getarg_a', cop]]])
-	iset(sym, pc, [[sp, ['getarg_a', cop]], [0, ['_sm_', 0]]])
+#	iset(sym, pc, [[sp, ['getarg_a', cop]], [0, ['_sm_', 0]]])
+#	iset(sym, pc, [[sp, ['getarg_a', cop]]])
+	ops = [[sp, ['getarg_a', cop]]]
+      end
 
+      if 0 != ops.size
+	iset(sym, pc, ops)
       else
-	iset(sym, pc, [[0, ['~~', 0]],[0, ['~~', 0]]])
-#	pc2 = @pc << 1
-#	fls(pc2, sym)
+#	iset(sym, pc, [[0, ['~~', 0]],[0, ['~~', 0]]])
+	iset(sym, pc, [[0, ['~~', 0]]])
 
-#	while (ctr, cto = @pl.ctr_g) and 0 != ctr - cto # pc - cto
+#	while (ctr, cto = @pl.ctr_g) and ctr != cto # pc != cto
 #	  @pl.slp
 #	end
 
 	plini
-	@flg.pop
-#	@flg.push(true)
-#	@flg.push(true)
-	@flg.push(true, true)
+#	@flg.pop
+#	@flg.push(true, true)
+	@flg = [true, true]
 
 	case sym
 
 	  # JMP nでpcをnだけ増やす。ただし、nは符号付き
 	when :JMP
 ##	  @pc = @pc + getarg_sbx(cop)
-#	  pc = pc + getarg_sbx(cop) - 1
 	  pc = pc + @pl.getarg_sbx(cop) - 1
 ##	  next
+
+	when :JMPIF
+#	  if @stack[@sp + getarg_a(cop)] then
+	  if @stack[sp + @pl.getarg_a(cop)] then
+#	    @pc = @pc + getarg_sbx(cop)
+	    pc = pc + @pl.getarg_sbx(cop) - 1
+#	    next
+	  end
 
 	  # JMPNOT Ra, nでもしRaがnilかfalseならpcをnだけ増やす。ただし、nは符号付き
 	when :JMPNOT
 ###	  if !@stack[@sp + getarg_a(cop)] then
 	  if !@stack[sp + @pl.getarg_a(cop)] then
 ##	    @pc = @pc + getarg_sbx(cop)
-#	    pc = pc + getarg_sbx(cop) - 1
 	    pc = pc + @pl.getarg_sbx(cop) - 1
 ##	    next
 	  end
@@ -730,11 +699,9 @@ p "#{pc.to_xeh} #{sym}"
 	when :RETURN
 	  if @cp == 0 then
 ###	    return @stack[@sp + getarg_a(cop)]
-#	    return @stack[sp + getarg_a(cop)]
 	    return @stack[sp + @pl.getarg_a(cop)]
 	  else
 ###	    @stack[@sp] = @stack[@sp + getarg_a(cop)]
-#	    @stack[sp] = @stack[sp + getarg_a(cop)]
 	    @stack[sp] = @stack[sp + @pl.getarg_a(cop)]
 	    @cp -= 1
 #	    @irep = @callinfo[@cp]
