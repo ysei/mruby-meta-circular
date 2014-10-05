@@ -1,6 +1,6 @@
 
 class Object
-  def to_i_from(k, i = 0)
+  def to_i_from(k, i = 0)	# unwork ? ( thread ? )
     self.kind_of?(k) ? i + self.to_i : self	# unwork ? ( thread ? )
   end
 end
@@ -11,12 +11,14 @@ class Numeric
   end
 
 # def pid_g
-#    pid = $$
-#    pid = 0 if nil == pid
-#    pid
-#
 #   $$ || self
 # end
+end
+
+class Array
+  def width
+    self.size - 1
+  end
 end
 
 module RiteOpcodeUtil
