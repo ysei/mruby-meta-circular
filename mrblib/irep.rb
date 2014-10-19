@@ -1,7 +1,9 @@
 
 class Object
   def to_i_from(k, i = 0)	# unwork ? ( thread ? )
-    self.kind_of?(k) ? i + self.to_i : self	# unwork ? ( thread ? )
+#   self.is_a?(k) ? i + self.to_i : self	# unwork ? ( thread ? )
+#   Class::k == self.class ? i + self.to_i : self	# unwork ? ( thread ? )
+    k.to_s == self.class.to_s ? i + self.to_i : self	# unwork ? ( thread ? )
   end
 end
 
@@ -18,6 +20,11 @@ end
 class Array
   def width
     self.size - 1
+  end
+
+  def affil(k, m = self)
+#   self[0].index(k)	# higokan mruby 10410200 ( irep.rb )
+    'i' == m ? self[0][0].index(k) : self[m.affil(k, 'i')]
   end
 end
 
