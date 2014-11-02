@@ -61,75 +61,77 @@ Thank you authers
 
 
 
-Log sample
+Sample log
 
 
-"0 ENTER 38"
-"1 LOADSELF 16777222"
-"2 LOADI 29362563"
-"1 getarg_a 6000001"
-"1 LOADSELF 2 0"
-"3 SEND 16777376"
-"2 getarg_sbx 38900c1"
-"2 getarg_a 38900c1"
-"2 LOADI 3 41"
-"0 ENTER 33554470"
-"1 MOVE 25182209"
-"2 LOADI 37748739"
-"1 getarg_b 1004081"
-"1 getarg_a 1004081"
-"1 MOVE 5 3"
-"3 EQ 25166002"
-"2 getarg_sbx 3000042"
-"2 getarg_a 3000042"
-"2 LOADI 6 1"
-"4 JMPNOT 29360409"
-"3 getarg_a 2b00081"
-"3 EQ 5 5"
-"7 MOVE 25182209"
-"8 LOADI 37748611"
-"7 getarg_b 1004081"
-"7 getarg_a 1004081"
-"7 MOVE 5 3"
-"9 EQ 25166002"
-"8 getarg_sbx 38fff32"
-"8 getarg_a 38fff32"
-"8 LOADI 6 0"
-"a JMPNOT 29360409"
-"9 getarg_a 2b00081"
-"9 EQ 5 5"
-"d LOADSELF 25165830"
-"e MOVE 33570817"
-"d getarg_a 6000081"
-"d LOADSELF 5 2"
-"f SUBI 33587375"
-"e getarg_b 1004002"
-"e getarg_a 1004002"
-"e MOVE 6 3"
-"01 SEND 25182368"
-"f getarg_c fa08002"
-"f getarg_a fa08002"
-"f SUBI 6 1"
-"0 ENTER 33554470"
-"1 MOVE 25182209"
-"2 LOADI 37748739"
-"1 getarg_b 1004081"
+0       ENTER   38
+1       LOADSELF        16777222
+2       LOADI   29362563
+1               getarg_a        6000001
+1               getarg_a        6000001
+1                       LOADSELF        2       2
+3       SEND    16777376
+2               getarg_sbx      38900c1
+2               getarg_a        38900c1
+2                       LOADI   3       41
+0       ENTER   33554470
+1       MOVE    25182209
+2       LOADI   37748739
+1               getarg_b        1004081
+1               getarg_a        1004081
+1                       MOVE    5       3
+3       EQ      25166002
+2               getarg_sbx      3000042
+2               getarg_a        3000042
+2                       LOADI   6       1
+4       JMPNOT  29360409
+3               getarg_a        2b00081
+3                       EQ      5       5
+7       MOVE    25182209
+8       LOADI   37748611
+7               getarg_b        1004081
+7               getarg_a        1004081
+7                       MOVE    5       3
+9       EQ      25166002
+8               getarg_sbx      38fff32
+8               getarg_a        38fff32
+8                       LOADI   6       0
+a       JMPNOT  29360409
+9               getarg_a        2b00081
+9                       EQ      5       5
+d       LOADSELF        25165830
+e       MOVE    33570817
+d               getarg_a        6000081
+d               getarg_a        6000081
+d                       LOADSELF        5       5
+f       SUBI    33587375
+e               getarg_b        1004002
+e               getarg_a        1004002
+e                       MOVE    6       3
+01      SEND    25182368
+f               getarg_c        fa08002
+f               getarg_a        fa08002
+f                       SUBI    6       1
+0       ENTER   33554470
+1       MOVE    25182209
+2       LOADI   37748739
+1               getarg_b        1004081
 
 
 
 Special thanks
 
 
-ABEkeniti , AEC , AHS-AC , akihito heika , ANDOUjun , AnjouNourin , 
-AsahidouCamera , ASC , AUE , ArkInternet , BABAkenji , CarrotParty , DDS , 
-Douglas E Smith , Ecom , EidenSya , FHUH , FUJIMOTOisao , FUKATANIsyouiti , 
-GalleryIDF , HARADAsouzaburou , HASEGAWA , HASEGAWAatusi , HAYAKAWAtakasi , 
-HoshigaokaBowl , HIEIyukio , HIRANOtakahiko , IcLandMatuno , IKEMITUsatoo , 
-INAGAKIhitosi , Isidake , ITAKURAyuuji , IWATAtakaaki , IWE , Jay Miner , 
-Jean L Gassee , KADO , KAGEYAMAken , KATOU , KATOUario , KatouPiano , 
-KAMIUTIseikou , KATAYAMA , Kazoku , kenji , KITAMURAtuyosi , KITANOmasaya , 
-KIYOTAkazuo , KOIKEkinya , KondouZouen , KuwayamaDenkaShop , Lpn , 
-MAKINOmasami , MankaiSeisakujo , masataka , MATUMOTOmasakazu , 
+ABEkeniti , ABEkouta , AEC , AHS-AC , akihito heika , ANDOUjun , 
+AnjouNourin , AsahidouCamera , ASC , AUE , ArkInternet , BABAkenji , 
+CarrotParty , DDS , Douglas E Smith , Ecom , EidenSya , FHUH , FUJIMOTOisao , 
+FUKATANIsyouiti , GalleryIDF , HARADAsouzaburou , HASEGAWA , HASEGAWAatusi , 
+HAYAKAWAtakasi , HoshigaokaBowl , HIEIyukio , HIRANOtakahiko , IcLandMatuno , 
+IKEMITUsatoo , INAGAKIhitosi , Isidake , ITAKURAyuuji , IWATAtakaaki , IWE , 
+Jay Miner , Jean L Gassee , KADO , KAGEYAMAken , KATOU , KATOUario , 
+KatouPiano , KAMIUTIseikou , KATAYAMA , Kazoku , kenji , KITAMURAtuyosi , 
+KITANOmasaya , KIYOTAkazuo , KOIKEkinya , KondouZouen , KuwayamaDenkaShop , 
+Lpn , MAKINOmasami , MankaiSeisakujo , masataka , MATUMOTOmasakazu , 
 MATUMOTOreiji , Matz , MIKI , MitomoSangyou , MITUYAyuuji , MIURAkenji , 
 MiyosiRichLand , MizutaniEijiJimusyo , NAKANEkou , NAITOUmutumi , 
 NagoyaJuke , NAKAGAWAmasaya , NamcoN , NARITA , NayabasiOosu , NeuroClub , 
@@ -218,6 +220,44 @@ http://google.com/search?q=ruby+cellbe
 
 
  ( eof ) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
