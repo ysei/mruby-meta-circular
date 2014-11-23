@@ -95,11 +95,8 @@ class Imem
 end
 
 module M__Slp
-# @@slp = 0.0001
   @@slp = 0.00001
-#  def slp(t = @@slp)
   def slp(t = @@slp, r = 1)
-#    sleep t
     (r - 1).times {sleep 0}; GC.start; r.times {sleep t}
 #   (0 .. self.size << 4).each {
 #     sleep 0; (true == true).is_a?(Object); sleep 0
@@ -216,7 +213,6 @@ class ENVary < Array
     if 1 > n then pl = pl[self.idx0(n)] end
     pl = mapr(pl) { |v|
       v.to_i_from(Numeric)
-#    } if Float == self.affil('ctr').class
     } if Float == self.affil('ctr')[0].class
     pl
   end
@@ -242,7 +238,6 @@ class ENVary < Array
   end
 
   def ctr_g
-#    [pl_eg('ctr'), pl_eg('cto')]
     ctr, cto = [pl_eg('ctr')[0], pl_eg('cto')[0]]
     cto_s(ctr) if ctr != cto
     [ctr, cto]
@@ -288,54 +283,57 @@ print "#{pc.to_xeh}		#{opc}	#{op.to_xeh}\n" if ! knid(opc, 'Numeric')
     }
   end
 
-#  def pl(pl, pc)
-  def pl(pc, idx, th)
+# def pl(pc, idx, th)
+  def pl(pc)
 #   i_th = self.affil('th', 'i')	# higokan mruby 10410200 ( irep.rb )
 #   i_lf = self[0].index('lf')
-#   pl = plg(pc, 0)
-    th[idx .. -1] = (thn = pl_eg(pc, 'th'))[idx .. -1]
-    th = th[0 .. (mx = thn.width)]
-#   pl[i_th].each { |v| return(pl) if ! ckth(v, 0) }
-#   for idx in (0 ... pl[i_th].size)
+    th = []	##
+    idx = 0	##
+    Fiber.new {	##
 #   for idx in (ith .. (mx = th.width))
-#      pl[i_th][idx] = st_id(pl[i_th][idx], pc - 1)
-#     return [idx, th] if ! th[idx] = st_id(th[idx], pc - 1)
-#      return [0, th] if mx < idx
-      th[idx] = st_id(th[idx], pc - 1) if mx >= idx
-      if [] != th[mx]
-	idx = idx == mx ? 0 : idx + 1
-#      self.pl_es(pc, ['th', pl[i_th]])
-	self.pl_es(pc, ['th', th])
+#   for idx in (ith .. mx = (th = pl_eg(pc, 'th')).width)
+#   th[idx .. -1] = (thn = pl_eg(pc, 'th'))[idx .. -1]	###
+      while (th[idx .. -1] = (thn = pl_eg(pc, 'th'))[idx .. -1])	##
+	th = th[0 .. (mx = thn.width)]
+	flg = false	##
+	th[idx] = st_id(th[idx], pc - 1) if mx >= idx
+	if [] != th[mx]
+	  self.pl_es(pc, ['th', th])
+#	  idx = idx == mx ? 0 : idx + 1	###
+	  flg = true	##
+	end
+	Slp.new.slp 0
+	Fiber.yield(flg && idx >= mx)	##
+	idx += 1	##
       end
-      Slp.new.slp 0
-#   end
+    }
 ##  self.lf_d
-    [idx, th]
+#   [0, th]	###
   end
 
   def plw(pc = 1)
-#    i_th = self.affil('th', 'i')
 #   cto = 0
-    ith = 0
-    th = []
+#   ith = 0
+#   th = []
     flg = true
     loop do
 #     pc = self.ctr_g
       pc, cto = self.ctr_g if flg
       if pc != cto || ! flg
 #	cto += 1
-#	flg = true
+	f = self.pl(pc) if flg
 
 #	an[cto] = Thread.new(envid) { |envid|
 #	self.pl(cto)
 #	self.pl(pc - 1)
-#	pl = pl_g(pc)
-#	pl[i_th].each { |v| if ! ckth(v, 0) then flg = false; break end}
-	(ith, th) = self.pl(pc, ith, th)
-        (flg = [true][ith] || false) || (Slp.new.slp 0; redo)
+#	(ith, th) = self.pl(pc, ith, th)
+#	(flg = [true][ith] || false) || (Slp.new.slp 0; redo)
+#	(flg = self.pl(pc)) || (Slp.new.slp 0; redo)
+	(flg = f.resume) || (Slp.new.slp 0.0001; redo)
 #	if flg
-#	  self.pl(pl, pc)
-#	  self.ctr_s(cto = pc)
+#	  ith = 0
+#	else	
+#	  redo
 #	end
       end
       Slp.new.slp
@@ -346,22 +344,6 @@ print "#{pc.to_xeh}		#{opc}	#{op.to_xeh}\n" if ! knid(opc, 'Numeric')
   end
 
 # private
-
-#  def plg(pc, md = 1, w = true, oth = [])
-#    i_th = self.affil('th', 'i')
-#    while pl = pl_g(pc)	# and 0 != pc do
-#      th = pl[i_th]
-#      max ||= md & th.width
-##     max.step(0, -1) { |idx|	# higokan ? mruby 70410200
-#      (0 .. max).reverse_each { |idx|
-#	break if ! ckth(th[idx], md)
-#	return(pl) if 0 == idx
-#      }
-#      if w then Slp.new.slp else return(pl) end
-##     sleep 0.00001
-#    end
-##   self[pc] = pl
-#  end
 end
 
 #class ENVary < Array
@@ -369,10 +351,10 @@ end
 #end
 
 module M__Stack
-#  def initialize(sp = 0)
+  def initialize(sp = 0)
 #    @sp = [sp, sp]
 #    @ofs = [0, 0]
-#  end
+  end
 #  def []=(*a)
 #    a = a.each { |v|}
 ##      case v.is_a?(String)
@@ -454,10 +436,9 @@ class FibVM
 
     # 3080410200 : gene gc off : mruby 6170410200 d17506c1
     # 3080410200 : 5x2 ng ( segmentation fault ) : mruby 3080410200 0878900f
-    # 3080410200 : 5x2 ok ( gc ) : monami-ya.mrb 8270410200 813e2af8
+    # 3080410200 : 5x2 ok ( gc ) : monami-ya.mrb 8270410200 813e2af8	# http://www.monami-ya.jp/
     @pl[0] = [['th',  'sym', 'ctr', 'cto'],	# mruby 20410200 : higokan ? : ary_many
 	      [[thini],  0,    [0],   [0]]]	# mruby 70410200 : 4x2 ok , 5x2 ng
-#	      [[thini],  0,     0,     0]]	# mruby 70410200 : 4x2 ok , 5x2 ng
 
     @pla = [['sp_r', 'ctr']]
 
@@ -494,7 +475,7 @@ class FibVM
   end
 
   def fls(pc, pl = [])
-    return if 0 != @flag[0]
+#    return if 0 != @flag[0]
 
     ppll = @pl
     i_th = ppll.affil('th', 'i')
@@ -504,7 +485,7 @@ class FibVM
     flg = [false]
     s = @stack
     i = @irep[0]
-    r0 , r1 = [0, 0]
+    r0, r1 = [0, 0]
     fml = [
       [:MOVE,     lambda {s[r0]}],         [:LOADL,   lambda {i.pool[r0]}],
       [:LOADI,    lambda {  r0 }],         [:LOADSYM, lambda {i.syms[r0]}],
@@ -566,7 +547,6 @@ class FibVM
 
 
 
-#   pl[i_th].each { |v| return(pl) if ! ppll.ckth(v, 1)}
     for idx in (0 ... pl[i_th].size)
       flg[idx] = ppll.ckth(pl[i_th][idx], 1)
     end
@@ -574,7 +554,7 @@ class FibVM
     sym, r = rslt(pl)
     r0, r1 = r
 
-# print "#{(pc - 1).to_xeh}			#{sym}	#{r1.to_xeh}	#{r0.to_xeh}"
+# p "#{(pc - 1).to_xeh} #{sym} #{r1.to_xeh} #{r0.to_xeh}"
 
     pr, sy = fml.assoc(sym)[1 .. -1]
     p = Proc.new { |r0, r1| r1 && pr.call}
@@ -582,24 +562,26 @@ class FibVM
     rs = ['-', '-']
     wd = plspr.width
     if flg[0] && flg[-1]
-      r00 = (plspr[r1 + 1] if 0 < wd && r1 < wd) || p.(r0, r1)	# c
+      r00 = (plspr[r1 + 1] if 0 < wd && r1 < wd) || p.(r0, r1)	# c 
       r00 = [s[r1], r00].inject(sy) if nil != sy
       s[r1] = r00
       rs = [r1.to_xeh, r0.to_xeh]
     elsif flg[0]
-      0xf.times { |n|
-#	r00 = nil == r1 ? r1 : p.(r0, r1)	# c
-	plspr.push(p.(r0, s[wd + n]))		# c
+#      0xf.times { |n|
+      wd.step(wd + 0xe) { |n|
+#	r00 = nil == r1 ? r1 : p.(r0, r1)	# c 
+#	plspr.push(p.(r0, s[wd + n]))		# c
+	plspr<< p.(r0, s[n])		# p # c 
       }
       rs[1] = r0.to_xeh
     elsif flg[-1]
       rs[0] = r1.to_xeh
     end
 print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
-    pl
+#   pl
+    return([! flg.include?(false), pl])
   end
 
-#  def iset(pc, ops)
   def iset(sym, cop, sp, pc)
     pc1 = pc + 1
     imem = @imem
@@ -659,46 +641,59 @@ print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
       return
     )
 
-#    ta = lambda { |idx, lith|
     ta = lambda { |lth|
-#      lsp = sp >> ((1 - fml[idx][lith].shift) << 8)	# 256
       lsp = sp >> ((1 - lth.shift) << 8)	# 256
-#      th = [fml[idx][lith].pop || 'getarg_a', cop]
       th = [lth.pop || 'getarg_a', cop]
       th = [lsp, th] if 0 != lsp
       th
     }
-    ops = []
-    ops.push fml.shift
-#   ops = ['sym', fml.shift, 'th']
-    for idx in (0 ... fml.size)
-      ths = []
-#     for lith in (0 ... fml[idx].size)
-        lith = 0
-        ths.push(ta.(fml[idx][lith]), [])	# c
-        ops.push ths
-#     end
-    end
-    ops.push [sp]
+#    ops = []
+#    ops.push fml.shift
+   ops = ['sym', fml.shift] #, 'th']
+#    for idx in (0 ... fml.size)
+#      ths = []
+      ths = fml.shift
+#      lith = 0
+#      ths.push(ta.(fml[idx][lith]), [])	# c
+      ops.push('th', [ta.(ths.shift), []])	# c 
+#      ops.push ths
+#    end
+#    ops.push [sp]
+    ops.push(@pla.assoc('sp_r')[1], [sp])
 
-#    pl.pl_es(pc1, ['sym', 'th'].flat_map { |o| [o].push(ops.shift)})
-    pl.pl_es(pc1, ['sym', 'th', @pla.assoc('sp_r')[1]].flat_map { |o| [o].push(ops.shift)})
-#    pl.pl_es(0,   ['ctr', pc1])
+#    pl.pl_es(pc1, ['sym', 'th', @pla.assoc('sp_r')[1]].flat_map { |o| [o].push(ops.shift)})
+    pl.pl_es(pc1, ops)
 ####    pl.ctr_s(pc1)
 
-    ths = pl.pl_eg(pc1, 'th')
-    if 1 < fml[idx].size
-      lith = 1
-#      ths[lith] = ta.(fml[idx], lith)	# c
-      ths[lith] = ta.(fml[idx][lith])	# c
+    Slp.new.slp 0
+    th = pl.pl_eg(pc1, 'th')
+#    if 1 < fml[idx].size
+    if 0 < ths.size
+#      lith = 1
+#      ths[lith] = ta.(fml[idx][lith])	# c
+      th[-1] = ta.(ths.shift)		# c 
     else
-      ths.delete_at(1)
+      th.delete_at(1)
     end
-    pl.pl_es(pc1, ['th', ths])
-    pl.ctr_s(pc1)	####
+    pl.pl_es(pc1, ['th', th])
+    pl.ctr_s(pc1)
 
 #   pl1[i_ctr] += 1
 #   pl1[i_lf] += 1
+  end
+
+  def opf(irep, pc)
+    imem = @imem
+
+    #　命令コードの取り出し
+#   cop = @irep.iseq[@pc]
+    cop = irep.iseq[pc]
+
+#   case OPTABLE_SYM[get_opcode(cop)]
+#   sym = OPTABLE_SYM[get_opcode(cop)]
+#   sym = OPTABLE_SYM[ppll.get_opcode(cop)]
+    sym = OPTABLE_SYM[imem.get_opcode(cop)]
+    [cop, sym]
   end
 
   def eval(irep)
@@ -717,29 +712,24 @@ print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
     while true
       if flg[0]
 	pc = @pc
-
-	#　命令コードの取り出し
-#	cop = @irep.iseq[@pc]
-	cop = irep.iseq[pc]
 	sp = @sp ##
 
-#	case OPTABLE_SYM[get_opcode(cop)]
-#	sym = OPTABLE_SYM[get_opcode(cop)]
-#	sym = OPTABLE_SYM[ppll.get_opcode(cop)]
-	sym = OPTABLE_SYM[imem.get_opcode(cop)]
-print "#{pc.to_xeh}	#{sym}	#{cop}\n"
+	cop, sym = opf(irep, pc)
+#print "#{pc.to_xeh}	#{sym}	#{cop}"
+print "#{pc.to_xeh}	#{sym}	#{cop.to_xeh}\n"
 
 	pl = ppll.pl_g(pc)
       else
 	pl[i_th] = ppll.pl_eg(pc, 'th')
       end
 
-      if 0 == @flag[0] and 0 != pc
-	flg[0] = true
-	pl[i_th].each { |v| if ! ppll.ckth(v, 1) then flg[0] = false; break end}
-      end
+#      if 0 == @flag[0] and 0 != pc
+#	flg[0] = true
+#	pl[i_th].each { |v| if ! ppll.ckth(v, 1) then flg[0] = false; break end}
+#      end
 
-      pl = fls(pc, pl)
+#      pl = fls(pc, pl)
+      flg[0], pl = fls(pc, pl) if 0 == @flag[0]
 
       if flg[0]
 
@@ -747,10 +737,7 @@ print "#{pc.to_xeh}	#{sym}	#{cop}\n"
 	  iset(sym, cop, sp, pc)
 	else
 
-#	  while (ctr, cto = ppll.ctr_g) and ctr != cto # pc != cto
-#	  while ! ppll.ctr_c
-#	    Slp.new.slp
-#	  end
+#	  while ! ppll.ctr_c do Slp.new.slp end
 
 	  plini
 	  @flag[0] = 2
