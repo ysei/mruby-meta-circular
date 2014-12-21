@@ -231,9 +231,10 @@ class ENVary < Array
 #   arg[0].is_a?(Numeric) ? n = arg.shift : n = 0	# unwork ( thread ? )
 
     pl = pl_g(n)
-    ary.each_slice(2) { |k, v|
-      pl[self.affil(k, 'i')] = v
-    }
+#    ary.each_slice(2) { |k, v|
+#      pl[self.affil(k, 'i')] = v
+#    }
+    ary.each_slice(2) { |k, v| pl[self.affil(k, 'i')] = v}
     pl_s(n, pl)
   end
 
@@ -290,10 +291,8 @@ print "#{pc.to_xeh}		#{opc}	#{op.to_xeh}\n" if ! knid(opc, 'Numeric')
     th = []	##
     idx = 0	##
     Fiber.new {	##
-#   for idx in (ith .. (mx = th.width))
-#   for idx in (ith .. mx = (th = pl_eg(pc, 'th')).width)
 #   th[idx .. -1] = (thn = pl_eg(pc, 'th'))[idx .. -1]	###
-      while (th[idx .. -1] = (thn = pl_eg(pc, 'th'))[idx .. -1])	##
+      while th[idx .. -1] = (thn = pl_eg(pc, 'th'))[idx .. -1]	##
 	th = th[0 .. (mx = thn.width)]
 	flg = false	##
 	th[idx] = st_id(th[idx], pc - 1) if mx >= idx
@@ -312,9 +311,6 @@ print "#{pc.to_xeh}		#{opc}	#{op.to_xeh}\n" if ! knid(opc, 'Numeric')
   end
 
   def plw(pc = 1)
-#   cto = 0
-#   ith = 0
-#   th = []
     flg = true
     loop do
 #     pc = self.ctr_g
@@ -326,15 +322,9 @@ print "#{pc.to_xeh}		#{opc}	#{op.to_xeh}\n" if ! knid(opc, 'Numeric')
 #	an[cto] = Thread.new(envid) { |envid|
 #	self.pl(cto)
 #	self.pl(pc - 1)
-#	(ith, th) = self.pl(pc, ith, th)
-#	(flg = [true][ith] || false) || (Slp.new.slp 0; redo)
-#	(flg = self.pl(pc)) || (Slp.new.slp 0; redo)
-	(flg = f.resume) || (Slp.new.slp 0.0001; redo)
-#	if flg
-#	  ith = 0
-#	else	
-#	  redo
-#	end
+#	(ith, th) = self.pl(pc, ith, th)	###
+#	(flg = [true][ith] || false) || (Slp.new.slp 0; redo)	###
+	(flg = f.resume) ? f = nil : (Slp.new.slp 0; redo)	##
       end
       Slp.new.slp
 #     sleep 0.002
@@ -436,7 +426,7 @@ class FibVM
 
     # 3080410200 : gene gc off : mruby 6170410200 d17506c1
     # 3080410200 : 5x2 ng ( segmentation fault ) : mruby 3080410200 0878900f
-    # 3080410200 : 5x2 ok ( gc ) : monami-ya.mrb 8270410200 813e2af8	# http://www.monami-ya.jp/
+    # 3080410200 : 5x2 ok ( gc ) : monami-ya.mrb 8270410200 813e2af8	# www.monami-ya.jp
     @pl[0] = [['th',  'sym', 'ctr', 'cto'],	# mruby 20410200 : higokan ? : ary_many
 	      [[thini],  0,    [0],   [0]]]	# mruby 70410200 : 4x2 ok , 5x2 ng
 
@@ -474,26 +464,29 @@ class FibVM
     [pl[@pl.affil('sym', 'i')].to_sym, r]
   end
 
-  def fls(pc, pl = [])
+#  def fls(pc, pl = [])	###
+  def fls(pc)	##
 #    return if 0 != @flag[0]
 
     ppll = @pl
     i_th = ppll.affil('th', 'i')
-    plspr = pl[ppll.affil(@pla.assoc('sp_r')[1], 'i')]
-    sp = plspr[0]
+    i_sp_r = ppll.affil(@pla.assoc('sp_r')[1], 'i')	##
+#   plspr = pl[ppll.affil(@pla.assoc('sp_r')[1], 'i')]	###
+#   sp = plspr[0]	###
 
     flg = [false]
     s = @stack
     i = @irep[0]
     r0, r1 = [0, 0]
+    rs = ['-', '-']
     fml = [
-      [:MOVE,     lambda {s[r0]}],         [:LOADL,   lambda {i.pool[r0]}],
-      [:LOADI,    lambda {  r0 }],         [:LOADSYM, lambda {i.syms[r0]}],
-      [:LOADSELF, lambda {s[r0]}],         [:LOADT,   lambda {       r0 }],
-      [:ADD,      lambda {s[r0 + 1]}, :+], [:ADDI,    lambda {       r0 }, :+],
-      [:SUB,      lambda {s[r0 + 1]}, :-], [:SUBI,    lambda {       r0 }, :-],
-      [:MUL,      lambda {s[r0 + 1]}, :*], [:DIV,     lambda { s[1 + r0]}, :/],
-      [:EQ,       lambda {s[r1] == s[r0 + 1]}]
+      [:MOVE,	  -> {s[r0]}],	       [:LOADL,   -> {i.pool[r0]}],	# l 2 
+      [:LOADI,	  -> {  r0 }],	       [:LOADSYM, -> {i.syms[r0]}],	# l 2 
+      [:LOADSELF, -> {s[r0]}],	       [:LOADT,   -> {	     r0 }],	# l 2 
+      [:ADD,	  -> {s[r0 + 1]}, :+], [:ADDI,    -> {	     r0 }, :+],	# l 2 
+      [:SUB,	  -> {s[r0 + 1]}, :-], [:SUBI,    -> {	     r0 }, :-],	# l 2 
+      [:MUL,	  -> {s[r0 + 1]}, :*], [:DIV,	  -> { s[1 + r0]}, :/],	# l 2 
+      [:EQ,	  -> {s[r1] == s[r0 + 1]}]	# l 
     ]
 #   when :MOVE
 #     @stack[@sp + getarg_a(cop)] = @stack[@sp + getarg_b(cop)]
@@ -546,43 +539,48 @@ class FibVM
 #     @stack[r1] = val
 
 
+    Fiber.new {
+      loop do	##
+	pl = ppll.pl_g(pc)	##
+	plspr = pl[i_sp_r]	##
+	sp ||= plspr[0]	##
 
-    for idx in (0 ... pl[i_th].size)
-      flg[idx] = ppll.ckth(pl[i_th][idx], 1)
-    end
+	for idx in (0 ... pl[i_th].size)
+	  flg[idx] = ppll.ckth(pl[i_th][idx], 1)
+	end
 
-    sym, r = rslt(pl)
-    r0, r1 = r
+	sym, r = rslt(pl)
+	r0, r1 = r
 
-# p "#{(pc - 1).to_xeh} #{sym} #{r1.to_xeh} #{r0.to_xeh}"
+	pr, sy = fml.assoc(sym)[1 .. -1]
+	p = Proc.new { |r0, r1| r1 && pr.call}
 
-    pr, sy = fml.assoc(sym)[1 .. -1]
-    p = Proc.new { |r0, r1| r1 && pr.call}
-
-    rs = ['-', '-']
-    wd = plspr.width
-    if flg[0] && flg[-1]
-      r00 = (plspr[r1 + 1] if 0 < wd && r1 < wd) || p.(r0, r1)	# c 
-      r00 = [s[r1], r00].inject(sy) if nil != sy
-      s[r1] = r00
-      rs = [r1.to_xeh, r0.to_xeh]
-    elsif flg[0]
-#      0xf.times { |n|
-      wd.step(wd + 0xe) { |n|
-#	r00 = nil == r1 ? r1 : p.(r0, r1)	# c 
-#	plspr.push(p.(r0, s[wd + n]))		# c
-	plspr<< p.(r0, s[n])		# p # c 
-      }
-      rs[1] = r0.to_xeh
-    elsif flg[-1]
-      rs[0] = r1.to_xeh
-    end
+#	rs = ['-', '-']
+	wd = plspr.width
+	if flg[0] && flg[-1]
+	  r00 = (plspr[r1 + 1] if 0 < wd && r1 < wd) || p.(r0, r1)	# c 
+	  r00 = [s[r1], r00].inject(sy) if nil != sy
+	  s[r1] = r00
+	  rs = [r1.to_xeh, r0.to_xeh]
+	elsif flg[0]
+	  wd.step(wd + 0xe) { |n|
+#	    r00 = nil == r1 ? r1 : p.(r0, r1)	# c 
+	    plspr<< p.(r0, s[n])		# p # c 
+	  }
+	  rs[1] = r0.to_xeh
+	elsif flg[-1]
+	  rs[0] = r1.to_xeh
+	end
 print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
-#   pl
-    return([! flg.include?(false), pl])
+#	pl
+#	return([! flg.include?(false), pl])	###
+	Fiber.yield(! flg.include?(false))	##
+      end	##
+    }
   end
 
-  def iset(sym, cop, sp, pc)
+#  def iset(sym, cop, sp, pc)
+  def iset(sym, cop, sp, pc, thi = 0, th = [])
     pc1 = pc + 1
     imem = @imem
     pl = @pl
@@ -628,7 +626,7 @@ print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
 #     val = (@stack[@sp + getarg_a(cop)] == @stack[@sp + getarg_a(cop) + 1])
 #     @stack[@sp + getarg_a(cop)] = val
 
-    ops = [
+    ops = [['bt', ['sym', true, 'th', true], ['sym', false, 'th', true]],
       [:MOVE,     [[1, 'getarg_b'],   [1]]], [:LOADL,   [[0, 'getarg_bx'], [1]]],
       [:LOADI,    [[0, 'getarg_sbx'], [1]]], [:LOADSYM, [[0, 'getarg_bx'], [1]]],
       [:LOADSELF, [[1],               [1]]], [:LOADT,   [[0, true],        [1]]],
@@ -641,45 +639,74 @@ print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
       return
     )
 
-    ta = lambda { |lth|
+    bt = ops.assoc('bt')[1 .. -1]
+#    ta = lambda { |lth|
+    ta = ->( lth ) {
       lsp = sp >> ((1 - lth.shift) << 8)	# 256
-      th = [lth.pop || 'getarg_a', cop]
-      th = [lsp, th] if 0 != lsp
-      th
+#      th = [lth.pop || 'getarg_a', cop]
+#      th = [lsp, th] if 0 != lsp
+#      th
+      lth = [lth.pop || 'getarg_a', cop]
+      lth = [lsp, lth] if 0 != lsp
+      lth
     }
-#    ops = []
-#    ops.push fml.shift
-   ops = ['sym', fml.shift] #, 'th']
-#    for idx in (0 ... fml.size)
-#      ths = []
-      ths = fml.shift
-#      lith = 0
-#      ths.push(ta.(fml[idx][lith]), [])	# c
-      ops.push('th', [ta.(ths.shift), []])	# c 
-#      ops.push ths
-#    end
-#    ops.push [sp]
-    ops.push(@pla.assoc('sp_r')[1], [sp])
 
-#    pl.pl_es(pc1, ['sym', 'th', @pla.assoc('sp_r')[1]].flat_map { |o| [o].push(ops.shift)})
-    pl.pl_es(pc1, ops)
-####    pl.ctr_s(pc1)
+#    fml2 = fml.dup
+#    ops = ['sym', fml.shift]
+
+#    ths = fml.shift
+#    th0 = ta.(ths.shift)		# c 
+#    ops.push('th', [ta.(ths.shift), []])	# c 
+#    ops.push('th', [th0, []])
+#    ops.push(@pla.assoc('sp_r')[1], [sp])
+
+    wd = 1
+    opg = Proc.new{ |oi|
+      o = bt[oi]
+      lopa = []
+      o.each_slice(2) { |k, v|
+	fv = fml.shift
+	if v # && knid(fv, 'Array')
+	  if 'th' == k
+	    if 0 == oi
+	      fv = [fv[oi] = th[oi] = ta.(fv[oi])] + [[]]	# c 
+	    else
+	      th[oi] = ta.(fv[oi]) if oi <= wd = fv.width	# c 
+	      fv = th
+	    end
+	  end
+	  lopa.push(k, fv)
+	end
+      }
+      lopa
+    }
+    opa = opg.(thi)	# c 
+    opa.push(@pla.assoc('sp_r')[1], [sp]) if 0 == thi
+
+
+#    pl.pl_es(pc1, ops)
+    pl.pl_es(pc1, opa)
+    pl.ctr_s(pc1) if 0 == thi
 
     Slp.new.slp 0
-    th = pl.pl_eg(pc1, 'th')
-#    if 1 < fml[idx].size
-    if 0 < ths.size
-#      lith = 1
-#      ths[lith] = ta.(fml[idx][lith])	# c
-      th[-1] = ta.(ths.shift)		# c 
-    else
-      th.delete_at(1)
-    end
-    pl.pl_es(pc1, ['th', th])
-    pl.ctr_s(pc1)
+#    th = pl.pl_eg(pc1, 'th')
+#    th = [th0]
+#    th = [ths.shift]
 
+#    th.push ta.(ths.shift) if 0 < ths.size	# c 
+#    th[1] = ta.(th[1]) if 1 < th.size		# c 
+#    pl.pl_es(pc1, ['th', th])
+
+#    fml2 = fml.dup
+#    opa = opg.(1)	# c 
+#    pl.pl_es(pc1, opa)
+
+#   pl.pl_es(pc1, ['sym', 'th', @pla.assoc('sp_r')[1]].flat_map { |o| [o].push(ops.shift)})
 #   pl1[i_ctr] += 1
 #   pl1[i_lf] += 1
+
+    if 0 != thi && wd <= thi then thi = -1; th = [] end
+    [thi + 1, th]
   end
 
   def opf(irep, pc)
@@ -709,32 +736,35 @@ print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
     @flag[0] = 1
 
     flg = Array.new(@@rmth + 1) {true}
+    thi = 0
+    th = []
+
     while true
       if flg[0]
-	pc = @pc
-	sp = @sp ##
+	if 1 > thi
+	  pc = @pc
+	  sp = @sp ##
 
-	cop, sym = opf(irep, pc)
-#print "#{pc.to_xeh}	#{sym}	#{cop}"
+	  cop, sym = opf(irep, pc)
 print "#{pc.to_xeh}	#{sym}	#{cop.to_xeh}\n"
 
-	pl = ppll.pl_g(pc)
+#	  pl = ppll.pl_g(pc)	###
+	  fl = fls(pc) if 0 == @flag[0]	##
+	end
       else
-	pl[i_th] = ppll.pl_eg(pc, 'th')
+#	pl[i_th] = ppll.pl_eg(pc, 'th')	###
       end
 
-#      if 0 == @flag[0] and 0 != pc
-#	flg[0] = true
-#	pl[i_th].each { |v| if ! ppll.ckth(v, 1) then flg[0] = false; break end}
-#      end
 
-#      pl = fls(pc, pl)
-      flg[0], pl = fls(pc, pl) if 0 == @flag[0]
+#     flg[0], pl = fls(pc, pl) if 0 == @flag[0]	###
+      ((flg[0] = fl.resume) && fl = nil) if fl	##
 
-      if flg[0]
-
+#      if flg[0]
+      if flg[0] or 0 != thi
 	if 'J' != sym.to_s[0] and ! [:ENTER, :SEND, :RETURN].include?(sym)
-	  iset(sym, cop, sp, pc)
+#	  iset(sym, cop, sp, pc)
+	  thi, th = iset(sym, cop, sp, pc, thi, th)
+
 	else
 
 #	  while ! ppll.ctr_c do Slp.new.slp end
@@ -848,11 +878,12 @@ print "#{pc.to_xeh}	#{sym}	#{cop.to_xeh}\n"
 	  end
 	end
 
-	@flag[0] >>= 1
+#	@flag[0] >>= 1
+	@flag[0] >>= (1 - (thi <=> 0))
 	@pc = pc + 1
 	@sp = sp ##
 	@irep[0] = irep
-
+	Slp.new.slp 0
       else
 	Slp.new.slp
       end	# if flg

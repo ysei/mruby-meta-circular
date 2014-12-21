@@ -19,8 +19,8 @@ Note
 
 10410200
 
-Lock file : ./~~ritepl.loc
-Lock ENV :    ~~ritepl ...
+Ext file : ./~~ritepl.loc
+Ext ENV  :   ~~ritepl ...
 
 
 
@@ -64,58 +64,75 @@ Thank you authers
 Sample log
 
 
-0       ENTER   38
-1       LOADSELF        16777222
-2       LOADI   29362563
+0       ENTER   62
+1       LOADSELF        6000001
+2       LOADI   38900c1
+1                       LOADSELF        -       -
 1               getarg_a        6000001
 1               getarg_a        6000001
+1                       LOADSELF        2       -
 1                       LOADSELF        2       2
-3       SEND    16777376
+3       SEND    0a00001
+2                       LOADI   -       -
 2               getarg_sbx      38900c1
 2               getarg_a        38900c1
-2                       LOADI   3       41
-0       ENTER   33554470
-1       MOVE    25182209
-2       LOADI   37748739
+2                       LOADI   41      3
+0       ENTER   6200002
+1       MOVE    1004081
+2       LOADI   3000042
+1                       MOVE    -       -
 1               getarg_b        1004081
 1               getarg_a        1004081
-1                       MOVE    5       3
-3       EQ      25166002
+1                       MOVE    3       5
+3       EQ      2b00081
+2                       LOADI   -       -
 2               getarg_sbx      3000042
 2               getarg_a        3000042
-2                       LOADI   6       1
-4       JMPNOT  29360409
+2                       LOADI   1       6
+4       JMPNOT  91100c1
 3               getarg_a        2b00081
+3                       EQ      -       -
 3                       EQ      5       5
-7       MOVE    25182209
-8       LOADI   37748611
+7       MOVE    1004081
+8       LOADI   38fff32
+7                       MOVE    -       -
 7               getarg_b        1004081
 7               getarg_a        1004081
-7                       MOVE    5       3
-9       EQ      25166002
+7                       MOVE    3       -
+7                       MOVE    3       5
+9       EQ      2b00081
+8                       LOADI   -       -
 8               getarg_sbx      38fff32
 8               getarg_a        38fff32
-8                       LOADI   6       0
-a       JMPNOT  29360409
+8                       LOADI   0       6
+a       JMPNOT  91100c1
+9                       EQ      -       -
 9               getarg_a        2b00081
 9                       EQ      5       5
-d       LOADSELF        25165830
-e       MOVE    33570817
+d       LOADSELF        6000081
+e       MOVE    1004002
 d               getarg_a        6000081
 d               getarg_a        6000081
 d                       LOADSELF        5       5
-f       SUBI    33587375
+f       SUBI    fa08002
+e                       MOVE    -       -
+e                       MOVE    -       -
 e               getarg_b        1004002
+e                       MOVE    3       -
 e               getarg_a        1004002
-e                       MOVE    6       3
-01      SEND    25182368
+e                       MOVE    3       6
 f               getarg_c        fa08002
 f               getarg_a        fa08002
-f                       SUBI    6       1
-0       ENTER   33554470
-1       MOVE    25182209
-2       LOADI   37748739
+01      SEND    0a04081
+f                       SUBI    1       -
+f                       SUBI    1       6
+0       ENTER   6200002
+1       MOVE    1004081
+2       LOADI   3000042
 1               getarg_b        1004081
+1               getarg_a        1004081
+1                       MOVE    6       8
+3       EQ      2b00081
 
 
 
@@ -149,6 +166,12 @@ TyuukyouMiCom , Usagi , UsagiDan , WAKAZONO , WATANABE , Wellenetz , YAMADA ,
 YAMADAkenji , YAMAZAKIeiji , YokoiFSika , yosinori
 
 
+
+Todo
+
+
+ENVary Bunkatu
+MeireiStream KurasuKa
 
 
 
@@ -215,6 +238,7 @@ end
 
 http://github.com/matsumoto-r/mruby-on-Lua/
 http://github.com/CowboyTim/lua-cell/
+http://github.com/RyanScottLewis/lua-mruby/
 http://google.com/search?q=ruby+cellbe
 
 
