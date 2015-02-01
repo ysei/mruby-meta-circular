@@ -141,29 +141,31 @@ Special thanks
 
 ABEkeniti , ABEkouta , AEC , AHS-AC , akihito heika , ANDOUjun , 
 AnjouNourin , AsahidouCamera , ASC , AUE , ArkInternet , BABAkenji , 
-CarrotParty , DDS , Douglas E Smith , Ecom , EidenSya , FHUH , FUJIMOTOisao , 
-FUKATANIsyouiti , GalleryIDF , HARADAsouzaburou , HASEGAWA , HASEGAWAatusi , 
-HAYAKAWAtakasi , HoshigaokaBowl , HIEIyukio , HIRANOtakahiko , IcLandMatuno , 
-IKEMITUsatoo , INAGAKIhitosi , Isidake , ITAKURAyuuji , IWATAtakaaki , IWE , 
-Jay Miner , Jean L Gassee , KADO , KAGEYAMAken , KATOU , KATOUario , 
-KatouPiano , KAMIUTIseikou , KATAYAMA , Kazoku , kenji , KITAMURAtuyosi , 
-KITANOmasaya , KIYOTAkazuo , KOIKEkinya , KondouZouen , KuwayamaDenkaShop , 
-Lpn , MAKINOmasami , MankaiSeisakujo , masataka , MATUMOTOmasakazu , 
-MATUMOTOreiji , Matz , MIKI , MitomoSangyou , MITUYAyuuji , MIURAkenji , 
-MiyosiRichLand , MizutaniEijiJimusyo , NAKANEkou , NAITOUmutumi , 
-NagoyaJuke , NAKAGAWAmasaya , NamcoN , NARITA , NayabasiOosu , NeuroClub , 
-NHlignuxNH , NISII , NISIKADOtomohiro , NISIMURAtakesi , NOJIMAakinori , 
-OAsystem-plaza , Oh!MZ , Oh!X , OkaSin , OKAYAMAyasuo , OKUMURAnobuo , 
-ONOyouko , OOGAWARAkunio , OOI , OONISI , OONISIyosinori , Plainss , 
+BinaryCoders , CarrotParty , ChipDesigners , DDS , Douglas E Smith , Ecom , 
+EidenSya , FHUH , FpFt , FUJIMOTOisao , FUKATANIsyouiti , GalleryIDF , 
+GwAmyuuzu , HARADAsouzaburou , HASEGAWAatusi , HAYAKAWAtakasi , 
+HoshigaokaBowl , HIEIyukio , HIRANOtakahiko , IcLandMatuno , IKEMITUsatoo , 
+INAGAKIhitosi , Isidake , ITAKURAyuuji , IWATAtakaaki , IWE , Jay Miner , 
+Jean L Gassee , KADO , KAGEYAMAken , KATOUario , KatouPiano , KAMIUTIseikou , 
+KATAYAMA , Kazoku , kenji , KITAMURAtuyosi , KITANOmasaya , KIYOTAkazuo , 
+KOIKEkinya , KondouZouen , KuwayamaDenkaShop , Lpn , MAKINOmasami , 
+MankaiSeisakujo , masataka , MATUMOTOmasakazu , MATUMOTOreiji , Matz , MIKI , 
+MitomoSangyou , MITUYAyuuji , MIURAkenji , MiyosiRichLand , 
+MizutaniEijiJimusyo , NAKANEkou , NAITOUmutumi , NagoyaJuke , 
+NAKAGAWAmasaya , NamcoN , NARITA , NayabasiOosu , NeuroClub , NHlignuxNH , 
+NISII , NISIKADOtomohiro , NISIMURAtakesi , NOJIMAakinori , OAsystem-plaza , 
+Oh!MZ , Oh!X , OkaSin , OKAYAMAyasuo , OKUMURAnobuo , ONOyouko , 
+OOGAWARAkunio , OOI , OONISI , OONISIyosinori , Plainss , 
 Professor Alan Kay , Professor Andrew S Tanenbaum , Professor Babbage , 
-Professor Buddha , Rms , Rockin' , Saarunaato , SAITOUken , SAKAMURAken , 
-SankyouDouro , SATAKE , SATOUfumi , SAWATARIkatuya , SegaN , Sharp , 
-Spd Yum^2 , StarbaseNagoya , SUZUKItosikazu , Syoji , SyouwaJidousya , 
-Taataa , TAGUTIkagekiyo , TAKAMI , Takasago , TAKATUKASA , TANAKAyasusi , 
-TANAKAhideaki , TANIGUTItakanori , TirasiYa , TomoeYa , Tooya , TORII , 
-TougouTyou , ToyoSin , TOYOTAsumio , Tsukumo , TuruYa , Tutui , 
-TyuukyouMiCom , Usagi , UsagiDan , WAKAZONO , WATANABE , Wellenetz , YAMADA , 
-YAMADAkenji , YAMAZAKIeiji , YokoiFSika , yosinori
+Professor Buddha , Rms , Rockin' , RtSangyouKai , Saarunaato , SAITOUken , 
+SAKAMURAken , SankyouDouro , SATAKE , SATOUfumi , SAWATARIkatuya , SegaN , 
+SFI , Sharp , SIBATAkaku , Spd Yum^2 , Sphr , StarbaseNagoya , SUZUKI , 
+SUZUKItosikazu , Syoji , SyouwaJidousya , Taataa , TAGUTIkagekiyo , TAKAMI , 
+Takasago , TAKATUKASA , TANAKAyasusi , TANAKAhideaki , TANIGUTItakanori , 
+TirasiYa , TomoeYa , TomotikaSyoukai , Tooya , TORII , TougouTyou , ToyoSin , 
+TOYOTAsumio , Tsukumo , TuruYa , Tutui , TyuukyouMiCom , TyuunitiKatouRiyou , 
+Usagi , UsagiDan , WAKAZONO , WATANABE , Wellenetz , YAMADA , YAMADAkenji , 
+YAMAMOTOryuuji , YAMAZAKIeiji , YokoiFSika , yosinori
 
 
 
@@ -237,8 +239,8 @@ end
 
 
 http://github.com/matsumoto-r/mruby-on-Lua/
-http://github.com/CowboyTim/lua-cell/
 http://github.com/RyanScottLewis/lua-mruby/
+http://github.com/CowboyTim/lua-cell/
 http://google.com/search?q=ruby+cellbe
 
 
