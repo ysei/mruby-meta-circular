@@ -403,9 +403,9 @@ print "#{pc.to_xeh}		#{opc}	#{op.to_xeh}\n" if ! knid(opc, 'Numeric')
 	th = th[0 .. (mx = thn.width)]
 	flg = false	##
 #	th[idx] = st_id(th[idx], pc - 1) if mx >= idx
-	th[idx] = st_id(th[idx], pc - 1)
+####	th[idx] = st_id(th[idx], pc - 1)
 ####	th[idx] = st_id(th[idx], pc - 1) if ! knid(th[idx], 'Numeric')	# fuguai taisaku
-####	th[idx] = st_id(th[idx], pc - 1) if ckth(th[idx], 0)	# fuguai taisaku
+	th[idx] = st_id(th[idx], pc - 1) if ckth(th[idx], 0)	# fuguai taisaku
 #	f[idx] = nil != th[idx] = st_id(th[idx], pc - 1) if ! f[idx] # && mx >= idx
 #	f[idx] = [] != th[idx] = st_id(th[idx], pc - 1) if ! f[idx]
 #	f[idx] = [] != th[idx] = st_id(th[idx], pc - 1) if ! f[idx] || 0 == ct & 0b11
@@ -423,9 +423,9 @@ print "#{pc.to_xeh}		#{opc}	#{op.to_xeh}\n" if ! knid(opc, 'Numeric')
 	Fiber.yield(flg && idx >= mx)	##
 #	ct += 1		##
 #	idx += 1	##
-	idx += 1 if idx < mx || [] != th[mx]	##
+####	idx += 1 if idx < mx || [] != th[mx]	##
 #	idx += 1 if idx < mx && f[idx]	##
-####	idx += 1 if idx < mx && [] != th[mx]	# fuguai taisaku	##
+	idx += 1 if idx < mx && [] != th[mx]	# fuguai taisaku	##
 #	(idx += 1; ct = 0) if idx < mx && [] != th[mx]	##
 #	idx += 1 if f	##
 #	idx += 1 if f && [] != th[mx]	##
@@ -552,7 +552,7 @@ class FibVM
 
     # 3080410200 : gene gc off : mruby 6170410200 d17506c1
     # 3080410200 : 5x2 ng ( segmentation fault ) : mruby 3080410200 0878900f
-    # 3080410200 : 5x2 ok ( gc ) : monami-ya.mrb 8270410200 813e2af8	# www.monami-ya.jp
+    # 3080410200 : 5x2 ok ( gc ) : monami-ya.mrb 8270410200 813e2af8	# http://www.monami-ya.jp/
     @pl[0] = [['th',  'sym', 'ctr', 'cto'],	# mruby 20410200 : higokan ? : ary_many
 	      [[thini],  0,    [0],   [0]]]	# mruby 70410200 : 4x2 ok , 5x2 ng
 
