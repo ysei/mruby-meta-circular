@@ -552,7 +552,7 @@ class FibVM
 
     # 3080410200 : gene gc off : mruby 6170410200 d17506c1
     # 3080410200 : 5x2 ng ( segmentation fault ) : mruby 3080410200 0878900f
-    # 3080410200 : 5x2 ok ( gc ) : monami-ya.mrb 8270410200 813e2af8	# http://www.monami-ya.jp/
+    # 3080410200 : 5x2 ok ( gc ) : monami-ya.mrb 8270410200 813e2af8	# www.monami-ya.jp
     @pl[0] = [['th',  'sym', 'ctr', 'cto'],	# mruby 20410200 : higokan ? : ary_many
 	      [[thini],  0,    [0],   [0]]]	# mruby 70410200 : 4x2 ok , 5x2 ng
 
@@ -919,7 +919,7 @@ print "#{rg.assoc('pc')[1].to_xeh}	#{rg.assoc('sym')[1]}	#{rg.assoc('cop')[1].to
 	      @cp -= 1
 ###	      @pc = @callinfo[@cp]
 #	      pc = @callinfo[@cp] - 1
-	      rg.assoc('pc')[1] = @callinfo[@cp] - 1
+	      rg.assoc('pc')[1] = @callinfo[@cp] # - 1
 	      @cp -= 1
 ###	      @sp = @callinfo[@cp]
 #	      sp = @callinfo[@cp]
