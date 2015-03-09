@@ -1,10 +1,7 @@
 # -*- coding: iso-2022-jp -*-
 
 module M__Object
-#  def mapr(&block)
   def mapr(&b)
-#   knid(self, 'Array') ? self.map { |v| v.__send__(&block)} : yield(self)
-#    knid(self, 'Array') ? self.map { |v| v.mapr(&block)} : yield(self)
     knid(self, 'Array') ? self.map { |v| v.__method__ b} : yield(self)
   end
 
@@ -19,8 +16,6 @@ module M__Object
 #   self.kind_of?(k)	# unwork ? ( thread ? )
 # end
 
-#  @@TP = [['Array',  Class::Array ], ['Numeric', Class::Numeric],
-#  @@TP = [['Array',  -> {Class::Array }], ['Numeric', -> {Class::Numeric}],
   TP = [['Array',  -> {Class::Array }], ['Numeric', -> {Class::Numeric}],
 	['Fixnum', -> {Class::Fixnum}], ['Float',   -> {Class::Float  }],
 	['String', -> {Class::String}]]	# .lazy
@@ -40,23 +35,15 @@ module M__Object
 
 #   k = tp.assoc(k)[1]	# unwork ? ( thread ? )
     if v == vs = v.to_s
-##     String == k
-#      'String' == k
       'String' == k	# String
     else
-#      sn = ['Numeric', 'Float'].include?(k) ? (k = 'Fixnum'; '.') : ''
       sn = ['Numeric', 'Float'].include?(k) ? '.' : ''	# Numeric, Float
 
       case k
-#      when 'Array'
-##     when Array
       when 'Array'	# , Array
 	'[]' == vs[0] + vs[-1]
-#      when 'Fixnum'
-##     when Fixnum
       when 'Numeric', 'Fixnum', 'Float'	# , Numeric, Fixnum, Float
 	sn += (0 .. 9).to_a.join + '-'	# * ''
-#	vs.each_byte { |c| break if ! sn.include?(c)}
 	vs.each_byte { |c| break if ! sn.include? c}
       else
 	false
@@ -404,31 +391,17 @@ print "#{pc.to_xeh}		#{opc}	#{op.to_xeh}\n" if ! knid(opc, 'Numeric')
 	flg = false	##
 #	th[idx] = st_id(th[idx], pc - 1) if mx >= idx
 	th[idx] = st_id(th[idx], pc - 1)
-####	th[idx] = st_id(th[idx], pc - 1) if ! knid(th[idx], 'Numeric')	# fuguai taisaku
 ####	th[idx] = st_id(th[idx], pc - 1) if ckth(th[idx], 0)	# fuguai taisaku
-#	f[idx] = nil != th[idx] = st_id(th[idx], pc - 1) if ! f[idx] # && mx >= idx
-#	f[idx] = [] != th[idx] = st_id(th[idx], pc - 1) if ! f[idx]
-#	f[idx] = [] != th[idx] = st_id(th[idx], pc - 1) if ! f[idx] || 0 == ct & 0b11
 	if [] != th[mx]
-#	if f = [] != th[mx]	##
 	  self.pl_es(pc, ['th', th])
 #	  idx = idx == mx ? 0 : idx + 1	###
 	  flg = true	##
-#	else	##
-#	  f[idx] = false if idx == mx	##
-##	  f[idx] = idx != mx	# kakikomi	##
 	end
 	Slp.new.slp 0
 #	Slp.new.slp(0, 4096)
 	Fiber.yield(flg && idx >= mx)	##
-#	ct += 1		##
-#	idx += 1	##
 	idx += 1 if idx < mx || [] != th[mx]	##
-#	idx += 1 if idx < mx && f[idx]	##
 ####	idx += 1 if idx < mx && [] != th[mx]	# fuguai taisaku	##
-#	(idx += 1; ct = 0) if idx < mx && [] != th[mx]	##
-#	idx += 1 if f	##
-#	idx += 1 if f && [] != th[mx]	##
       end
     }
 ##  self.lf_d
@@ -571,9 +544,7 @@ class FibVM
   def wkth(pc = 1)
 #   Thread.new($pcmax) { |pcmax|
     Thread.new(pc) { |pc|
-#   Thread.new(pc, @imem) { |pc, imem|
       ENVary.new(0).plw(pc)
-#     ENVary.new(0).plw(pc, imem)
     }
   end
 
