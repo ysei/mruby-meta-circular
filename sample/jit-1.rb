@@ -4,8 +4,6 @@ module M__Object
 # def mapr(&b)
 #   knid(self, 'Array') ? self.map { |v| v.__method__ b} : yield(self)
 # end
-# def mapr(&b)
-#   knid(self, 'Array') ? self.map { |v| v.__method__ b} : yield(self)
 # def mapr(a, &b)
 #   a.map { |v| knid(v, 'Array') ? __method__(v, b) : yield(v)}
 # def mapr(&b)
@@ -22,40 +20,28 @@ module M__Object
 #   self.kind_of?(k)	# unwork ? ( thread ? )
 # end
 
+  KS = (0 .. 9).to_a.join + '-'	# * '' higokan mruby 70410200	# '0'.upto # higokan mruby 70410200 # 7221410200 6ccae658 suzukaze
   TP = [['Array',  -> {Class::Array }], ['Numeric', -> {Class::Numeric}],
 	['Fixnum', -> {Class::Fixnum}], ['Float',   -> {Class::Float  }],
 	['String', -> {Class::String}]]	# .lazy
-#  TP = [['Array',  Class::Array ], ['Numeric', Class::Numeric],
-#	['Fixnum', Class::Fixnum], ['Float',   Class::Float  ],
-#	['String', Class::String]]	# .lazy
   def knid(v, k)
-#    tp = [['Array',  Class::Array ], ['Numeric', Class::Numeric],
-#	  ['Fixnum', Class::Fixnum], ['Float',   Class::Float  ],
-#	  ['String', Class::String]]
-#    return v.kind_of?(tp.assoc(k)[1]) if 0.kind_of?(Numeric)	# super
-#    return v.kind_of?(TP.assoc(k)[1].call()) if 0.kind_of?(Numeric)	# super
     return v.kind_of?(TP.assoc(k)[1].call) if 0.kind_of?(Numeric)	# super
-#    return v.kind_of?(TP.force.assoc(k)[1]) if 0.kind_of?(Numeric)	# super
-#    return v.kind_of?(TP.assoc(k)[1]) if 0.kind_of?(Numeric)	# super
+#   return v.kind_of?(TP.force.assoc(k)[1].call) if 0.kind_of?(Numeric)	# super
 
 #   k = tp.assoc(k)[1]	# unwork ? ( thread ? )
 
     if v == vs = v.to_s
       'String' == k	# String
     else
-#      sn = ['Numeric', 'Float'].include?(k) ? '.' : ''	# Numeric, Float
-
+#   elsif false != v
       case k
       when 'Array'	# , Array
 	'[]' == vs[0] + vs[-1]
       when 'Numeric', 'Fixnum', 'Float'	# , Numeric, Fixnum, Float
-#	sn += (0 .. 9).to_a.join + '-'	# * ''
-#	vs.each_byte { |c| break if ! sn.include? c}
-	s = (0 .. 9).to_a.join + '-' + 'Fixnum' == k ? '' : '.'	# * '' higokan mruby 70410200	# Fixnum
+#	s = (0 .. 9).to_a.join + '-' + 'Fixnum' == k ? '' : '.'	# * '' higokan mruby 70410200	# Fixnum
+#	s = '0'.upto('9') + '-' + 'Fixnum' == k ? '' : '.'	# higokan mruby 70410200 # 7221410200 6ccae658 suzukaze	# Fixnum
+	s = KS + 'Fixnum' == k ? '' : '.'	# Fixnum
 	vs.each_byte { |c| s.include?(c) || break}
-#      else
-#	false
-#      end
       end && true || false
     end
   end
@@ -80,6 +66,10 @@ class Numeric
 end
 
 module M__Array
+# def ijr(&b)
+#   yield self.map { |v| knid(v, 'Array') ? v.__method__(b) : v}
+# end
+
   def affil(k, m = self)	# unwork ( thread ? ) # mrblib/
 #   self[0].index(k)	# higokan mruby 10410200 ( irep.rb )
     'i' == m ? self[0][0].index(k) : self[m.affil(k, 'i')]	# self.index(idx)
@@ -110,25 +100,42 @@ end
 
 module M__Imem
   include RiteOpcodeUtil
-# include M__Icl
 
   def initialize
 #    @cop = 0
 #    s, r0, r1 = [[], 0, 0]
-    @fml = Proc.new { |lb| [
+#    lb = 'st'
+#   @fmlr = [
+#    @fml = Proc.new { |lb| [
+    @fml = ->(lb) { [	# l 
+      ['st',
+	[:MOVE,     :s__sr0],	   [:LOADL,   :s__i_pool_r0],
+	[:LOADI,    :s__r0 ],	   [:LOADSYM, :s__i_syms_r0],
+	[:LOADSELF, :s__sr0],	   [:LOADT,   :s__r0],
+	[:ADD,	    :s__sr01, :+], [:ADDI,    :s__r0,  :+],
+	[:SUB,	    :s__sr01, :-], [:SUBI,    :s__r0,  :-],
+	[:MUL,	    :s__sr01, :*], [:DIV,     :s__r01, :/],
+	[:EQ,	    :s__r1_eq_sr01]],
       ['th',
 	['bt', ['sym', true, 'th', true], ['sym', false, 'th', true]],
-	[:MOVE,     [[1, 'getarg_b'],   [1]]], [:LOADL,   [[0, 'getarg_bx'], [1]]],
-	[:LOADI,    [[0, 'getarg_sbx'], [1]]], [:LOADSYM, [[0, 'getarg_bx'], [1]]],
-#	[:LOADSELF, [[1],		[1]]], [:LOADT,   [[0, true],	     [1]]],
-	[:LOADSELF, [[1],		[1]]], [:LOADT,   [[0, true, 0],     [1]]],
-	[:ADD,	    [[1]]],		       [:ADDI,	  [[0, 'getarg_c'],  [1]]],
-	[:SUB,	    [[1]]],		       [:SUBI,	  [[0, 'getarg_c'],  [1]]],
-	[:MUL, [[1]]], [:DIV, [[1]]], [:EQ, [[1]]]
+	[:MOVE,     [['getarg_b'    ], []]], [:LOADL,	[['getarg_bx'], []]],
+	[:LOADI,    [['getarg_sbx'  ], []]], [:LOADSYM, [['getarg_bx'], []]],
+	[:LOADSELF, [['mk_opcode', 0], []]], [:LOADT,	[[true, '', 0], []]],	# mk_opcode 0
+	[:ADD,	    [[] 		 ]], [:ADDI,	[['getarg_c' ], []]],
+	[:SUB,	    [[]			 ]], [:SUBI,	[['getarg_c' ], []]],
+	[:MUL, [[]]], [:DIV, [[]]], [:EQ, [[]]]
+#	[:MOVE,     [[1, 'getarg_b'],	[1]]], [:LOADL,   [[0, 'getarg_bx'], [1]]],
+#	[:LOADI,    [[0, 'getarg_sbx'], [1]]], [:LOADSYM, [[0, 'getarg_bx'], [1]]],
+#	[:LOADSELF, [[1],		[1]]], [:LOADT,   [[0, true, 0],     [1]]],
+#	[:ADD,	    [[1]]],                    [:ADDI,	  [[0, 'getarg_c'],  [1]]],
+#	[:SUB,	    [[1]]],                    [:SUBI,	  [[0, 'getarg_c'],  [1]]],
+#	[:MUL, [[1]]], [:DIV, [[1]]], [:EQ, [[1]]]
       ]].assoc(lb) # .lazy
+#     ]]
     }
-
-#   @icl = Icl.new
+#   fml.assoc('st')[1 .. -1].map { |p| p[2] = Proc.new { |s, r0, r1| p[2]}}
+#   @fml = Proc.new { |lb| @fmlr.assoc(lb)}
+#   @fml = Proc.new {fml}
   end
 
       # 何もしない
@@ -136,18 +143,15 @@ module M__Imem
       # MOVE Ra, RbでレジスタRaにレジスタRbの内容をセットする
 #   when :MOVE
 #     @stack[@sp + getarg_a(cop)] = @stack[@sp + getarg_b(cop)]
-#     stack_s(stack_g(r0), r1)
 #     @stack[r1] = @stack[r0]
       # LOADL Ra, pb でレジスタRaに定数テーブル(pool)のpb番目の値をセットする
 #   when :LOADL
 #     @stack[@sp + getarg_a(cop)] = @irep.pool[getarg_bx(cop)]
-#     stack_s(@irep[0].pool[r0], r1)
 #     @stack[r1] = @irep[0].pool[r0]
 #     ops = [[['getarg_bx', cop], [sp, ['getarg_a', cop]]]]
       # LOADI Ra, n でレジスタRaにFixnumの値 nをセットする
 #   when :LOADI
 #     @stack[@sp + getarg_a(cop)] = getarg_sbx(cop)
-#     stack_s(r0, r1)
 #     @stack[r1] = r0
 #   when :LOADSYM
 #     @stack[@sp + getarg_a(cop)] = irep.syms[getarg_bx(cop)]
@@ -163,12 +167,10 @@ module M__Imem
       # ADD Ra, Rb でレジスタRaにRa+Rbをセットする
 #   when :ADD
 #     @stack[@sp + getarg_a(cop)] += @stack[@sp + getarg_a(cop) + 1]
-#     stack_s(stack_g(r0 + 1), r1, :+)
 #     @stack[r1] += @stack[r0 + 1]
 #     ops = [[[sp, ['getarg_a', cop]]]]
 #   when :ADDI
 #     @stack[@sp + getarg_a(cop)] += getarg_c(cop)
-#     stack_s(r0, r1, :+)
 #     @stack[r1] += r0
 #   when :SUB
 #     @stack[@sp + getarg_a(cop)] -= @stack[@sp + getarg_a(cop) + 1]
@@ -186,18 +188,24 @@ module M__Imem
       # EQ Ra でRaとR(a+1)を比べて同じならtrue, 違うならfalseをRaにセットする
 #   when :EQ
 #     val = (@stack[@sp + getarg_a(cop)] == @stack[@sp + getarg_a(cop) + 1])
-#     val = stack_g(r1) == stack_g(r0 + 1)
 #     val = @stack[r1] == @stack[r0 + 1]
 #     @stack[@sp + getarg_a(cop)] = val
-#     stack_s(val, r1)
 #     @stack[r1] = val  end
 
   def fml(lb, sym)
     @fml.(lb).assoc(sym)	# c 
   end
 
+  @@i_s__i = 0; @@i_s__s = 1; @@i_s__r0 = 2; @@i_s__r1 = 3
+
+  def s__sr0(	    *a) a[@@i_s__s][	 a[@@i_s__r0]]	   end
+  def s__r0(	    *a) 		 a[@@i_s__r0]	   end
+  def s__sr01(	    *a) a[@@i_s__s][	 a[@@i_s__r0] + 1] end
+  def s__i_pool_r0( *a) a[@@i_s__i].pool[a[@@i_s__r0]]	   end
+  def s__i_syms_r0( *a) a[@@i_s__i].syms[a[@@i_s__r0]]	   end
+  def s__r1_eq_sr01(*a) a[@@i_s__s][	 a[@@i_s__r1]] == a[@@i_s__s][a[@@i_s__r0] + 1] end
+
   def mcall(*op)
-#    knid(op[0], 'Fixnum') ? op.inject(:+) : self.send(*op)
     knid(op[0], 'Numeric') ? op.inject(:+) : self.send(*op)
   end
 end
@@ -252,7 +260,6 @@ class ENVary < Array
       f = File.open(@@fl, 'w')
       f.flock(File::LOCK_EX)
     rescue
-#      self.slp
       Slp.new.slp 0
       retry
     end
@@ -301,7 +308,14 @@ class ENVary < Array
 ##end
 
   def idx0(n = 0, t = 1)
-    t > n ? n + 1 : n
+#   t > n ? n + 1 : n
+    n + (t > n ? 1 : 0)
+#   n + [false, true].index(t > n)
+#   n + (((t > n) && 1) || 0)
+#   n + (t > n && 1 || 0)
+#   n + ((t <=> n) & 1)[0]		# higokan mruby 70410200
+#   n + (((t <=> n) + 1) & 2)[1]	# higokan mruby 70410200
+#   n + ((((t <=> n) + 1) & 2) >> 1)
   end
 
 # @@fxnm = nil
@@ -310,16 +324,14 @@ class ENVary < Array
 #   self[n < 0 ? n + 1 : n][self.idx0(n)]
     pl = self[self.idx0(n, 0)]
 #   1 > n ? pl[self.idx0(n)] : pl
-#    if 1 > n then pl = pl[self.idx0(n)] end
     if 1 > n
       pl = pl[self.idx0(n)]
 #     (nil == @@fxnm) && @@fxnm = (Float == self.affil('ctr')[0].class)
     end
-#    pl = mapr(pl) { |v|
 #   pl = pl.mapr { |v|
 #     v.to_i_from(Numeric)	# furui mattn/mruby-json
-#   } if Float == self.affil('ctr')[0].class
 #   } if @@fxnm
+#   pl = pl.mapr { |v| v.to_i_from(Numeric)} if @@fxnm	# furui mattn/mruby-json
     pl
   end
 
@@ -367,7 +379,6 @@ class ENVary < Array
 
   def ckth(th, md)
 #   self[pc][idx('th')].is_a?(Array)	# higokan mruby 10410200 ( irep.rb )
-#   [true, false].index(knid(th, 'Array')) == md
     (knid(th, 'Array') ? 0 : 1) == md
   end
 
@@ -380,6 +391,7 @@ class ENVary < Array
       knid(v, 'Array') ? st_id(v, pc) : v
     }
     return a[0] if 2 > a.size
+#   return a.ijr { |v| v.inject(@@imem.mcall) || v[0]}
 
 #   GC.start
     a.inject { |opc, op|
@@ -388,8 +400,8 @@ print "#{pc.to_xeh}		#{opc}	#{op.to_xeh}\n" if ! knid(opc, 'Numeric')
     }
   end
 
-# def pl(pc, idx, th)
-  def pl(pc)
+# def pl(pc, idx, th)	###
+  def pl(pc)	##
 #   i_th = self.affil('th', 'i')	# # higokan mruby 10410200 ( irep.rb )
 #   i_lf = self[0].index('lf')
     th = []	##
@@ -448,106 +460,74 @@ end
 #  include M__ENVary
 #end
 
-module M__Stack
-  @@stack = []
+#class Sp # < Numeric
 #  @@sp = []
-## @@l = []
+#  def initialize(sp = 0)
+#    @@sp = sp
+#  end
+#end
+
+module M__Stack
+#  @@stack = []
+  @@s = []
 #  @@m = Mutex.new
 
-#  def initialize(sp = 0, callee = '')
+# def initialize(sp = 0, callee = '')
   def initialize(sp = 0)
 #   p id = self.object_id
-#    @@sp.push [id, sp]
-#   @@l.push [id]
-
-#    @callee = callee
-    @sp = sp
+#   @callee = callee
+#    @sp = sp
+    @p = sp
 
 #   @@m.lock
-#     stack = @@stack # .dup
+##     stack = @@stack # .dup
+#     s = @@s # .dup
 #   @@m.unlock
-    @@stack
-#   stack
-
-##    @sp = [sp, sp]
-##    @ofs = [0, 0]
+#    @@stack
+    @@s
+##   stack
+#   s
   end
 
   def sp(*a)
 #   p id = self.object_id
-##    @@sp.assoc(id)[1] = a[0] if 0 < a.size
-##    @@sp.assoc(id)[1]
-#    v = []
-#    begin
-#      until v = @@sp.assoc(id) do Slp.new.slp 0 end
-#    end until id == v[0]
-#    if 0 < a.size
-#      loop do
-#	until v = @@sp.delete_at(@@sp.index(v)) do Slp.new.slp 0 end
-#	break if id == v[0]
-#	@@sp.push v
-#      end
-#    p 'sp++'
-#      v[1] = a[0]
-#      @@sp.unshift(v)
-#    end
-#    p 'sp+'
-#    v[1]
-
-    @sp = a[0] if 0 < a.size
-    @sp
+#    @sp = a[0] if 0 < a.size
+#    @sp
+    @p = a[0] if 0 < a.size
+    @p
   end
 
   def [](*a)
-#    p 'sp-'
-#    print    "r#{@callee}	#{@sp}	#{@@stack}	#{a}\n"
+#   p 'sp-'
+#   print    "r#{@callee}	#{@sp}	#{@@stack}	#{a}\n"
 
 #   @@m.lock
-#     stack = @@stack # .dup
+##     stack = @@stack # .dup
+#     s = @@s # .dup
 #   @@m.unlock
-#    @@stack[a[0] + self.sp]
-#   stack[a[0] + @sp]
-    @@stack[a[0] + @sp]
+##    @@stack[a[0] + self.sp]
+##    stack[a[0] + @sp]
+#    @@stack[a[0] + @sp]
+#   s[a[0] + @p]
+    @@s[a[0] + @p]
   end
 
   def []=(*a)
-#    p 'sp--'
-#    @@stack[a[0] + self.sp] = a[1]
-#    a = a.each { |v|}
-##      case v.is_a?(String)
-##    when true
-#    sd = b.shift
-#    @ofs[['S', 'D'].index(sd)] = b.first
-##      case b.shift
-##      when 'S'
-##	@sp[0] = b.first
-##      when 'D'
-##	@sp[1] = b.first
-##      end
-##    else
-#      super
-##    end
+#   p 'sp--'
+#   print    "w#{@callee}	#{@sp}	#{@@stack}	#{a}\n"
 
-#    print    "w#{@callee}	#{@sp}	#{@@stack}	#{a}\n"
-
-#   sp = @sp + a[0]
+##   sp = @sp + a[0]
+#   sp = @p + a[0]
 #   a = a[1]
 #   @@m.lock
-#      a = @@stack[sp] = a
-#     @@stack[sp] = a
+##      a = @@stack[sp] = a
+#      a = @@s[sp] = a
+##     @@stack[sp] = a
 #   @@m.unlock
 #   a
-    @@stack[@sp + a[0]] = a[1]
+#    @@stack[@sp + a[0]] = a[1]
+    @@s[@p + a[0]] = a[1]
   end
-
-#  def ofs(*a)
-#    sd = a.shift
-#    @ofs[['S', 'D'].index(sd)] = a.first
-#  end
-
-#  def sp_g(sp = 0)
-#    @sp
-#  end
 end
 
 class Stack # < Array
@@ -556,21 +536,40 @@ end
 
 class FibVM
 # include RiteOpcodeUtil
-  OPTABLE_CODE = Irep::OPTABLE_CODE
-  OPTABLE_SYM = Irep::OPTABLE_SYM
-#   rmth = 63
-#   rmth = 47
-  @@rmth = 39
 
-#  def initialize
-  [def initialize
+#  OPTABLE_CODE = Irep::OPTABLE_CODE
+#  OPTABLE_SYM = Irep::OPTABLE_SYM
+##   rmth = 63
+##   rmth = 47
+
+#  [
+#    OPTABLE_CODE = Irep::OPTABLE_CODE,
+#    OPTABLE_SYM = Irep::OPTABLE_SYM,
+##     rmth = 63,
+##     rmth = 47,
+#    @@rmth = 39
+#  ] # .clear # .map! { |v| v = nil}.uniq! # .lazy	# .fill(nil) higokan ? mruby 70410200
+
+#  [(
+  (
+    OPTABLE_CODE = Irep::OPTABLE_CODE
+    OPTABLE_SYM = Irep::OPTABLE_SYM
+#     rmth = 63
+#     rmth = 47
+    @@rmth = 39
+
+    @@pla = nil; @@plb = nil
+#  )] # .clear # .lazy	# .fill(nil) higokan ? mruby 70410200
+  )
+
+  def initialize
+#  [def initialize
     @Imem = Imem.new
     @flag = []
 
     # For Interpriter
 #   @stack = []			# スタック(@spより上位をレジスタとして扱う)
-    @stack = Stack.new		# スタック(@spより上位をレジスタとして扱う)
-#    @stack = Stack.new 0, 'main'	# スタック(@spより上位をレジスタとして扱う)
+    @stack = Stack.new # 0, 'main'	# スタック(@spより上位をレジスタとして扱う)
     @callinfo = []		# メソッド呼び出しで呼び出し元の情報を格納
     @pc = 0			# 実行する命令の位置
     @sp = 0			# スタックポインタ
@@ -599,20 +598,22 @@ class FibVM
 #   Assertion failed: (((mrb)->is_generational_gc_mode) || mrb->gc_state != GC_STATE_NONE),
 #       function mrb_write_barrier, file src/gc.c, line 1103.
 
-#  end
-  end] # .clear # .map! { |v| v = nil} # .uniq! # .lazy	# .fill(nil) higokan ? mruby 70410200
+  end
+##  end] # .clear # .map! { |v| v = nil} # .uniq! # .lazy	# .fill(nil) higokan ? mruby 70410200
+#  end] # .clear # .lazy	# .fill(nil) higokan ? mruby 70410200
 
   def plini
     thini = false
 
     # 3080410200 : gene gc off : mruby 6170410200 d17506c1
     # 3080410200 : 5x2 ng ( segmentation fault ) : mruby 3080410200 0878900f
-    # 3080410200 : 5x2 ok ( gc ) : monami-ya.mrb 8270410200 813e2af8	# http://www.monami-ya.jp/
+    # 3080410200 : 5x2 ok ( gc ) : monami-ya.mrb 8270410200 813e2af8	# www.monami-ya.jp
     @pl[0] = [['th',  'sym', 'ctr', 'cto'],	# mruby 20410200 : higokan ? : ary_many
 	      [[thini],  0,    [0],   [0]]]	# mruby 70410200 : 4x2 ok , 5x2 ng
 
-#    @pla = [['sp_r', 'ctr']]
     @pla ||= [['sp_r', 'ctr']]
+#   @plb ||= (@pla.dup).map { |a| a[1] = @pl.affil(a[1], 'i'); a}	# higokan ? mruby 70410200
+    @plb ||= @pla.map { |a| [a[0], @pl.affil(a[1], 'i')]}
 
 #   (1..$pcmax + 1).each{ |n| @pl[n] = Envha.new(n, {})}
 #     @pl = [$pcmax + 1, {}]
@@ -626,6 +627,8 @@ class FibVM
 
   def wkth(pc = 1)
 #   Thread.new($pcmax) { |pcmax|
+#   Thread.new(@pl, pc) { |pl, pc|	# @Imem, 
+#     pl.plw(pc)
     Thread.new(pc) { |pc|
       ENVary.new(0).plw(pc)
     }
@@ -641,84 +644,84 @@ class FibVM
 # end
 
   def rslt(pl)
-    r = pl[@pl.affil('th', 'i')]
+    lpl = @pl
+#    r = pl[@pl.affil('th', 'i')]
+    r = pl[lpl.affil('th', 'i')]
     r[1] = r[-1]
-    [pl[@pl.affil('sym', 'i')].to_sym, r]
+#    [pl[@pl.affil('sym', 'i')].to_sym, r]
+    [pl[lpl.affil('sym', 'i')].to_sym, r]
   end
 
 # def fls(pc, pl = [])	###
   def fls(pc)	##
+##	  pl = lpl.pl_g(pc) ### fls
+##	pl[i_th] = lpl.pl_eg(pc, 'th')	### fls
+
     lpl = @pl
-    pla = @pla
+#    pla = @pla
+    plb = @plb
     imem = @Imem
     i_th = lpl.affil('th', 'i')
 #    i_sp_r = lpl.affil(@pla.assoc('sp_r')[1], 'i')	##
-    i_sp_r = lpl.affil(pla.assoc('sp_r')[1], 'i')	##
+    i_sp_r = plb.assoc('sp_r')[1]	##
 #   plspr = pl[lpl.affil(@pla.assoc('sp_r')[1], 'i')]	###
 #   sp = plspr[0]	###
 
     flg = [false]
-#    s = @stack
-#    s = Stack.new 0, 'sub'
     s = Stack.new
-    i = @irep[0]
-    r0, r1 = [0, 0]
+#    s = nil
+    sp = nil; plspr = nil
+
+#   i = @irep[0]
+    i = @irep
+#    r0, r1 = [0, 0]
     rs = ['-', '-']
 
-    fml = [
-      [:MOVE,	  -> {s[r0]}],	       [:LOADL,   -> {i.pool[r0]}],	# l 2 
-      [:LOADI,	  -> {  r0 }],	       [:LOADSYM, -> {i.syms[r0]}],	# l 2 
-      [:LOADSELF, -> {s[r0]}],	       [:LOADT,   -> {	     r0 }],	# l 2 
-      [:ADD,	  -> {s[r0 + 1]}, :+], [:ADDI,	  -> {	     r0 }, :+],	# l 2 
-      [:SUB,	  -> {s[r0 + 1]}, :-], [:SUBI,	  -> {	     r0 }, :-],	# l 2 
-      [:MUL,	  -> {s[r0 + 1]}, :*], [:DIV,	  -> { s[1 + r0]}, :/],	# l 2 
-      [:EQ,	  -> {s[r1] == s[r0 + 1]}]	# l 
-    ]
+#    fml = [
+#      [:MOVE,	  -> {s[r0]}],	       [:LOADL,   -> {i.pool[r0]}],	# l 2 
+#      [:LOADI,	  -> {  r0 }],	       [:LOADSYM, -> {i.syms[r0]}],	# l 2 
+#      [:LOADSELF, -> {s[r0]}],	       [:LOADT,   -> {	     r0 }],	# l 2 
+#      [:ADD,	  -> {s[r0 + 1]}, :+], [:ADDI,	  -> {	     r0 }, :+],	# l 2 
+#      [:SUB,	  -> {s[r0 + 1]}, :-], [:SUBI,	  -> {	     r0 }, :-],	# l 2 
+#      [:MUL,	  -> {s[r0 + 1]}, :*], [:DIV,	  -> { s[1 + r0]}, :/],	# l 2 
+#      [:EQ,	  -> {s[r1] == s[r0 + 1]}]	# l 
+#    ]
 #    ].lazy
 
     Fiber.new {
       loop do	##
-#	if ! i_sp_r ||= lpl.affil(pla.assoc('sp_r')[1], 'i')	# fuguai taisaku
-#	  Slp.new.slp 0
-#	  redo
-#	end
-
 	pl = lpl.pl_g(pc)	##
-#	plspr = pl[i_sp_r]	##
-#	sp ||= plspr[0]	##
-	sp ||= (plspr = pl[i_sp_r])[0]	##
+#	sp ||= (plspr = pl[i_sp_r)[0]	##
+#	s.sp(sp ||= (plspr = pl[i_sp_r])[0])	##	####
+#	s ||= Stack.new(sp = (plspr = pl[i_sp_r])[0]) # , 'sub')	##	####
+	sp || s.sp(sp = (plspr = pl[i_sp_r])[0])
 
-	for idx in (0 ... pl[i_th].size)
-	  flg[idx] = lpl.ckth(pl[i_th][idx], 1)
-	end
+#	for idx in (0 ... pl[i_th].size)
+#	  flg[idx] = lpl.ckth(pl[i_th][idx], 1)
+#	end
+	pl[i_th].each_with_index { |v, idx| flg[idx] = lpl.ckth(v, 1)}
 
 #	sym, (r0, r1) = rslt pl	# higokan mruby 70410200	# bce75e27 2211410200 matz
-#	sym, r = rslt(pl)
-#	r0, r1 = r
 	sym, r = rslt(pl); r0, r1 = r
 
-	pr, sy = fml.assoc(sym)[1 .. -1]
-#	pr, sy = fml.force.assoc(sym)[1 .. -1]
-#	pr, sy = imem.fml('st', sym)[1 .. -1]
-#	p = Proc.new { |r0, r1| r1 && pr.call}
-	lm ||= ->(r0, r1) {r1 && pr.call}
+#	pr, sy = fml.assoc(sym)[1 .. -1]
+	pr, sy = imem.fml('st', sym)[1 .. -1]
+#	lm ||= ->(s, r0, r1) {r1 && pr.call}	# l 
+	lm ||= ->(isr0, r1) {r1 && imem.send(pr, *isr0, r1)}	# l 
 
+	isr0 = [i, s, r0]
 	wd = plspr.width
 	if flg[0] && flg[-1]
-#	  r00 = (plspr[r1 + 1] if 0 < wd && r1 < wd) || p.(r0, r1)	# c 
-##	  r00 = (plspr[r1 + 1] if 0 < wd && r1 < wd) || lm.(r0, r1)	# c 
-	  r00 = (plspr[r1 - sp + 1] if 0 < wd && r1 < sp + wd) || lm.(r0, r1)	# c 
+#	  r00 = (plspr[r1 - sp + 1] if 0 < wd && r1 < sp + wd) || lm.(r0, r1)	# c 
+	  r00 = (plspr[r1 + 1] if 0 < wd && r1 < wd) || lm.(isr0, r1)	# c 
+##	  r00 = lm.(isr0, r1)	# c 
+#	  r00 = (plspr[r1 + 1] if 0 < wd && r1 < wd) || lm.call
 	  s[r1] = nil == sy ? r00 : [s[r1], r00].inject(sy)
 	  rs = [r1.to_xeh, r0.to_xeh]
 	elsif flg[0]
-#	  wd.step(wd + 0xe) { |n|
-##	    r00 = nil == r1 ? r1 : p.(r0, r1)	# c 
-#	    plspr<< p.(r0, s[n])		# p # c 
-#	  }
-#	  (sw = sp + wd).step(sw + 0xe) { |n| plspr<< lm.(r0, s[n])}	# p # c 
 #	  ((sw = sp + wd) + 0xe).step(sw, -1) {	# higokan mruby 70410200	# bbab89e7 5211410200 tmtm
-#	  ((sw = sp + wd + 0xe) - 0xe).step(sw) { |n| plspr<< lm.(r0, s[n])}	# p # c 
-	  ((sw = sp + wd) + 0xe).downto(sw) { |n| plspr<< lm.(r0, s[n])}	# p # c 
+#	  ((sw = sp + wd) + 0xe).downto(sw) { |n| plspr<< lm.(r0, s[n])}	# p # c 
+	  wd.step(sw ||= wd + 0xe) { |n| plspr<< lm.(isr0, s[n])}; sw = nil	# p c 
 	  rs[1] = r0.to_xeh
 	elsif flg[-1]
 	  rs[0] = r1.to_xeh
@@ -739,9 +742,9 @@ print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
     pc1 = pc + 1
     imem = @Imem
     pl = @pl
+    pla = @pla
 #   i_lf = @idx['lf']
 
-#   fml = ops.assoc(sym) || (
     fml = imem.fml('th', sym) || (
       printf("Unkown code %s \n", OPTABLE_SYM[imem.get_opcode(cop)])
       return
@@ -749,32 +752,30 @@ print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
     fmla = fml
 
     bt = imem.fml('th', 'bt')[1 .. -1]
-    ta = ->(lth) {
-      lsp = sp >> ((1 - lth.shift) << 8)	# 256
-#      lth = [lth.pop || 'getarg_a', cop]
-      lth = [lth.pop || 'getarg_a', cop][0 .. lth.pop || 1]
-#      lth = [lsp, lth] if 0 != lsp
-#      lth
-      0 != lsp ? [lsp, lth] : lth
+    ta = ->(lth) {	# l 
+#      lsp = sp >> ((1 - lth.shift) << 8)	# 256 ####
+#      lth = [lth.pop || 'getarg_a', cop][0 .. lth.pop || 1]
+#      lth = [lth.pop || 'getarg_a', n.is_a?(Numeric) ? cop & n : cop][0 .. lth.pop || 1]
+      [lth.shift || 'getarg_a', lth.shift || cop][0 .. lth.pop || 1]
+#      0 != lsp ? [lsp, lth] : lth	####    
     }
 
     th = []	##
     wd = 1
-#    opg = Proc.new{ |oi|
     opg = ->(oi) {	# l 
       fml = fmla.dup
-#      o = bt[oi]
       lopa = []
-#      o.each_slice(2) { |k, v|
       bt[oi].each_slice(2) { |k, v|
 	fv = fml.shift
 	if v # && knid(fv, 'Array')
 	  if 'th' == k
 	    if 0 == oi
-	      fv = [fv[oi] = th[oi] = ta.(fv[oi])] + [[]]	# c 
+#	      fv = [fv[oi] = th[oi] = ta.(fv[oi])] + [[]]	# c 
+	      fv = [fv[oi] = th[oi] = ta.(fv[oi]), []]		# c 
 	    else
-	      th[oi] = ta.(fv[oi]) if oi <= wd = fv.width	# c 
-	      fv = th
+#	      th[oi] = ta.(fv[oi]) if oi <= wd = fv.width	# c 
+#	      fv = th
+	      fv = th += [ta.(fv[oi])] if oi <= wd = fv.width	# c 
 	    end
 	  end
 	  lopa.push(k, fv)
@@ -784,7 +785,8 @@ print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
     }
 
     thi = 0	##
-    k_sp_r = @pla.assoc('sp_r')[1]
+#    k_sp_r = @pla.assoc('sp_r')[1]
+    k_sp_r = pla.assoc('sp_r')[1]
     Fiber.new {
       loop do	##
 	opa = opg.(thi)	# c 
@@ -792,14 +794,13 @@ print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
 
 	pl.pl_es(pc1, opa)
 	pl.ctr_s(pc1) if 0 == thi
-
 	Slp.new.slp 0
 
 #	pl.pl_es(pc1, ['sym', 'th', k_sp_r].flat_map { |o| [o].push(ops.shift)})
-#	pl1[i_ctr] += 1
 #	pl1[i_lf] += 1
 
-	if 0 != thi && wd <= thi then thi = -1; th = [] end
+#	if 0 != thi && wd <= thi then thi = -1; th = [] end
+	if 0 != thi && wd <= thi then thi = -1 end
 #	[thi + 1, th]	###
 	Fiber.yield(thi += 1)	##
       end	##
@@ -824,8 +825,10 @@ print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
   def eval(irep)
     lpl = @pl
     imem = @Imem
-    rg = [['i', 'pc',   'sp',   'cop',   'sym'],
-               ['pc'], ['sp'], ['cop'], ['sym']]
+#    rg = [['i', 'pc',   'sp',   'cop',   'sym',   'pco'],
+#	       ['pc'], ['sp'], ['cop'], ['sym'], ['pco']]
+    rg = [['i', 'pc',      'sp',   'cop',   'sym',   'pco'],
+	       ['pc', 0], ['sp'], ['cop'], ['sym'], ['pco']]
 
     @irep[0] = irep
 #   @irepid = @irep.id
@@ -843,10 +846,9 @@ print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
       if flg[0]
 	if 1 > thi	##
 #	  pc = @pc
+#	  rg.assoc('pc').push @pc
 	  rg.assoc('pc')[1] = @pc
 #	  sp = @sp
-#	  rg.assoc('sp')[1] = @sp
-#	  rg.assoc('sp')[1] = @sp + 0
 	  @stack.sp(rg.assoc('sp')[1] = @sp) # + 0
 
 #	  cop, sym = opf(irep, pc)
@@ -854,29 +856,30 @@ print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
 
 print "#{rg.assoc('pc')[1].to_xeh}	#{rg.assoc('sym')[1]}	#{rg.assoc('cop')[1].to_xeh}\n"
 
-#	  pl = lpl.pl_g(pc)	###
 #	  fl = fls(pc) if 0 == @flag[0]	##
-	  fl = fls(rg.assoc('pc')[1]) if 0 == @flag[0]	##
+	  0 == @flag[0] && fl = fls(rg.assoc('pc')[1])	##
 	end	##
-      else
-#	pl[i_th] = lpl.pl_eg(pc, 'th')	###
+#     else
       end
 
 
 #     flg[0], pl = fls(pc, pl) if 0 == @flag[0]	###
-      ((flg[0] = fl.resume) && fl = nil) if fl	##
+#      ((flg[0] = fl.resume) && fl = nil) if fl	##
+      fl && (flg[0] = fl.resume) && fl = nil	##
 
-#      if flg[0]
+
       if flg[0] or 0 != thi
 #	if 'J' != sym.to_s[0] and ! [:ENTER, :SEND, :RETURN].include?(sym)
-#	if 'J' != rg.assoc('sym')[1].to_s[0] and ! [:ENTER, :SEND, :RETURN].include?(rg.assoc('sym')[1])
 #	if 'J' != rg.assoc('sym')[1][0]	# higokan mruby 70410200
 	if 'J' != rg.assoc('sym')[1].to_s[0] && ! [:ENTER, :SEND, :RETURN].include?(rg.assoc('sym')[1])
 #	  thi, th = iset(sym, cop, sp, pc, thi, th)	###
 #	  ise = iset(sym, cop, sp, pc) if 0 == thi	##
-	  ise = iset(rg) if 0 == thi	##
-	  thi = ise.resume	##
+#	  ise = iset(rg) if 0 == thi	##
+	  ise ||= iset(rg)	##
+#	  thi = ise.resume	##
 #	  ise = nil if [true, false][thi]	##
+	  [true][thi = ise.resume] && ise = nil	##
+#	  [true][thi = (ise ||= iset(rg)).resume] && ise = nil	##	# higokan ? mruby 70410200
 
 	else
 
@@ -885,7 +888,7 @@ print "#{rg.assoc('pc')[1].to_xeh}	#{rg.assoc('sym')[1]}	#{rg.assoc('cop')[1].to
 	  plini
 	  @flag[0] = 2
 
-#	  case sym
+
 	  case rg.assoc('sym')[1]
 
 	    # 何もしない
@@ -902,8 +905,6 @@ print "#{rg.assoc('pc')[1].to_xeh}	#{rg.assoc('sym')[1]}	#{rg.assoc('cop')[1].to
 	  when :JMPIF
 #	    if @stack[@sp + getarg_a(cop)] then
 #	    if @stack[sp + lpl.getarg_a(cop)] then
-#	    if @stack[sp + imem.getarg_a(cop)] then
-#	    if @stack[rg.assoc('sp')[1] + imem.getarg_a(rg.assoc('cop')[1])] then
 	    if @stack[imem.getarg_a(rg.assoc('cop')[1])] then
 #	      @pc = @pc + getarg_sbx(cop)
 #	      pc = pc + lpl.getarg_sbx(cop) - 1
@@ -914,10 +915,8 @@ print "#{rg.assoc('pc')[1].to_xeh}	#{rg.assoc('sym')[1]}	#{rg.assoc('cop')[1].to
 
 	    # JMPNOT Ra, nでもしRaがnilかfalseならpcをnだけ増やす。ただし、nは符号付き
 	  when :JMPNOT
-###	    if !@stack[@sp + getarg_a(cop)] then
+#	    if !@stack[@sp + getarg_a(cop)] then
 #	    if !@stack[sp + lpl.getarg_a(cop)] then
-#	    if !@stack[sp + imem.getarg_a(cop)] then
-#	    if !@stack[rg.assoc('sp')[1] + imem.getarg_a(rg.assoc('cop')[1])] then
 	    if !@stack[imem.getarg_a(rg.assoc('cop')[1])] then
 ##	      @pc = @pc + getarg_sbx(cop)
 #	      pc = pc + lpl.getarg_sbx(cop) - 1
@@ -941,15 +940,12 @@ print "#{rg.assoc('pc')[1].to_xeh}	#{rg.assoc('sym')[1]}	#{rg.assoc('cop')[1].to
 #	    n = getarg_c(cop)
 #	    n = lpl.getarg_c(cop)
 	    n = imem.getarg_c(rg.assoc('cop')[1])
-###	    newirep = Irep::get_irep(@stack[@sp + a], mid)
-#	    newirep = Irep::get_irep(@stack[sp + a], mid)
-#	    newirep = Irep::get_irep(@stack[rg.assoc('sp')[1] + a], mid)
+#	    newirep = Irep::get_irep(@stack[@sp + a], mid)
 	    newirep = Irep::get_irep(@stack[a], mid)
 	    if newirep then
-###	      @callinfo[@cp] = @sp
+#	      @callinfo[@cp] = @sp
 #	      @callinfo[@cp] = sp
-	      @callinfo[@cp] = rg.assoc('sp')[1]
-#	      @callinfo[@cp] = rg.assoc('sp')[1] + 0
+	      @callinfo[@cp] = rg.assoc('sp')[1] # + 0
 	      @cp += 1
 #	      @callinfo[@cp] = @pc
 #	      @callinfo[@cp] = pc
@@ -958,10 +954,9 @@ print "#{rg.assoc('pc')[1].to_xeh}	#{rg.assoc('sym')[1]}	#{rg.assoc('cop')[1].to
 #	      @callinfo[@cp] = @irep
 	      @callinfo[@cp] = irep
 	      @cp += 1
-###	      @sp += a
+#	      @sp += a
 #	      sp += a
 	      rg.assoc('sp')[1] += a
-##	      @stack.sp(rg.assoc('sp')[1] += a)
 ##	      @pc = 0
 #	      pc = -1
 	      rg.assoc('pc')[1] = -1
@@ -974,31 +969,23 @@ print "#{rg.assoc('pc')[1].to_xeh}	#{rg.assoc('sym')[1]}	#{rg.assoc('cop')[1].to
 	    else
 	      args = []
 	      n.times do |i|
-###		args.push @stack[@sp + a + i + 1]
-#		args.push @stack[sp + a + i + 1]
-#		args.push @stack[rg.assoc('sp')[1] + a + i + 1]
+#		args.push @stack[@sp + a + i + 1]
 		args.push @stack[a + i + 1]
 	      end
 
-###	      @stack[@sp + a] = @stack[@sp + a].send(mid, *args)
-#	      @stack[sp + a] = @stack[sp + a].send(mid, *args)
-#	      @stack[rg.assoc('sp')[1] + a] = @stack[rg.assoc('sp')[1] + a].send(mid, *args)
+#	      @stack[@sp + a] = @stack[@sp + a].send(mid, *args)
 	      @stack[a] = @stack[a].send(mid, *args)
 	    end
 
 	    # RETURN Raで呼び出し元のメソッドに戻る。Raが戻り値になる
 	  when :RETURN
 	    if @cp == 0 then
-###	      return @stack[@sp + getarg_a(cop)]
+#	      return @stack[@sp + getarg_a(cop)]
 #	      return @stack[sp + lpl.getarg_a(cop)]
-#	      return @stack[sp + imem.getarg_a(cop)]
-#	      return @stack[rg.assoc('sp')[1] + imem.getarg_a(rg.assoc('cop')[1])]
 	      return @stack[imem.getarg_a(rg.assoc('cop')[1])]
 	    else
-###	      @stack[@sp] = @stack[@sp + getarg_a(cop)]
+#	      @stack[@sp] = @stack[@sp + getarg_a(cop)]
 #	      @stack[sp] = @stack[sp + lpl.getarg_a(cop)]
-#	      @stack[sp] = @stack[sp + imem.getarg_a(cop)]
-#	      @stack[rg.assoc('sp')[1]] = @stack[rg.assoc('sp')[1] + imem.getarg_a(rg.assoc('cop')[1])]
 	      @stack[0] = @stack[imem.getarg_a(rg.assoc('cop')[1])]
 	      @cp -= 1
 #	      @irep = @callinfo[@cp]
@@ -1006,15 +993,13 @@ print "#{rg.assoc('pc')[1].to_xeh}	#{rg.assoc('sym')[1]}	#{rg.assoc('cop')[1].to
 #	      @irepid = @irep.id
 	      @irepid = irep.id
 	      @cp -= 1
-###	      @pc = @callinfo[@cp]
-#	      pc = @callinfo[@cp] # - 1
+#	      @pc = @callinfo[@cp]
+#	      pc = @callinfo[@cp]
 	      rg.assoc('pc')[1] = @callinfo[@cp]
 	      @cp -= 1
-###	      @sp = @callinfo[@cp]
+#	      @sp = @callinfo[@cp]
 #	      sp = @callinfo[@cp]
-	      rg.assoc('sp')[1] = @callinfo[@cp]
-#	      rg.assoc('sp')[1] = @callinfo[@cp] + 0
-##	      @stack.sp(rg.assoc('sp')[1] = @callinfo[@cp]) # + 0
+	      rg.assoc('sp')[1] = @callinfo[@cp] # + 0
 	    end
 #	  else
 ##	    printf("Unkown code %s \n", OPTABLE_SYM[get_opcode(cop)])
@@ -1026,8 +1011,7 @@ print "#{rg.assoc('pc')[1].to_xeh}	#{rg.assoc('sym')[1]}	#{rg.assoc('cop')[1].to
 #	@pc = pc + 1
 	@pc = rg.assoc('pc')[1] + 1
 #	@sp = sp
-	@sp = rg.assoc('sp')[1]
-#	@sp = rg.assoc('sp')[1] + 0
+	@sp = rg.assoc('sp')[1] # + 0
 	@irep[0] = irep
 	Slp.new.slp 0
       else

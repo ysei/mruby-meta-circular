@@ -6,7 +6,7 @@ Base code : Miura Hideki
 Thread : mattn
 
 
-Please donate to them and Rubyists 
+Please donate to them , Ruby/Rubinius/Maglev committers , and Rubyists
 Code : Free 
 Coding : Not free
 http://www.gnu.org/philosophy/selling.html
@@ -136,7 +136,7 @@ f                       SUBI    1       6
 
 
 
-Special thanks
+Teikyou
 
 
 ABEkeniti , ABEkouta , AEC , AHS-AC , akihito heika , ANDOUjun , 
@@ -148,24 +148,25 @@ HoshigaokaBowl , HIEIyukio , HIRANOtakahiko , IcLandMatuno , IKEMITUsatoo ,
 INAGAKIhitosi , Isidake , ITAKURAyuuji , IWATAtakaaki , IWE , Jay Miner , 
 Jean L Gassee , KADO , KAGEYAMAken , KATOUario , KatouPiano , KAMIUTIseikou , 
 KATAYAMA , Kazoku , kenji , KITAMURAtuyosi , KITANOmasaya , KIYOTAkazuo , 
-KOIKEkinya , KondouZouen , KuwayamaDenkaShop , Lpn , MAKINOmasami , 
+KOIKEkinya , KONDOU , KondouZouen , KuwayamaDenkaShop , Lpn , MAKINOmasami , 
 MankaiSeisakujo , masataka , MATUMOTOmasakazu , MATUMOTOreiji , Matz , MIKI , 
 MitomoSangyou , MITUYAyuuji , MIURAkenji , MiyosiRichLand , 
-MizutaniEijiJimusyo , NAKANEkou , NAITOUmutumi , NagoyaJuke , 
+MizutaniEijiJimusyo , NAKANEkou , NAITOUmutumi , NAGATA , NagoyaJuke , 
 NAKAGAWAmasaya , NamcoN , NARITA , NayabasiOosu , NeuroClub , NHlignuxNH , 
 NISII , NISIKADOtomohiro , NISIMURAtakesi , NOJIMAakinori , OAsystem-plaza , 
 Oh!MZ , Oh!X , OkaSin , OKAYAMAyasuo , OKUMURAnobuo , ONOyouko , 
 OOGAWARAkunio , OOI , OONISI , OONISIyosinori , Plainss , 
 Professor Alan Kay , Professor Andrew S Tanenbaum , Professor Babbage , 
-Professor Buddha , Rms , Rockin' , RtSangyouKai , Saarunaato , SAITOUken , 
-SAKAMURAken , SankyouDouro , SATAKE , SATOUfumi , SAWATARIkatuya , SegaN , 
-SFI , Sharp , SIBATAkaku , Spd Yum^2 , Sphr , StarbaseNagoya , SUZUKI , 
-SUZUKItosikazu , Syoji , SyouwaJidousya , Taataa , TAGUTIkagekiyo , TAKAMI , 
-Takasago , TAKATUKASA , TANAKAyasusi , TANAKAhideaki , TANIGUTItakanori , 
-TirasiYa , TomoeYa , TomotikaSyoukai , Tooya , TORII , TougouTyou , ToyoSin , 
-TOYOTAsumio , Tsukumo , TuruYa , Tutui , TyuukyouMiCom , TyuunitiKatouRiyou , 
-Usagi , UsagiDan , WAKAZONO , WATANABE , Wellenetz , YAMADA , YAMADAkenji , 
-YAMAMOTOryuuji , YAMAZAKIeiji , YokoiFSika , yosinori
+Professor Buddha , Rms , Rockin' , Ryou , RtSangyouKai , Saarunaato , 
+SAITOUken , SAKAMURAken , SankyouDouro , SATAKE , SATOUfumi , 
+SAWATARIkatuya , SegaN , SFI , Sharp , SIBATAkaku , Spd Yum^2 , Sphr , 
+StarbaseNagoya , StudioSpeak , SUMITUJI , SUZUKI , SUZUKItosikazu , Syoji , 
+SyouwaJidousya , Taataa , TAGUTIkagekiyo , TAKAMI , Takasago , TAKATUKASA , 
+TANAKAyasusi , TANAKAhideaki , TANIGUTItakanori , TirasiYa , TomoeYa , 
+TomotikaSyoukai , Tooya , TORII , TougouTyou , ToyoSin , ToyookaDenki , 
+TOYOTAsumio , Tsukumo , TurumaiMztnSyasin , TuruYa , Tutui , TyuukyouMiCom , 
+TyuunitiKatouRiyou , Usagi , UsagiDan , WAKAZONO , WATANABE , Wellenetz , 
+YAMADA , YAMADAkenji , YAMAMOTOryuuji , YAMAZAKIeiji , YokoiFSika , yosinori
 
 
 
