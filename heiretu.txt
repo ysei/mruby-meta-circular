@@ -146,10 +146,11 @@ EidenSya , FHUH , FpFt , FUJIMOTOisao , FUKATANIsyouiti , GalleryIDF ,
 GwAmyuuzu , HARADAsouzaburou , HASEGAWAatusi , HAYAKAWAtakasi , 
 HoshigaokaBowl , HIEIyukio , HIRANOtakahiko , IcLandMatuno , IKEMITUsatoo , 
 INAGAKIhitosi , Isidake , ITAKURAyuuji , IWATAtakaaki , IWE , Jay Miner , 
-Jean L Gassee , KADO , KAGEYAMAken , KATOUario , KatouPiano , KAMIUTIseikou , 
-KATAYAMA , Kazoku , kenji , KITAMURAtuyosi , KITANOmasaya , KIYOTAkazuo , 
-KOIKEkinya , KONDOU , KondouZouen , KuwayamaDenkaShop , Lpn , MAKINOmasami , 
-MankaiSeisakujo , masataka , MATUMOTOmasakazu , MATUMOTOreiji , Matz , MIKI , 
+Jean L Gassee , KADO , KAGEYAMAken , KATOUario , KATOUm , KatouPiano , 
+KOTOUyosiharu , KAMIUTIseikou , KATAYAMA , KAZAOKA , Kazoku , kenji , 
+KITAMURAtuyosi , KITANOmasaya , KIYOTAkazuo , KOIKEkinya , KONDOU , 
+KondouZouen , KuwayamaDenkaShop , Lpn , MAKINOmasami , MankaiSeisakujo , 
+masataka , MATUMOTOmasakazu , MATUMOTOreiji , Matz , MIKI , MISIMA , 
 MitomoSangyou , MITUYAyuuji , MIURAkenji , MiyosiRichLand , 
 MizutaniEijiJimusyo , NAKANEkou , NAITOUmutumi , NAGATA , NagoyaJuke , 
 NAKAGAWAmasaya , NamcoN , NARITA , NayabasiOosu , NeuroClub , NHlignuxNH , 
@@ -165,8 +166,9 @@ SyouwaJidousya , Taataa , TAGUTIkagekiyo , TAKAMI , Takasago , TAKATUKASA ,
 TANAKAyasusi , TANAKAhideaki , TANIGUTItakanori , TirasiYa , TomoeYa , 
 TomotikaSyoukai , Tooya , TORII , TougouTyou , ToyoSin , ToyookaDenki , 
 TOYOTAsumio , Tsukumo , TurumaiMztnSyasin , TuruYa , Tutui , TyuukyouMiCom , 
-TyuunitiKatouRiyou , Usagi , UsagiDan , WAKAZONO , WATANABE , Wellenetz , 
-YAMADA , YAMADAkenji , YAMAMOTOryuuji , YAMAZAKIeiji , YokoiFSika , yosinori
+TyuunitiKatouRiyou , UKAI , Usagi , UsagiDan , WAKAZONO , WATANABE , 
+Wellenetz , YAMADA , YAMADAkenji , YamadaMura , YAMADA , YAMADAs , YAMAJI , 
+YAMAMOTOryuuji , YAMAZAKIeiji , YokoiFSika , yosinori
 
 
 
