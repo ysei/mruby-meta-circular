@@ -1,4 +1,7 @@
 For mruby d17506c1
+For monami-ya.mrb
+http://www.monami-ya.jp/
+http://github.com/ysei/monami-ya.mrb/tree/mruby-meta-circular-heiretu/
 
 
 
@@ -47,8 +50,8 @@ http://github.com/mattn/mruby-thread/issues/15#issuecomment-51916890
 build_config.rb
 
 
-    conf.gem :github => 'mattn/mruby-thread'
-  # conf.gem :github => 'ysei/mruby-thread', :branch => 'master_-_merge_-_postmodern_-_master_-_pthread_kill_-_8a67d500'
+  # conf.gem :github => 'mattn/mruby-thread'
+    conf.gem :github => 'ysei/mruby-thread', :branch => 'master_-_merge_-_postmodern_-_master_-_pthread_kill_-_8a67d500'
   # conf.gem :github => 'crimsonwoods/mruby-thread', :branch => 'experimental_thread_support'
   # conf.gem :github => 'ysei/mruby-thread', :branch => 'ac8d04fb6c'
   # conf.gem :github => 'miura1729/mruby-meta-circular'
@@ -56,6 +59,7 @@ build_config.rb
     conf.gem :github => 'mattn/mruby-json'
     conf.gem :github => 'iij/mruby-io'
     conf.gem :github => 'iij/mruby-process'
+  # conf.gem :github => 'bamchoh/mruby-sleep', :branch => 'support-float-value'
 
 Thank you authers
 
@@ -156,7 +160,7 @@ MizutaniEijiJimusyo , NAKANEkou , NAITOUmutumi , NAGATA , NagoyaJuke ,
 NAKAGAWAmasaya , NamcoN , NARITA , NayabasiOosu , NeuroClub , NHlignuxNH , 
 NISII , NISIKADOtomohiro , NISIMURAtakesi , NOJIMAakinori , OAsystem-plaza , 
 Oh!MZ , Oh!X , OkaSin , OKAYAMAyasuo , OKUMURAnobuo , ONOyouko , 
-OOGAWARAkunio , OOI , OONISI , OONISIyosinori , Plainss , 
+OOGAWARAkunio , OOI , OONISI , OONISIyosinori , OZAWAhiroki , Plainss , 
 Professor Alan Kay , Professor Andrew S Tanenbaum , Professor Babbage , 
 Professor Buddha , Rms , Rockin' , Ryou , RtSangyouKai , Saarunaato , 
 SAITOUken , SAKAMURAken , SankyouDouro , SATAKE , SATOUfumi , 
@@ -451,6 +455,50 @@ Assertion failed: ((obj)->tt != MRB_TT_FREE), function mrb_gc_mark, file /root/m
 
 
 LOADL ? LOADI ?
+
+
+
+
+60510200
+
+monami-ya.mrb memo unwork
+/include/mruby/opcode.h
+#define MAXARG_Bx	(0xffffU)
+#define MAXARG_sBx	(MAXARG_Bx>>1)		/* sBx' is signed */
+
+monami-ya.mrb memo unwork
+./sample/jit-1.rb
+  def rslt(pl)
+    f = r.map { |v| lpl.ckth(v, 1)}
+    f.map.with_index { |v, n| v && r[n] >>= 1}	# monami-ya.mrb
+  def fls(pc)	##
+#	sp ||= s.sp(pl[i_sp][0])
+	sp ||= s.sp(pl[i_sp][0] >> 1)	# monami-ya.mrb
+  def eval(irep)
+	    when :JMPNOT
+#	      rga.('as', -1, 'pc', rgas.('pc') + imem.getarg_sbx(rgas.('cop')) - 1)	# c 3 
+	      rga.('as', -1, 'pc', rgas.('pc') + imem.getarg_sbx(rgas.('cop') >> 1) -1)	# c 3 	# monami-ya.mrb
+... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
