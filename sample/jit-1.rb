@@ -2,16 +2,16 @@
 
 module M__Object
 # def mapr(&b)
-#   knid(self, 'Array') ? self.map { |v| v.__method__ b} : yield(self)
+#   knid(self, :Array) ? self.map { |v| v.__method__ b} : yield(self)
 # end
 # def mapr(a, &b)
-#   a.map { |v| knid(v, 'Array') ? __method__(v, b) : yield(v)}
+#   a.map { |v| knid(v, :Array) ? __method__(v, b) : yield(v)}
 # def mapr(&b)
-#   self.map { |v| knid(v, 'Array') ? v.__method__(b) : yield(v)}
+#   self.map { |v| knid(v, :Array) ? v.__method__(b) : yield(v)}
 
 # def to_i_from(k, i = 0)
-##  self.is_a?(k) ? i + self.to_i : self	# unwork ? ( thread ? ) # mrblib/
-##  knid(k, self) ? i + self.to_i : self	# unwork ? ( thread ? ) # mrblib/
+##  self.is_a?(k) ? i + self.to_i : self		# unwork ? ( thread ? ) # mrblib/
+##  knid(k, self) ? i + self.to_i : self		# unwork ? ( thread ? ) # mrblib/
 #   self.class.to_s == k.to_s ? i + self.to_i : self	# unwork ? ( thread ? ) # mrblib/
 # end
 
@@ -20,7 +20,8 @@ module M__Object
 #   self.kind_of?(k)	# unwork ? ( thread ? )
 # end
 
-  KS = (0 .. 9).to_a.join + '-'	# * '' higokan mruby 70410200	# '0'.upto # higokan mruby 70410200 # 7221410200 6ccae658 suzukaze
+#  KS = (0 .. 9).to_a.join + '-'	# * '' higokan mruby 70410200	# '0'.upto # higokan mruby 70410200 # 7221410200 6ccae658 suzukaze
+  KS = (0 .. 9).to_a.join + ?-	# * '' higokan mruby 70410200	# ?0.upto # higokan mruby 70410200 # 7221410200 6ccae658 suzukaze	# q 
   def knid(v, k)
 #   k = Kernel.const_get k
 #   return v.kind_of?(Object.const_get k) if 0.kind_of?(Numeric)	# super
@@ -29,18 +30,18 @@ module M__Object
 
     k = k[1]
     if v == vs = v.to_s
-#      'String' == k	# String
-      't' == k		# String
+#      't' == k		# String
+      ?t == k		# String	# q 
     else
 #   elsif false != v
       ! ! case k
-#      when 'Array'	# , Array
-      when 'r'		# , Array
+#      when 'r'		# , Array
+      when ?r		# , Array	# q 
 	'[]' == vs[0] + vs[-1]
-#      when 'Numeric', 'Fixnum', 'Float'	# , Numeric, Fixnum, Float
-      when 'u', 'i', 'l'			# , Numeric, Fixnum, Float
-#	s = KS + 'Fixnum' == k ? '' : '.'	# Fixnum
-	s = KS + 'i' == k ? '' : '.'		# Fixnum
+#      when 'u', 'i', 'l'			# , Numeric, Fixnum, Float
+      when ?u, ?i, ?l				# , Numeric, Fixnum, Float	# q 3 
+#	s = KS + 'i' == k ? '' : '.'		# Fixnum
+	s = KS + ?i == k ? '' : ?.		# Fixnum	# q 2 
 	vs.each_byte { |c| s.include?(c) || break}
       end
     end
@@ -67,12 +68,13 @@ end
 
 module M__Array
 # def ijr(&b)
-#   yield self.map { |v| knid(v, 'Array') ? v.__method__(b) : v}
+#   yield self.map { |v| knid(v, :Array) ? v.__method__(b) : v}
 # end
 
   def affil(k, m = self)	# unwork ( thread ? ) # mrblib/
 #   self[0].index(k)	# higokan mruby 10410200 ( irep.rb )
-    'i' == m ? self[0][0].index(k) : self[m.affil(k, 'i')]	# self.index(idx)
+#    'i' == m ? self[0][0].index(k) : self[m.affil(k, 'i')]	# self.index(idx)
+    ?i != m ? self[m.affil(k, ?i)] : self[0][0].index(k)	# self.index(idx)	# q 2 
   end
 
 # def asoc
@@ -116,15 +118,10 @@ module M__Imem
 	[:EQ,	    :s__r1_eq_sr01]],
       ['th',
 	['bt', ['sym', true, 'th', true], ['sym', false, 'th', true]],
-#	[:MOVE,     [['getarg_b'    ], []]], [:LOADL,	[['getarg_bx'], []]],
-#	[:LOADI,    [['getarg_sbx'  ], []]], [:LOADSYM, [['getarg_bx'], []]],
-#	[:LOADSELF, [['mk_opcode', 0], []]], [:LOADT,	[[true, '', 0], []]],	# mk_opcode 0
-#	[:ADD,	    [[] 		 ]], [:ADDI,	[['getarg_c' ], []]],
-#	[:SUB,	    [[]			 ]], [:SUBI,	[['getarg_c' ], []]],
 	[:MOVE,     [[:getarg_b    ], []]], [:LOADL,   [[:getarg_bx ], []]],
 	[:LOADI,    [[:getarg_sbx  ], []]], [:LOADSYM, [[:getarg_bx ], []]],
 	[:LOADSELF, [[:mk_opcode, 0], []]], [:LOADT,   [[true, '', 0], []]],	# mk_opcode 0
-	[:ADD,	    [[] 		]], [:ADDI,    [[:getarg_c  ], []]],
+	[:ADD,	    [[]			]], [:ADDI,    [[:getarg_c  ], []]],
 	[:SUB,	    [[]			]], [:SUBI,    [[:getarg_c  ], []]],
 	[:MUL, [[]]], [:DIV, [[]]], [:EQ, [[]]]
       ]].assoc(lb) # .lazy
@@ -200,6 +197,8 @@ module M__Imem
 
   def mcall(*op)
     knid(op[0], 'Numeric') ? op.inject(:+) : self.send(*op)
+# def send(*op)		# fuantei ? mruby 70410200
+#   knid(op[0], 'Numeric') ? op.inject(:+) : self.__send__(*op)
   end
 end
 
@@ -238,7 +237,7 @@ class ENVary < Array
       return
     end
 #   @ary = Array.new(n)
-    (0..n).each{ |i|
+    (0 .. n).each{ |i|
 #     @ary = a
       self[i] = *a
     }
@@ -249,9 +248,9 @@ class ENVary < Array
 
     # 3080410200 : gene gc off : mruby 6170410200 d17506c1
     # 3080410200 : 5x2 ng ( segmentation fault ) : mruby 3080410200 0878900f
-    # 3080410200 : 5x2 ok ( gc ) : monami-ya.mrb 8270410200 813e2af8	# www.monami-ya.jp
-    self[0] = [['th',  'sym', 'ctr', 'cto'],	# mruby 20410200 : higokan ? : ary_many
-	      [[thini],  0,    [0],   [0]]]	# mruby 70410200 : 4x2 ok , 5x2 ng
+    # 3080410200 : 5x2 ok ( gc ) : monami-ya.mrb 8270410200 813e2af8	# http://www.monami-ya.jp/
+    self[0] = [['th',	 'sym', 'ctr', 'cto'],	# mruby 20410200 : higokan ? : ary_many
+	       [[thini], 0,	[0],   [0]]]	# mruby 70410200 : 4x2 ok , 5x2 ng
   end
 
 # @@ploc = Fiber.new { |a|
@@ -259,18 +258,16 @@ class ENVary < Array
   def ploc(*a)
 #   @m.lock
     begin
-      f = File.open(@@fl, 'w')
+#      f = File.open(@@fl, 'w')
+      f = File.open(@@fl, ?w)	# q 
       f.flock(File::LOCK_EX)
     rescue
       Slp.new.slp 0
       retry
     end
     a[0] = a[0].to_xeh
-#    r = yield a
-#    f.close
-#   @m.unlock
-#    r
     [yield(a), f.close][0]
+#   [yield(a), f.close, @m.unlock][0]
 #   a = yield(r)
   end
 # }
@@ -349,7 +346,7 @@ class ENVary < Array
 #   arg[0].is_a?(Numeric) ? n = arg.shift : n = 0	# unwork ( thread ? )
 
     pl = pl_g(n)
-    ary.each_slice(2) { |k, v| pl[self.affil(k, 'i')] = v}	# memo .shift(2) higokan mruby 70410200
+    ary.each_slice(2) { |k, v| pl[self.affil(k, ?i)] = v}	# memo .shift(2) higokan mruby 70410200	# q 
     pl_s(n, pl)
   end
 
@@ -394,10 +391,6 @@ class ENVary < Array
 #   (bf = 1).step(bfsz - 1) { bf |= bf << 1}
     bf = 2 ** bfsz - 1	# kakezan
 
-#    f = true
-#    loop do
-#      break if ! f &&=
-#    while f &&= (0 == 1 & md) == a[(md & bf) >> 1]
     while (0 == 1 & md) == a[(md & bf) >> 1]
 #	((0 == (1 & md)) == a[md >> 1])
 #	((a[(md & bf) >> 1] ? 0 : 1) == 1 & md)
@@ -408,16 +401,17 @@ class ENVary < Array
 ##    0 == lf ? return(false) : (md &= bf if 0 == lf >> bfsz)	# ? mruby 70410200
       0 == lf && break
     end == true
-#    f
   end
 
   def st_id(a, pc)
-    return a if [] == a || ! knid(a, :Array)	# t 
+#    return a if [] == a || ! knid(a, :Array)	# t 
+#   ([] == a || ! knid(a, 'Array')) && return(a)	# t 	# higokan mruby70410200 monami-ya.mrb60510200
+    ([] == a || ! knid(a, 'Array')) && (return a)	# t 
     a.map! { |v|
-##    v.kind_of?(Array) ? __send__(v, pc) : v	# unwork ( thread ? )
-#     knid(v, 'Array') ? __method__(v, pc) : v	# unwork ( thread ? )
-#     knid(v, 'Array') ? __callee__(v, pc) : v	# unwork ( thread ? )
-      knid(v, 'Array') ? st_id(v, pc) : v
+##    v.kind_of?(Array) ?  __send__(v, pc)  : v		# unwork ( thread ? )
+#     knid(v, 'Array') ? __method__(v, pc)  : v		# unwork ( thread ? )
+#     knid(v, 'Array') ? __callee__(v, pc)  : v		# unwork ( thread ? )
+      knid(v, 'Array') ?      st_id(v, pc)  : v
     }
     return a[0] if 2 > a.size
 #   return a.ijr { |v| v.inject(@@imem.mcall) || v[0]}
@@ -426,12 +420,13 @@ class ENVary < Array
     a.inject { |opc, op|
 print "#{pc.to_xeh}		#{opc}	#{op.to_xeh}\n" if ! knid(opc, 'Numeric')
       (imem = @@Imem).mcall(opc, op) || op
+#     (imem = @@Imem).send(opc, op) || op
     }
   end
 
 # def pl(pc, idx, th)	###
   def plw(pc)	##
-#   i_th = self.affil('th', 'i')	# # higokan mruby 10410200 ( irep.rb )
+#   i_th = self.affil('th', ?i)	# # higokan mruby 10410200 ( irep.rb )	# q 
 #   i_lf = self[0].index('lf')
     th = []; idx = 0	##
     flg = false
@@ -444,7 +439,6 @@ print "#{pc.to_xeh}		#{opc}	#{op.to_xeh}\n" if ! knid(opc, 'Numeric')
 	th[idx] = st_id(th[idx], pc - 1)
 	mx = thn.width
 #	mx ||= thn.width
-#	if [] != th[mx]
 	if f = ckth(th[mx], 3)
 	  self.pl_es(pc, ['th', th])
 #	  idx = idx == mx ? 0 : idx + 1	###
@@ -454,8 +448,6 @@ print "#{pc.to_xeh}		#{opc}	#{op.to_xeh}\n" if ! knid(opc, 'Numeric')
 	Slp.new.slp 0
 #	Slp.new.slp(0, 4096)
 	Fiber.yield(flg && idx >= mx)	##
-#	idx += 1 if idx < mx || [] != th[mx]	##
-#####	idx += 1 if idx < mx && [] != th[mx]	# fuguai taisaku	##
 	idx += f || idx < mx ? 1 : 0	##
 ####	idx += f && idx < mx ? 1 : 0	# fuguai taisaku	##
       end
@@ -593,7 +585,8 @@ class FibVM
 #    @@rmth = 39
     @@rmth = 39
 
-    @@pla = nil; @@plb = nil
+#    @@pla = nil; @@plb = nil
+    @@pla, @@plb = nil
   )
 
   def initialize
@@ -620,9 +613,9 @@ class FibVM
 #    @pl.plini
 #    @pla = [['sp_r', 'ctr']]
     @@pla ||= [['sp_r', 'ctr']]
-#   @plb = @pla.dup.map { |a| a[1] = @pl.affil(a[1], 'i'); a}	# higokan ? mruby 70410200
-#    @plb = @pla.map { |a| [a[0], @pl.affil(a[1], 'i')]}
-    @@plb ||= @@pla.map { |a| [a[0], @pl.affil(a[1], 'i')]}
+#   @plb = @pla.dup.map { |a| a[1] = @pl.affil(a[1], ?i); a}	# higokan ? mruby 70410200	# q 
+#    @plb = @pla.map { |a| [a[0], @pl.affil(a[1], ?i)]}		# q 
+    @@plb ||= @@pla.map { |a| [a[0], @pl.affil(a[1], ?i)]}	# q 
 
 
     @rmt = wkth
@@ -650,16 +643,12 @@ class FibVM
 
   def rslt(pl)
     lpl = @pl
-#    r = pl[lpl.affil('th', 'i')]; r[1] = r[-1]
-    r = pl[lpl.affil('th', 'i')]
+#    r = pl[lpl.affil('th', ?i)]; r[1] = r[-1]	# q 
+    r = pl[lpl.affil('th', ?i)]			# q 
     f = r.map { |v| lpl.ckth(v, 1)}
-#    r[0] = ~ r[0] if knid(r[0], :Numeric) && 0 > r[0]	# monami-ya.mrb
-#    r[0] += 0x10000 if knid(r[0], :Numeric) && 0 > r[0]	# monami-ya.mrb
-#   f.map.with_index { |v, n| v && r[n] >>= 1}		# monami-ya.mrb
-
     r[1] = r[-1]; f[1] = f[-1]
-#    [pl[lpl.affil('sym', 'i')].to_sym, r]
-    [pl[lpl.affil('sym', 'i')].to_sym, r, f]
+#    [pl[lpl.affil('sym', ?i)].to_sym, r]	# q 
+    [pl[lpl.affil('sym', ?i)].to_sym, r, f]	# q 
   end
 
 # def fls(pc, pl = [])	###
@@ -671,20 +660,20 @@ class FibVM
 #      lpl = @pl; plb = @plb
       lpl = @pl; plb = @@plb
       imem = @Imem
-      i_th = lpl.affil('th', 'i')
+      i_th = lpl.affil('th', ?i)	# q 
       i_sp = plb.assoc('sp_r')[1]	##
-#     plr = pl[lpl.affil(@pla.assoc('sp_r')[1], 'i')]	###
+#     plr = pl[lpl.affil(@pla.assoc('sp_r')[1], ?i)]	###	# q 
 
       s = Stack.new; sp = nil; plr = nil
       i = @irep
 
 #     sp, wd, isr0, r0, r1, lm, sy = []		# higokan ? mruby 70410200
 #     sp, wd, isr0, r0, r1, lm, sy = [][0]
-#      sp, wd, isr0, r0, r1, lm, sy = nil
       sp, isr0, r0, r1, lm, pr, sy = nil
       plr = []
 #      flg = [false, false]	# antei ? mruby 70410200
-      rs = ['-', '-']
+#      rs = ['-', '-']
+      rs = [?-, ?-]	# q 2 
 
       wd = 7
       ap = 0xf - 1; ap = (ap << wd) + (ap << (wd - 2)) + (1 << (wd - 1)) >> wd
@@ -697,8 +686,7 @@ class FibVM
 	s[r1] = sy ? [s[r1], r00].inject(sy) : r00
 	rs = [r1.to_xeh, r0.to_xeh]},
       -> {	# flg[0]
-#	((sw = sp + wd) + 0xe).step(sw, -1) {	# higokan mruby 70410200	# bbab89e7 5211410200 tmtm
-#	wd.step(wd + 0xe) { |n| plr<< lm.(isr0, s[n])}	# p c 
+#	((sw = sp + wd) + 0xe).step(sw, -1) {	# memo	# higokan mruby 70410200	# bbab89e7 5211410200 tmtm
 	wd.step(wd + ap = (ap >> 1) + (ap >> 2)) { |n| plr<< lm.(isr0, s[n])}	# p c 
 	rs[1] = r0.to_xeh},
       -> {	# flg[-1]
@@ -710,7 +698,6 @@ class FibVM
       loop do	##
 	pl = lpl.pl_g(pc)	##
 	sp ||= s.sp(pl[i_sp][0])
-#	sp ||= s.sp(pl[i_sp][0] >> 1)	# monami-ya.mrb
 
 #	sym, (r0, r1) = rslt pl	# higokan mruby 70410200	# bce75e27 2211410200 matz
 #	sym, r = rslt(pl); r0, r1 = r
@@ -750,10 +737,7 @@ print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
     fmla = fml
 
     bt = imem.fml('th', 'bt')[1 .. -1]
-#    ta = ->(lth) {	# l 
-#      [lth.shift || 'getarg_a', lth.shift || cop][0 .. lth.pop || 1]
-#    }
-    ta = ->(l) {[l.shift || 'getarg_a', l.shift || cop][0 .. l.pop || 1]}	# l 
+    ta = ->(l) { [l.shift || 'getarg_a', l.shift || cop][0 .. l.pop || 1] }	# l 
 
     th = []	##
     wd = 1
@@ -762,7 +746,7 @@ print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
       lopa = []
       bt[oi].each_slice(2) { |k, v|
 	fv = fml.shift
-	if v # && knid(fv, 'Array')
+	if v # && knid(fv, :Array)
 	  if 'th' == k
 #	    if 0 == oi
 #	      fv = [fv[oi] = th[oi] = ta.(fv[oi]), []]		# c 
@@ -826,7 +810,7 @@ print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
 #   @irepid = @irep.id
     @irepid = irep.id
 
-    i_th = lpl.affil('th', 'i')
+    i_th = lpl.affil('th', ?i)	# q 
 
     @flag[0] = 1
 
@@ -882,7 +866,6 @@ print "#{(pc - 1).to_xeh}			#{sym}	#{rs[1]}	#{rs[0]}\n"
 	  rgas.('cop', c)	# c 
 	  rgas.('sym', s)	# c 
 
-# print "#{rg.assoc('pc')[1].to_xeh}	#{rg.assoc('sym')[1]}	#{rg.assoc('cop')[1].to_xeh}\n"
 # print "#{rg.assoc('pc')[rg.assoc('ctr')[1]].to_xeh}	#{rg.assoc('sym')[rg.assoc('ctr')[1]]}	#{rg.assoc('cop')[rg.assoc('ctr')[1]].to_xeh}\n"
 # print "#{rgas.('pc').to_xeh}	#{rgas.('sym')}	#{rgas.('cop').to_xeh}\n"	# c 3 
 print "#{rgas.('pc').to_xeh}	#{rgas.('sym')}	#{rgas.('cop').to_xeh}\n" if rgas.('cop')	# c 3 
@@ -899,16 +882,11 @@ print "#{rgas.('pc').to_xeh}	#{rgas.('sym')}	#{rgas.('cop').to_xeh}\n" if rgas.(
 #     flg[0], pl = fls(pc, pl) if 0 == @flag[0]	###
       fl && (flg[0] = fl.resume) && fl = nil	##
 
-#      if flg[0] or 0 != rg.assoc('thi')[1]
 #      if flg[0] || 0 != rg.assoc('thi')[1]
       if flg[0] || 0 != rgas.('thi')	# c 
-#	if 'J' != sym.to_s[0] and ! [:ENTER, :SEND, :RETURN].include?(sym)
-#	if 'J' != rg.assoc('sym')[1].to_s[0] and ! [:ENTER, :SEND, :RETURN].include?(rg.assoc('sym')[1])
-#	if 'J' != rg.assoc('sym')[rg.assoc('ctr')[1]].to_s[0] &&
-#	  ! [:ENTER, :SEND, :RETURN].include?(rg.assoc('sym')[rg.assoc('ctr')[1]])
 #	if 'J' != rgas.('sym')[0]	# higokan mruby 70410200
-#	if 'J' != rgas.('sym').to_s[0] && ! [:ENTER, :SEND, :RETURN].include?(rgas.('sym'))	# c 2 
-	if 'J' != rgas.('sym').to_s[0] && ! [:ENTER, :SEND, :RETURN, :NOP].include?(rgas.('sym'))	# c 2 
+#	if 'J' != rgas.('sym').to_s[0] && ! [:ENTER, :SEND, :RETURN, :NOP].include?(rgas.('sym'))	# c 2 
+	if ?J != rgas.('sym').to_s[0] && ! [:ENTER, :SEND, :RETURN, :NOP].include?(rgas.('sym'))	# q 	# c 2 
 
 #	  thi, th = iset(sym, cop, sp, pc, thi, th)	###
 #	  ise = iset(sym, cop, sp, pc) if 0 == thi	##
@@ -942,7 +920,7 @@ print "#{rgas.('pc').to_xeh}	#{rgas.('sym')}	#{rgas.('cop').to_xeh}\n" if rgas.(
 	  case rgas.('sym')	# c 
 
 	    # 何もしない
-	  when :NOP
+#	  when :NOP
 
 	    # JMP nでpcをnだけ増やす。ただし、nは符号付き
 	  when :JMP
@@ -979,7 +957,6 @@ print "#{rgas.('pc').to_xeh}	#{rgas.('sym')}	#{rgas.('cop').to_xeh}\n" if rgas.(
 #	      pc = pc + imem.getarg_sbx(cop) - 1
 #	      rg.assoc('pc')[1] += imem.getarg_sbx(rg.assoc('cop')[1]) - 1
 	      rga.('as', -1, 'pc', rgas.('pc') + imem.getarg_sbx(rgas.('cop')) - 1)	# c 3 
-#	      rga.('as', -1, 'pc', rgas.('pc') + imem.getarg_sbx(rgas.('cop') >> 1) - 1)	# c 3 	# monami-ya.mrb
 #	      next
 	    end
 
@@ -1081,7 +1058,8 @@ print "#{rgas.('pc').to_xeh}	#{rgas.('sym')}	#{rgas.('cop').to_xeh}\n" if rgas.(
 	end
 
 #	if 0 == rg.assoc('thi')[1]
-	if 0 == rgas.('thi')	# c 
+#	if 0 == rgas.('thi')	# c 
+	if [true][rgas.('thi')]	# c 
 	  @flag[0] >>= 1
 #	  @flag[0] >>= (1 - (thi <=> 0))
 

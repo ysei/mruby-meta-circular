@@ -1,5 +1,5 @@
-For mruby d17506c1
-For monami-ya.mrb
+For mruby d17506c1	# patch
+For monami-ya.mrb	# no patch
 http://www.monami-ya.jp/
 http://github.com/ysei/monami-ya.mrb/tree/mruby-meta-circular-heiretu/
 
@@ -7,6 +7,7 @@ http://github.com/ysei/monami-ya.mrb/tree/mruby-meta-circular-heiretu/
 
 Base code : Miura Hideki
 Thread : mattn
+mruby : matz , monaka
 
 
 Please donate to them , Ruby/Rubinius/Maglev committers , and Rubyists
@@ -146,33 +147,38 @@ Teikyou
 ABEkeniti , ABEkouta , AEC , AHS-AC , akihito heika , ANDOUjun , 
 AnjouNourin , AsahidouCamera , ASC , AUE , ArkInternet , BABAkenji , 
 BinaryCoders , CarrotParty , ChipDesigners , DDS , Douglas E Smith , Ecom , 
-EidenSya , FHUH , FpFt , FUJIMOTOisao , FUKATANIsyouiti , GalleryIDF , 
-GwAmyuuzu , HARADAsouzaburou , HASEGAWAatusi , HAYAKAWAtakasi , 
-HoshigaokaBowl , HIEIyukio , HIRANOtakahiko , IcLandMatuno , IKEMITUsatoo , 
-INAGAKIhitosi , Isidake , ITAKURAyuuji , IWATAtakaaki , IWE , Jay Miner , 
-Jean L Gassee , KADO , KAGEYAMAken , KATOUario , KATOUm , KatouPiano , 
-KOTOUyosiharu , KAMIUTIseikou , KATAYAMA , KAZAOKA , Kazoku , kenji , 
-KITAMURAtuyosi , KITANOmasaya , KIYOTAkazuo , KOIKEkinya , KONDOU , 
-KondouZouen , KuwayamaDenkaShop , Lpn , MAKINOmasami , MankaiSeisakujo , 
-masataka , MATUMOTOmasakazu , MATUMOTOreiji , Matz , MIKI , MISIMA , 
-MitomoSangyou , MITUYAyuuji , MIURAkenji , MiyosiRichLand , 
+EidenSya , EntuuJi , FHUH , FpFt , FUJIMOTOisao , FukagawaJidousya , 
+FUKATANIsyouiti , GalleryIDF , GwAmyuuzu , HARADAsouzaburou , HASEGAWAatusi , 
+HAYAKAWAtakasi , HoshigaokaBowl , HIEIyukio , hidenori, HiramatuMokuzai , 
+HIRANOtakahiko , IcLandMatuno , I.C.Mach , IKEMITUsatoo , INAGAKIhitosi , 
+IsidaGarasu , Isidake , ITAKURAyuuji , ItouTosou , IWATAtakaaki , 
+IWATUKIhiroyuki , IWE , Jay Miner , Jean L Gassee , KADO , KAGEYAMAken , 
+KamiyaTategu , KATOUario , KATOUm , KatouPiano , KATOUyosiharu , 
+KAMIUTIseikou , KanekoKougyou , KAZAOKA , Kazoku , kenji , KITAMURAtuyosi , 
+KITANOmasaya , KIYOTAkazuo , KOIKEkinya , KONDOU , KondouZouen , 
+KuwayamaDenkaShop , KyanonSaizensen , Lpn , MAKINOmasami , MankaiSeisakujo , 
+masataka , MATUFUJI , MATUMOTOmasakazu , MATUMOTOreiji , Matz , MiComTech , 
+MIKI , MISIMA , MitomoSangyou , MITUYAyuuji , MIURAkenji , MiyosiRichLand , 
 MizutaniEijiJimusyo , NAKANEkou , NAITOUmutumi , NAGATA , NagoyaJuke , 
 NAKAGAWAmasaya , NamcoN , NARITA , NayabasiOosu , NeuroClub , NHlignuxNH , 
-NISII , NISIKADOtomohiro , NISIMURAtakesi , NOJIMAakinori , OAsystem-plaza , 
-Oh!MZ , Oh!X , OkaSin , OKAYAMAyasuo , OKUMURAnobuo , ONOyouko , 
-OOGAWARAkunio , OOI , OONISI , OONISIyosinori , OZAWAhiroki , Plainss , 
+NISII , NISIKADOtomohiro , NISIMURAtakesi , NOJIMAakinori , 
+NonoyamaKoumuten , NUSis , OAsystem-plaza , Oh!MZ , Oh!X , OkaSin , 
+OKAYAMAyasuo , OKUMURAnobuo , ONOyouko , OOGAWARAkunio , OOI , OONISI , 
+OONISIyosinori , Otoya , OZAWAhiroki , PanNoKi , Plainss , 
 Professor Alan Kay , Professor Andrew S Tanenbaum , Professor Babbage , 
 Professor Buddha , Rms , Rockin' , Ryou , RtSangyouKai , Saarunaato , 
-SAITOUken , SAKAMURAken , SankyouDouro , SATAKE , SATOUfumi , 
-SAWATARIkatuya , SegaN , SFI , Sharp , SIBATAkaku , Spd Yum^2 , Sphr , 
-StarbaseNagoya , StudioSpeak , SUMITUJI , SUZUKI , SUZUKItosikazu , Syoji , 
-SyouwaJidousya , Taataa , TAGUTIkagekiyo , TAKAMI , Takasago , TAKATUKASA , 
-TANAKAyasusi , TANAKAhideaki , TANIGUTItakanori , TirasiYa , TomoeYa , 
-TomotikaSyoukai , Tooya , TORII , TougouTyou , ToyoSin , ToyookaDenki , 
+SAITOUken , SAKAMURAken , Saki , SankyouDouro , SATAKE , SATOUfumi , 
+SAWATARIkatuya , SegaN , SeianJi , SFI , Sharp , SIBATAkaku , Sinonomesora , 
+SiojiDenki , Spd Yum^2 , Sphr , StarbaseNagoya , StudioSpeak , SUGIURA , 
+SUMITUJI , SUZUKI , SUZUKItosikazu , Syoji , SyouwaJidousya , Taataa , 
+TAGUTIkagekiyo , TAKAMI , Takasago , TAKATUKASA , TANAKAyasusi , 
+TANAKAhideaki , TANIGUTItakanori , TirasiYa , TomoeYa , TomotikaSyoukai , 
+Tooya , TORII , TOSIMITUakihito , TougouTyou , ToyoSin , ToyookaDenki , 
 TOYOTAsumio , Tsukumo , TurumaiMztnSyasin , TuruYa , Tutui , TyuukyouMiCom , 
-TyuunitiKatouRiyou , UKAI , Usagi , UsagiDan , WAKAZONO , WATANABE , 
-Wellenetz , YAMADA , YAMADAkenji , YamadaMura , YAMADA , YAMADAs , YAMAJI , 
-YAMAMOTOryuuji , YAMAZAKIeiji , YokoiFSika , yosinori
+TyuunitiKatouRiyou , UKAI , Usagi , UsagiDan , UsidaSyouten , WAKAZONO , 
+WATANABE , Wellenetz , WestDartsClub , Xseld , YAMADA , YAMADAkenji , 
+YamadaMura , YAMADA , YAMADAs , YAMAJI , YAMAMOTOryuuji , YAMAZAKIeiji , 
+YokoiFSika , yosinori , Yottyan
 
 
 
