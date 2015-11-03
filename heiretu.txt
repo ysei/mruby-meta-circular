@@ -1,11 +1,11 @@
-Embeded condition for buisiness use : Tie up with the Yoko Ono Office
-Approve : Professor Fei-Fei Li ( Pre co-own rights for AL use ( not AI ) )
+* Buisiness embeded condition : Tie up with YokoOnoOffice and RubyAssociation
+* Approve : Professor Fei-Fei Li ( Pre co-own rights for AL use ( not AI ) )
 
 
 
 For mruby d17506c1	# patch
 For monami-ya.mrb	# no patch
-http://www.monami-ya.jp/
+http://mrb.monami-ya.jp/
 http://github.com/ysei/monami-ya.mrb/tree/mruby-meta-circular-heiretu/
 
 
