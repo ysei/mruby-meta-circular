@@ -1,5 +1,7 @@
-* Buisiness embeded condition : Tie up with YokoOnoOffice and RubyAssociation
-* Approve : Professor Fei-Fei Li ( Pre co-own rights for AL use ( not AI ) )
+Buisiness embed/port/convert condition : 
+	Tie up with Yoko Ono Office and Ruby Association
+	( Without port/convert VM : Mr. Miura Hideki too )
+Approve : Professor Fei-Fei Li ( Pre co-own rights for AL use ( not AI ) )
 
 
 
